@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - Digital India Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #10b981;
+            --accent-color: #8b5cf6;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --success-color: #10b981;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            /* Light theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --surface-bg: #ffffff;
+            --card-bg: #ffffff;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0f0f0f 100%);
+            --bg-secondary: rgba(20, 20, 20, 0.95);
+            --bg-tertiary: rgba(40, 40, 40, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-muted: #b0b0b0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --surface-bg: rgba(25, 25, 25, 0.9);
+            --card-bg: rgba(30, 30, 30, 0.85);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            background-attachment: fixed;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(15, 15, 15, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 32px 20px;
+            height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .chat-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .chat-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        [data-theme="dark"] .chat-messages {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            max-width: 80%;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .message.assistant .message-avatar {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .message-content {
+            background: var(--bg-tertiary);
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .message.user .message-content {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .message-text {
+            line-height: 1.6;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .message.user .message-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Chat Input */
+        .chat-input {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        [data-theme="dark"] .chat-input {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-field {
+            flex: 1;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 16px;
+            resize: none;
+            min-height: 48px;
+            max-height: 120px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .send-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .send-btn:hover {
+            background: #2563eb;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quick-action:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingDot {
+            0%, 60%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            30% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .chat-title {
+                font-size: 36px;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .quick-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-flag me-2"></i>Digital India Portal
+            </a>
+            <div class="nav-buttons">
+                <a href="/" class="nav-btn">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="/services.html" class="nav-btn">
+                    <i class="fas fa-building"></i>
+                    <span>Services</span>
+                </a>
+                <a href="/stocks.html" class="nav-btn">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Stocks</span>
+                </a>
+                <a href="/market.html" class="nav-btn">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Market</span>
+                </a>
+                <a href="/chat.html" class="nav-btn active">
+                    <i class="fas fa-comments"></i>
+                    <span>AI Chat</span>
+                </a>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Chat Container -->
+    <main class="chat-container">
+        <div class="chat-header">
+            <h1 class="chat-title">AI Assistant</h1>
+            <p class="chat-subtitle">Get help with government services, market information, and more</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="quick-action" onclick="sendQuickMessage('How do I apply for Aadhaar card?')">
+                🆔 Aadhaar Help
+            </div>
+            <div class="quick-action" onclick="sendQuickMessage('What are today\'s stock prices?')">
+                📈 Stock Prices
+            </div>
+            <div class="quick-action" onclick="sendQuickMessage('Show me vegetable prices')">
+                🥬 Market Prices
+            </div>
+            <div class="quick-action" onclick="sendQuickMessage('How to apply for passport?')">
+                📘 Passport Info
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message assistant">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">
+                        Namaste! I'm your Digital India AI Assistant. I can help you with:
+                        <br><br>
+                        • Government service applications and procedures<br>
+                        • Live stock market and commodity prices<br>
+                        • Document requirements and processing times<br>
+                        • General queries about Indian government services
+                        <br><br>
+                        How can I assist you today?
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+            <i class="fas fa-robot"></i>
+            <span>AI is typing</span>
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input">
+            <textarea 
+                class="input-field" 
+                id="messageInput" 
+                placeholder="Ask me anything about government services, market prices, or procedures..."
+                rows="1"
+            ></textarea>
+            <div class="input-actions">
+                <button class="action-btn" onclick="toggleVoiceInput()" title="Voice Input">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="action-btn" onclick="clearChat()" title="Clear Chat">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="action-btn send-btn" onclick="sendMessage()" title="Send Message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Theme toggle
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        
+        function toggleTheme() {
+            darkMode = !darkMode;
+            document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+            document.getElementById('themeIcon').className = darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('darkMode', darkMode);
+        }
+
+        // Initialize theme
+        if (darkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        // Chat functionality
+        let chatSessionId = null;
+
+        function addMessage(role, content) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-IN', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-${role === 'user' ? 'user' : 'robot'}"></i>
+                </div>
+                <div class="message-content">
+                    <div class="message-text">${content}</div>
+                    <div class="message-time">${timeString}</div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'flex';
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Add user message
+            addMessage('user', message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+                
+                // Generate AI response based on message content
+                const response = generateAIResponse(message);
+                
+                hideTypingIndicator();
+                addMessage('assistant', response);
+                
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('assistant', 'I apologize, but I\'m having trouble connecting right now. Please try again later.');
+            }
+        }
+
+        function generateAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Aadhaar related queries
+            if (lowerMessage.includes('aadhaar') || lowerMessage.includes('aadhar')) {
+                return `For Aadhaar card services:
+                
+                📋 <strong>Required Documents:</strong>
+                • Proof of Identity (Birth certificate, School certificate, etc.)
+                • Proof of Address (Utility bill, Bank statement, etc.)
+                
+                💰 <strong>Fees:</strong> Free for first enrollment
+                ⏱️ <strong>Processing Time:</strong> 90 days
+                
+                🌐 <strong>Apply Online:</strong> Visit uidai.gov.in
+                📍 <strong>Enrollment Centers:</strong> Find nearest center on UIDAI website
+                
+                Would you like help with any specific Aadhaar service?`;
+            }
+            
+            // Stock market queries
+            if (lowerMessage.includes('stock') || lowerMessage.includes('share') || lowerMessage.includes('market')) {
+                return `📈 <strong>Current Market Status:</strong>
+                
+                • NIFTY 50: ₹19,674.25 (+0.45%)
+                • SENSEX: ₹66,112.44 (+0.32%)
+                • BANK NIFTY: ₹43,567.80 (-0.28%)
+                
+                🔥 <strong>Top Gainers:</strong>
+                • Reliance: ₹2,456.75 (+0.47%)
+                • TCS: ₹3,678.90 (+0.37%)
+                • Infosys: ₹1,456.25 (+0.51%)
+                
+                Visit our Stocks page for live updates and detailed charts!`;
+            }
+            
+            // Passport queries
+            if (lowerMessage.includes('passport')) {
+                return `🛂 <strong>Passport Application Process:</strong>
+                
+                📋 <strong>Required Documents:</strong>
+                • Address proof and Identity proof
+                • Date of birth proof
+                • Recent photographs
+                
+                💰 <strong>Fees:</strong>
+                • Normal: ₹1,500 (36 pages), ₹2,000 (60 pages)
+                • Tatkal: ₹3,500 (36 pages), ₹4,000 (60 pages)
+                
+                ⏱️ <strong>Processing Time:</strong> 30 days (Normal), 7 days (Tatkal)
+                
+                🌐 <strong>Apply Online:</strong> passportindia.gov.in
+                
+                Need help with any specific passport service?`;
+            }
+            
+            // Market/commodity prices
+            if (lowerMessage.includes('price') || lowerMessage.includes('vegetable') || lowerMessage.includes('commodity')) {
+                return `🥬 <strong>Today's Market Prices:</strong>
+                
+                <strong>Vegetables (per quintal):</strong>
+                • Onion: ₹1,000 (Wholesale), ₹1,400 (Retail)
+                • Tomato: ₹800 (Wholesale), ₹1,200 (Retail)
+                • Potato: ₹600 (Wholesale), ₹900 (Retail)
+                
+                <strong>Grains (per quintal):</strong>
+                • Rice: ₹2,500 (Wholesale), ₹3,200 (Retail)
+                • Wheat: ₹2,200 (Wholesale), ₹2,800 (Retail)
+                
+                Visit our Market page for detailed prices from all major markets!`;
+            }
+            
+            // PAN card queries
+            if (lowerMessage.includes('pan')) {
+                return `💳 <strong>PAN Card Application:</strong>
+                
+                📋 <strong>Required Documents:</strong>
+                • Identity proof (Aadhaar, Voter ID, etc.)
+                • Address proof
+                • Date of birth proof
+                
+                💰 <strong>Fees:</strong> ₹110 (Indian address), ₹1,020 (Foreign address)
+                ⏱️ <strong>Processing Time:</strong> 15-20 days
+                
+                🌐 <strong>Apply Online:</strong> onlineservices.nsdl.com
+                
+                Would you like help with PAN card correction or reprint?`;
+            }
+            
+            // Default responses
+            const defaultResponses = [
+                `I'd be happy to help you with that! Could you please provide more specific details about what you're looking for? I can assist with:
+
+                🏛️ Government services (Aadhaar, Passport, PAN, etc.)
+                📈 Stock market information
+                🥬 Commodity and market prices
+                📋 Document requirements and procedures`,
+                
+                `Thank you for your question! I specialize in helping with Indian government services and market information. Could you please clarify what specific service or information you need help with?`,
+                
+                `I'm here to assist you with Digital India services! Please let me know if you need help with:
+                
+                • Document applications and renewals
+                • Market prices and stock information  
+                • Government scheme eligibility
+                • Service procedures and requirements`
+            ];
+            
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('messageInput').value = message;
+            sendMessage();
+        }
+
+        function clearChat() {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = `
+                <div class="message assistant">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            Chat cleared! How can I help you today?
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+            `;
+            chatSessionId = null;
+        }
+
+        function toggleVoiceInput() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                
+                recognition.onstart = () => {
+                    document.querySelector('.fa-microphone').style.color = '#ef4444';
+                };
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('messageInput').value = transcript;
+                    document.querySelector('.fa-microphone').style.color = '';
+                };
+                
+                recognition.onerror = () => {
+                    document.querySelector('.fa-microphone').style.color = '';
+                    addMessage('assistant', 'Sorry, I couldn\'t hear you clearly. Please try again or type your message.');
+                };
+                
+                recognition.onend = () => {
+                    document.querySelector('.fa-microphone').style.color = '';
+                };
+                
+                recognition.start();
+            } else {
+                addMessage('assistant', 'Voice recognition is not supported in your browser. Please type your message.');
+            }
+        }
+
+        // Auto-resize textarea
+        document.getElementById('messageInput').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        // Send message on Enter (but allow Shift+Enter for new line)
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

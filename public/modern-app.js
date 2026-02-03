@@ -4,25 +4,18 @@ class CivicAIApp {
         this.currentUser = null;
         this.services = [];
         this.marketData = [];
-        this.stockData = [];
         this.chatSessionId = null;
         this.animationsEnabled = true;
-        this.darkMode = false;
-        this.marketChart = null;
-        this.stockChart = null;
-        this.customTabs = [];
         this.init();
     }
 
     async init() {
         await this.loadServices();
         await this.loadMarketData();
-        await this.loadStockData();
         this.setupEventListeners();
         this.checkAuthStatus();
         this.loadUserPreferences();
         this.showWelcomeMessage();
-        this.loadMarketIndices();
     }
 
     setupEventListeners() {
@@ -37,7 +30,6 @@ class CivicAIApp {
         document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
         document.getElementById('registerForm').addEventListener('submit', (e) => this.handleRegister(e));
         document.getElementById('addServiceForm').addEventListener('submit', (e) => this.handleAddService(e));
-        document.getElementById('createTabForm').addEventListener('submit', (e) => this.handleCreateTab(e));
 
         // Real-time search
         document.getElementById('serviceSearch').addEventListener('input', () => this.debounce(this.filterServices.bind(this), 300)());
@@ -51,17 +43,9 @@ class CivicAIApp {
             case '#market':
                 this.loadMarketData();
                 break;
-            case '#stocks':
-                this.loadStockData();
-                break;
             case '#admin':
                 if (this.currentUser && this.currentUser.role === 'admin') {
                     this.loadAdminDashboard();
-                }
-                break;
-            case '#content':
-                if (this.currentUser && this.currentUser.role === 'admin') {
-                    this.loadContentManager();
                 }
                 break;
         }
@@ -155,24 +139,15 @@ class CivicAIApp {
     }
 
     updateUserDisplay() {
-        const loginSection = document.getElementById('loginSection');
-        const userSection = document.getElementById('userSection');
         const userDisplay = document.getElementById('userDisplay');
+        const logoutBtn = document.getElementById('logoutBtn');
         
         if (this.currentUser) {
-            loginSection.style.display = 'none';
-            userSection.style.display = 'block';
             userDisplay.textContent = this.currentUser.name;
-            
-            if (this.currentUser.role === 'admin') {
-                document.getElementById('admin-tab').style.display = 'block';
-                document.getElementById('content-tab').style.display = 'block';
-            }
+            logoutBtn.style.display = 'block';
         } else {
-            loginSection.style.display = 'block';
-            userSection.style.display = 'none';
-            document.getElementById('admin-tab').style.display = 'none';
-            document.getElementById('content-tab').style.display = 'none';
+            userDisplay.textContent = 'Guest';
+            logoutBtn.style.display = 'none';
         }
     }
 
@@ -180,6 +155,7 @@ class CivicAIApp {
         localStorage.removeItem('token');
         this.currentUser = null;
         this.updateUserDisplay();
+        document.getElementById('admin-tab').style.display = 'none';
         this.showNotification('Logged out successfully', 'info');
     }
 
@@ -439,516 +415,6 @@ class CivicAIApp {
 
         this.displayMarketData(filteredData);
         this.showNotification(`Found ${filteredData.length} market entries`, 'info');
-    }
-
-    // Stock Market Functionality
-    async loadStockData() {
-        try {
-            const response = await fetch('/api/stocks');
-            const data = await response.json();
-            this.stockData = data.stocks || [];
-            this.displayStockData(this.stockData);
-        } catch (error) {
-            console.error('Error loading stock data:', error);
-            this.stockData = this.getFallbackStockData();
-            this.displayStockData(this.stockData);
-        }
-    }
-
-    displayStockData(stockData) {
-        const stocksList = document.getElementById('stocksList');
-        stocksList.innerHTML = '';
-
-        if (stockData.length === 0) {
-            stocksList.innerHTML = `
-                <div class="text-center py-5">
-                    <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
-                    <h5>No stock data found</h5>
-                    <p class="text-muted">Try adjusting your filter criteria</p>
-                </div>
-            `;
-            return;
-        }
-
-        stockData.forEach((stock, index) => {
-            const stockCard = this.createStockCard(stock, index);
-            stocksList.appendChild(stockCard);
-        });
-    }
-
-    createStockCard(stock, index) {
-        const card = document.createElement('div');
-        card.className = 'market-card';
-        if (this.animationsEnabled) {
-            card.style.animationDelay = `${index * 0.1}s`;
-            card.classList.add('animate__animated', 'animate__fadeInRight');
-        }
-
-        const trendIcon = {
-            'up': '<i class="fas fa-arrow-up trend-up"></i>',
-            'down': '<i class="fas fa-arrow-down trend-down"></i>',
-            'stable': '<i class="fas fa-minus trend-stable"></i>'
-        };
-
-        const trendClass = stock.change >= 0 ? 'up' : 'down';
-        const changePercent = ((stock.change / stock.previousClose) * 100).toFixed(2);
-
-        card.innerHTML = `
-            <div class="d-flex justify-content-between align-items-start mb-3">
-                <div>
-                    <h5 class="mb-1">${stock.symbol}</h5>
-                    <small class="text-muted">${stock.name} • ${stock.exchange}</small>
-                </div>
-                <div class="price-trend">
-                    ${trendIcon[trendClass]}
-                    <span class="trend-${trendClass}">${changePercent > 0 ? '+' : ''}${changePercent}%</span>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-6">
-                    <div class="text-center p-2 bg-light rounded">
-                        <div class="small text-muted">Current Price</div>
-                        <div class="fw-bold">₹${stock.currentPrice.toFixed(2)}</div>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="text-center p-2 bg-light rounded">
-                        <div class="small text-muted">Change</div>
-                        <div class="fw-bold text-${trendClass === 'up' ? 'success' : 'danger'}">
-                            ${stock.change > 0 ? '+' : ''}₹${stock.change.toFixed(2)}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row mt-2">
-                <div class="col-4">
-                    <div class="small text-muted">High</div>
-                    <div class="fw-bold">₹${stock.dayHigh.toFixed(2)}</div>
-                </div>
-                <div class="col-4">
-                    <div class="small text-muted">Low</div>
-                    <div class="fw-bold">₹${stock.dayLow.toFixed(2)}</div>
-                </div>
-                <div class="col-4">
-                    <div class="small text-muted">Volume</div>
-                    <div class="fw-bold">${this.formatVolume(stock.volume)}</div>
-                </div>
-            </div>
-            
-            <div class="mt-2 d-flex justify-content-between align-items-center">
-                <span class="badge bg-${stock.sector === 'IT' ? 'primary' : stock.sector === 'Banking' ? 'success' : 'secondary'}">${stock.sector}</span>
-                <small class="text-muted">Updated: ${new Date(stock.lastUpdated).toLocaleTimeString()}</small>
-            </div>
-        `;
-
-        return card;
-    }
-
-    formatVolume(volume) {
-        if (volume >= 10000000) return (volume / 10000000).toFixed(1) + 'Cr';
-        if (volume >= 100000) return (volume / 100000).toFixed(1) + 'L';
-        if (volume >= 1000) return (volume / 1000).toFixed(1) + 'K';
-        return volume.toString();
-    }
-
-    filterStocks() {
-        const exchangeFilter = document.getElementById('exchangeFilter').value;
-        const sectorFilter = document.getElementById('sectorFilter').value;
-
-        let filteredStocks = this.stockData.filter(stock => {
-            const matchesExchange = !exchangeFilter || stock.exchange === exchangeFilter;
-            const matchesSector = !sectorFilter || stock.sector === sectorFilter;
-            return matchesExchange && matchesSector;
-        });
-
-        this.displayStockData(filteredStocks);
-        this.showNotification(`Found ${filteredStocks.length} stocks`, 'info');
-    }
-
-    async loadMarketIndices() {
-        try {
-            const response = await fetch('/api/stocks/indices');
-            const indices = await response.json();
-            
-            const indicesContainer = document.getElementById('marketIndices');
-            if (indicesContainer) {
-                indicesContainer.innerHTML = indices.map(index => `
-                    <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded" style="background: var(--bg-secondary);">
-                        <div>
-                            <div class="fw-bold">${index.name}</div>
-                            <div class="small text-muted">₹${index.value.toFixed(2)}</div>
-                        </div>
-                        <div class="text-end">
-                            <div class="small ${index.change >= 0 ? 'text-success' : 'text-danger'}">
-                                ${index.change >= 0 ? '+' : ''}${index.change.toFixed(2)}
-                            </div>
-                            <div class="small ${index.changePercent >= 0 ? 'text-success' : 'text-danger'}">
-                                ${index.changePercent >= 0 ? '+' : ''}${index.changePercent.toFixed(2)}%
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        } catch (error) {
-            console.error('Error loading market indices:', error);
-            // Fallback to mock data
-            this.loadMarketIndicesFallback();
-        }
-    }
-
-    loadMarketIndicesFallback() {
-        const indicesContainer = document.getElementById('marketIndices');
-        if (!indicesContainer) return;
-        
-        const indices = [
-            { name: 'NIFTY 50', value: 19674.25, change: 145.30, changePercent: 0.74 },
-            { name: 'SENSEX', value: 65953.48, change: 498.58, changePercent: 0.76 },
-            { name: 'NIFTY BANK', value: 44821.15, change: 312.85, changePercent: 0.70 }
-        ];
-
-        indicesContainer.innerHTML = indices.map(index => `
-            <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded" style="background: var(--bg-secondary);">
-                <div>
-                    <div class="fw-bold">${index.name}</div>
-                    <div class="small text-muted">₹${index.value.toFixed(2)}</div>
-                </div>
-                <div class="text-end">
-                    <div class="small ${index.change >= 0 ? 'text-success' : 'text-danger'}">
-                        ${index.change >= 0 ? '+' : ''}${index.change.toFixed(2)}
-                    </div>
-                    <div class="small ${index.changePercent >= 0 ? 'text-success' : 'text-danger'}">
-                        ${index.changePercent >= 0 ? '+' : ''}${index.changePercent.toFixed(2)}%
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // Chart Functions
-    showMarketCharts() {
-        const container = document.getElementById('marketChartsContainer');
-        container.style.display = 'block';
-        
-        if (this.marketChart) {
-            this.marketChart.destroy();
-        }
-
-        const ctx = document.getElementById('marketPriceChart').getContext('2d');
-        const chartData = this.prepareMarketChartData();
-
-        this.marketChart = new Chart(ctx, {
-            type: 'line',
-            data: chartData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Market Price Trends (Last 7 Days)',
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
-                    },
-                    legend: {
-                        labels: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        ticks: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary')
-                        },
-                        grid: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary')
-                        },
-                        grid: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    showStockCharts() {
-        const container = document.getElementById('stockChartsContainer');
-        container.style.display = 'block';
-        
-        if (this.stockChart) {
-            this.stockChart.destroy();
-        }
-
-        const ctx = document.getElementById('stockPriceChart').getContext('2d');
-        const chartData = this.prepareStockChartData();
-
-        this.stockChart = new Chart(ctx, {
-            type: 'line',
-            data: chartData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Stock Price Trends (Last 30 Days)',
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
-                    },
-                    legend: {
-                        labels: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        ticks: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary')
-                        },
-                        grid: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary')
-                        },
-                        grid: {
-                            color: getComputedStyle(document.documentElement).getPropertyValue('--border-color')
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    prepareMarketChartData() {
-        const labels = ['7 days ago', '6 days ago', '5 days ago', '4 days ago', '3 days ago', '2 days ago', 'Yesterday'];
-        const commodities = ['Onion', 'Tomato', 'Potato'];
-        const colors = ['#FF6B35', '#138808', '#000080'];
-
-        const datasets = commodities.map((commodity, index) => ({
-            label: commodity,
-            data: Array.from({length: 7}, () => Math.floor(Math.random() * 50) + 20),
-            borderColor: colors[index],
-            backgroundColor: colors[index] + '20',
-            tension: 0.4
-        }));
-
-        return { labels, datasets };
-    }
-
-    prepareStockChartData() {
-        const labels = Array.from({length: 30}, (_, i) => {
-            const date = new Date();
-            date.setDate(date.getDate() - (29 - i));
-            return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
-        });
-
-        const stocks = ['RELIANCE', 'TCS', 'INFY'];
-        const colors = ['#FF6B35', '#138808', '#000080'];
-
-        const datasets = stocks.map((stock, index) => {
-            const basePrice = 1000 + (index * 500);
-            const data = [];
-            let currentPrice = basePrice;
-            
-            for (let i = 0; i < 30; i++) {
-                const change = (Math.random() - 0.5) * 50;
-                currentPrice += change;
-                data.push(Math.max(currentPrice, basePrice * 0.8));
-            }
-
-            return {
-                label: stock,
-                data: data,
-                borderColor: colors[index],
-                backgroundColor: colors[index] + '20',
-                tension: 0.4
-            };
-        });
-
-        return { labels, datasets };
-    }
-
-    // Dark Mode Toggle
-    toggleDarkMode() {
-        this.darkMode = !this.darkMode;
-        document.documentElement.setAttribute('data-theme', this.darkMode ? 'dark' : 'light');
-        
-        const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
-        
-        if (this.darkMode) {
-            themeIcon.className = 'fas fa-sun';
-            themeText.textContent = 'Light';
-        } else {
-            themeIcon.className = 'fas fa-moon';
-            themeText.textContent = 'Dark';
-        }
-        
-        localStorage.setItem('darkMode', this.darkMode);
-        this.showNotification(`${this.darkMode ? 'Dark' : 'Light'} mode enabled`, 'info');
-        
-        // Update charts if they exist
-        if (this.marketChart) {
-            this.marketChart.update();
-        }
-        if (this.stockChart) {
-            this.stockChart.update();
-        }
-    }
-
-    // Content Management Functions
-    loadContentManager() {
-        this.loadExistingTabs();
-    }
-
-    loadExistingTabs() {
-        const container = document.getElementById('existingTabs');
-        const tabs = ['services', 'market', 'stocks', 'chat'];
-        
-        container.innerHTML = tabs.map(tab => `
-            <div class="d-flex justify-content-between align-items-center mb-2 p-2 rounded" style="background: var(--bg-secondary);">
-                <span class="fw-bold">${tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
-                <button class="btn btn-sm btn-outline-primary" onclick="app.editTab('${tab}')">
-                    <i class="fas fa-edit"></i>
-                </button>
-            </div>
-        `).join('');
-    }
-
-    async handleCreateTab(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const tabData = Object.fromEntries(formData);
-
-        try {
-            // In a real implementation, this would save to the backend
-            const tabId = tabData.tabName.toLowerCase().replace(/\s+/g, '-');
-            
-            // Add new tab to navigation
-            const tabNav = document.getElementById('mainTabs');
-            const newTabLi = document.createElement('li');
-            newTabLi.className = 'nav-item';
-            newTabLi.setAttribute('role', 'presentation');
-            newTabLi.innerHTML = `
-                <button class="nav-link" id="${tabId}-tab" data-bs-toggle="tab" data-bs-target="#${tabId}" type="button" role="tab">
-                    <i class="${tabData.tabIcon} me-2"></i>${tabData.tabName}
-                </button>
-            `;
-            
-            // Insert before admin tab
-            const adminTab = document.querySelector('#admin-tab').parentElement;
-            tabNav.insertBefore(newTabLi, adminTab);
-            
-            // Add new tab content
-            const tabContent = document.getElementById('mainTabContent');
-            const newTabContent = document.createElement('div');
-            newTabContent.className = 'tab-pane fade';
-            newTabContent.id = tabId;
-            newTabContent.setAttribute('role', 'tabpanel');
-            newTabContent.innerHTML = `
-                <div class="service-card">
-                    <h3><i class="${tabData.tabIcon} me-2"></i>${tabData.tabName}</h3>
-                    ${tabData.tabContent}
-                </div>
-            `;
-            
-            tabContent.appendChild(newTabContent);
-            
-            this.showNotification('New tab created successfully!', 'success');
-            e.target.reset();
-            this.loadExistingTabs();
-            
-        } catch (error) {
-            this.showNotification('Error creating tab', 'error');
-        }
-    }
-
-    loadContentSection() {
-        const section = document.getElementById('contentSection').value;
-        const editor = document.getElementById('contentEditor');
-        
-        if (!section) {
-            editor.style.display = 'none';
-            return;
-        }
-        
-        editor.style.display = 'block';
-        
-        // Load section content (mock data for demo)
-        const sectionData = {
-            hero: {
-                title: 'Digital India - Civic AI Assistant',
-                content: 'Welcome to the future of government services. Access all Indian government services, get real-time market data, and chat with our AI assistant.'
-            },
-            about: {
-                title: 'About Digital India Portal',
-                content: 'Our platform bridges the gap between citizens and government services through AI-powered assistance and comprehensive service directory.'
-            },
-            features: {
-                title: 'Key Features',
-                content: 'AI-powered chat assistance, comprehensive service directory, real-time market data, multi-language support, and accessibility features.'
-            },
-            footer: {
-                title: 'Footer Information',
-                content: '© 2024 Digital India Portal. All rights reserved. Built for the people of India.'
-            }
-        };
-        
-        const data = sectionData[section];
-        document.getElementById('sectionTitle').value = data.title;
-        document.getElementById('sectionContent').value = data.content;
-    }
-
-    saveContentSection() {
-        const section = document.getElementById('contentSection').value;
-        const title = document.getElementById('sectionTitle').value;
-        const content = document.getElementById('sectionContent').value;
-        
-        // In a real implementation, this would save to the backend
-        this.showNotification(`${section} section updated successfully!`, 'success');
-    }
-
-    previewContent() {
-        const content = document.getElementById('sectionContent').value;
-        
-        // Create preview modal
-        const modal = document.createElement('div');
-        modal.className = 'modal fade';
-        modal.innerHTML = `
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Content Preview</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="service-card">
-                            ${content}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(modal);
-        const modalInstance = new bootstrap.Modal(modal);
-        modalInstance.show();
-        
-        modal.addEventListener('hidden.bs.modal', () => {
-            document.body.removeChild(modal);
-        });
     }
 
     // Chat Functionality
@@ -1305,19 +771,6 @@ class CivicAIApp {
         if (localStorage.getItem('largeText') === 'true') {
             document.body.classList.add('large-text');
         }
-
-        // Load dark mode preference
-        const darkMode = localStorage.getItem('darkMode');
-        if (darkMode === 'true') {
-            this.darkMode = true;
-            document.documentElement.setAttribute('data-theme', 'dark');
-            const themeIcon = document.getElementById('themeIcon');
-            const themeText = document.getElementById('themeText');
-            if (themeIcon && themeText) {
-                themeIcon.className = 'fas fa-sun';
-                themeText.textContent = 'Light';
-            }
-        }
     }
 
     toggleVoiceInput() {
@@ -1433,76 +886,6 @@ class CivicAIApp {
             }
         ];
     }
-
-    getFallbackStockData() {
-        return [
-            {
-                symbol: 'RELIANCE',
-                name: 'Reliance Industries Limited',
-                exchange: 'NSE',
-                sector: 'Energy',
-                currentPrice: 2456.75,
-                previousClose: 2445.30,
-                change: 11.45,
-                dayHigh: 2467.80,
-                dayLow: 2441.20,
-                volume: 12500000,
-                lastUpdated: new Date()
-            },
-            {
-                symbol: 'TCS',
-                name: 'Tata Consultancy Services',
-                exchange: 'NSE',
-                sector: 'IT',
-                currentPrice: 3678.90,
-                previousClose: 3665.45,
-                change: 13.45,
-                dayHigh: 3689.30,
-                dayLow: 3658.70,
-                volume: 8750000,
-                lastUpdated: new Date()
-            },
-            {
-                symbol: 'INFY',
-                name: 'Infosys Limited',
-                exchange: 'NSE',
-                sector: 'IT',
-                currentPrice: 1456.25,
-                previousClose: 1448.80,
-                change: 7.45,
-                dayHigh: 1462.90,
-                dayLow: 1445.60,
-                volume: 15600000,
-                lastUpdated: new Date()
-            },
-            {
-                symbol: 'HDFCBANK',
-                name: 'HDFC Bank Limited',
-                exchange: 'NSE',
-                sector: 'Banking',
-                currentPrice: 1678.45,
-                previousClose: 1685.20,
-                change: -6.75,
-                dayHigh: 1689.80,
-                dayLow: 1672.30,
-                volume: 9800000,
-                lastUpdated: new Date()
-            },
-            {
-                symbol: 'ICICIBANK',
-                name: 'ICICI Bank Limited',
-                exchange: 'NSE',
-                sector: 'Banking',
-                currentPrice: 945.60,
-                previousClose: 952.30,
-                change: -6.70,
-                dayHigh: 956.80,
-                dayLow: 941.20,
-                volume: 11200000,
-                lastUpdated: new Date()
-            }
-        ];
-    }
 }
 
 // Global functions for HTML onclick events
@@ -1556,26 +939,6 @@ function filterServices() {
 
 function filterMarketData() {
     app.filterMarketData();
-}
-
-function showMarketCharts() {
-    app.showMarketCharts();
-}
-
-function filterStocks() {
-    app.filterStocks();
-}
-
-function showStockCharts() {
-    app.showStockCharts();
-}
-
-function toggleDarkMode() {
-    app.toggleDarkMode();
-}
-
-function showProfile() {
-    app.showNotification('Profile feature coming soon!', 'info');
 }
 
 // Initialize the app
