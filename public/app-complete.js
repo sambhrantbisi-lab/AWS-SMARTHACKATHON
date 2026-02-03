@@ -1,4 +1,4 @@
-// 🇮🇳 Civic AI Assistant - Professional Grade Implementation
+// 🇮🇳 Civic AI Assistant - Complete Government Grade Implementation
 // Built for AWS Smart Hackathon 2024
 
 // ============================================================================
@@ -82,309 +82,41 @@ const GOVERNMENT_TRANSLATIONS = {
 // Government-grade category translations
 const GOVERNMENT_CATEGORY_TRANSLATIONS = {
     en: {
-        healthcare: "Healthcare",
-        healthcare_desc: "Health Services",
-        employment: "Employment", 
-        employment_desc: "Job Services",
-        education: "Education",
-        education_desc: "Educational Services",
-        housing: "Housing",
-        housing_desc: "Housing Schemes",
-        legal: "Legal Aid",
-        legal_desc: "Legal Assistance",
-        transportation: "Transportation",
-        transportation_desc: "Transport Services",
-        documentation: "Documentation",
-        documentation_desc: "Document Services",
-        financial: "Financial",
-        financial_desc: "Financial Services",
-        emergency: "Emergency",
-        emergency_desc: "Emergency Services",
-        utilities: "Utilities",
-        utilities_desc: "Utility Services",
-        agriculture: "Agriculture",
-        agriculture_desc: "Agricultural Services",
-        welfare: "Welfare",
-        welfare_desc: "Welfare Schemes"
+        healthcare: "Healthcare", healthcare_desc: "Health Services",
+        employment: "Employment", employment_desc: "Job Services",
+        education: "Education", education_desc: "Educational Services",
+        housing: "Housing", housing_desc: "Housing Schemes",
+        legal: "Legal Aid", legal_desc: "Legal Assistance",
+        transportation: "Transportation", transportation_desc: "Transport Services",
+        documentation: "Documentation", documentation_desc: "Document Services",
+        financial: "Financial", financial_desc: "Financial Services",
+        emergency: "Emergency", emergency_desc: "Emergency Services",
+        utilities: "Utilities", utilities_desc: "Utility Services",
+        agriculture: "Agriculture", agriculture_desc: "Agricultural Services",
+        welfare: "Welfare", welfare_desc: "Welfare Schemes"
     },
     hi: {
-        healthcare: "स्वास्थ्य सेवा",
-        healthcare_desc: "स्वास्थ्य सेवाएं",
-        employment: "रोजगार",
-        employment_desc: "रोजगार सेवाएं",
-        education: "शिक्षा",
-        education_desc: "शिक्षा सेवाएं",
-        housing: "आवास",
-        housing_desc: "आवास योजनाएं",
-        legal: "कानूनी सहायता",
-        legal_desc: "कानूनी सहायता",
-        transportation: "परिवहन",
-        transportation_desc: "परिवहन सेवाएं",
-        documentation: "दस्तावेज़",
-        documentation_desc: "दस्तावेज़ सेवाएं",
-        financial: "वित्तीय",
-        financial_desc: "वित्तीय सेवाएं",
-        emergency: "आपातकाल",
-        emergency_desc: "आपातकालीन सेवाएं",
-        utilities: "उपयोगिताएं",
-        utilities_desc: "उपयोगिता सेवाएं",
-        agriculture: "कृषि",
-        agriculture_desc: "कृषि सेवाएं",
-        welfare: "कल्याण",
-        welfare_desc: "कल्याण योजनाएं"
+        healthcare: "स्वास्थ्य सेवा", healthcare_desc: "स्वास्थ्य सेवाएं",
+        employment: "रोजगार", employment_desc: "रोजगार सेवाएं",
+        education: "शिक्षा", education_desc: "शिक्षा सेवाएं",
+        housing: "आवास", housing_desc: "आवास योजनाएं",
+        legal: "कानूनी सहायता", legal_desc: "कानूनी सहायता",
+        transportation: "परिवहन", transportation_desc: "परिवहन सेवाएं",
+        documentation: "दस्तावेज़", documentation_desc: "दस्तावेज़ सेवाएं",
+        financial: "वित्तीय", financial_desc: "वित्तीय सेवाएं",
+        emergency: "आपातकाल", emergency_desc: "आपातकालीन सेवाएं",
+        utilities: "उपयोगिताएं", utilities_desc: "उपयोगिता सेवाएं",
+        agriculture: "कृषि", agriculture_desc: "कृषि सेवाएं",
+        welfare: "कल्याण", welfare_desc: "कल्याण योजनाएं"
     }
 };
-
-// Initialize language system
-function initializeLanguageSystem() {
-    // Load translations
-    translations = GOVERNMENT_TRANSLATIONS;
-    categoryTranslations = GOVERNMENT_CATEGORY_TRANSLATIONS;
-    isTranslationsLoaded = true;
-    
-    // Get saved language preference
-    const savedLanguage = localStorage.getItem('preferredLanguage');
-    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'hi')) {
-        currentLanguage = savedLanguage;
-    } else {
-        // Default to English
-        currentLanguage = 'en';
-    }
-    
-    // Update language selector
-    const languageSelect = document.getElementById('language-select');
-    if (languageSelect) {
-        languageSelect.value = currentLanguage;
-    }
-    
-    console.log('🇮🇳 Government language system initialized:', currentLanguage);
-}
-
-// Government-grade language change function
-function changeLanguage(languageCode) {
-    console.log('🌐 Government language change requested:', languageCode);
-    
-    // Validate language code (only English and Hindi supported)
-    if (languageCode !== 'en' && languageCode !== 'hi') {
-        console.error('❌ Unsupported language code:', languageCode);
-        return;
-    }
-    
-    // Check if translations are loaded
-    if (!isTranslationsLoaded) {
-        console.error('❌ Translations not loaded yet');
-        return;
-    }
-    
-    // Update current language
-    currentLanguage = languageCode;
-    localStorage.setItem('preferredLanguage', languageCode);
-    
-    // Update UI immediately
-    updateGovernmentUI();
-    
-    // Update language selector
-    const languageSelect = document.getElementById('language-select');
-    if (languageSelect) {
-        languageSelect.value = languageCode;
-    }
-    
-    // Show notification
-    const languageName = languageCode === 'hi' ? 'हिन्दी' : 'English';
-    showNotification(`भाषा बदली गई / Language changed to ${languageName}`, 'success');
-    
-    console.log('✅ Government language change completed:', languageCode);
-}
-
-// Government-grade UI update function
-function updateGovernmentUI() {
-    const lang = currentLanguage;
-    const t = translations[lang] || translations['en'];
-    const ct = categoryTranslations[lang] || categoryTranslations['en'];
-    
-    console.log('🏛️ Updating government UI to:', lang);
-    
-    // Update page title
-    document.title = t.app_title;
-    
-    // Update navbar
-    const navbarTitle = document.querySelector('.navbar-title');
-    if (navbarTitle) {
-        navbarTitle.innerHTML = `
-            <span class="gov-emblem">🇮🇳</span>
-            ${t.app_title}
-            <span class="beta-tag">BETA</span>
-        `;
-    }
-    
-    // Update navigation buttons
-    const navButtons = document.querySelectorAll('.nav-button');
-    navButtons.forEach(btn => {
-        const href = btn.getAttribute('href');
-        if (href === '#services') {
-            btn.textContent = t.nav_services;
-        } else if (href === '#chat') {
-            btn.textContent = t.nav_chat;
-        }
-    });
-    
-    // Update hero section
-    const heroTitle = document.querySelector('.hero h1');
-    if (heroTitle) {
-        heroTitle.textContent = t.hero_title;
-    }
-    
-    const heroSubtitle = document.querySelector('.hero p');
-    if (heroSubtitle) {
-        heroSubtitle.textContent = t.hero_subtitle;
-    }
-    
-    const heroDisclaimer = document.querySelector('.hero-disclaimer');
-    if (heroDisclaimer) {
-        heroDisclaimer.innerHTML = `
-            <span class="material-icons">info</span>
-            ${t.hero_disclaimer}
-        `;
-    }
-    
-    const heroBadge = document.querySelector('.hero-badge');
-    if (heroBadge) {
-        heroBadge.innerHTML = `
-            <span class="material-icons">verified</span>
-            ${t.government_platform}
-        `;
-    }
-    
-    // Update hero buttons
-    const startChatBtn = document.getElementById('start-chat-btn');
-    if (startChatBtn) {
-        startChatBtn.innerHTML = `
-            <span class="material-icons">chat</span>
-            ${t.start_ai_assistant}
-        `;
-    }
-    
-    const browseServicesBtn = document.getElementById('browse-services-btn');
-    if (browseServicesBtn) {
-        browseServicesBtn.innerHTML = `
-            <span class="material-icons">search</span>
-            ${t.browse_all_services}
-        `;
-    }
-    
-    // Update stats labels
-    const statLabels = document.querySelectorAll('.stat-label');
-    if (statLabels.length >= 3) {
-        statLabels[0].textContent = t.services_count;
-        statLabels[1].textContent = t.languages_count;
-        statLabels[2].textContent = t.ai_assistance;
-    }
-    
-    // Update section headers
-    const sectionHeaders = document.querySelectorAll('.section-header h2');
-    sectionHeaders.forEach(header => {
-        const text = header.textContent.trim();
-        if (text.includes('How We Help') || text.includes('हम आपके समुदाय')) {
-            header.textContent = t.how_we_help;
-        } else if (text.includes('Government Service Categories') || text.includes('सरकारी सेवा श्रेणियां')) {
-            header.textContent = t.government_services;
-        }
-    });
-    
-    const sectionSubtitles = document.querySelectorAll('.section-header p');
-    sectionSubtitles.forEach(subtitle => {
-        const text = subtitle.textContent.trim();
-        if (text.includes('tools designed') || text.includes('उपकरणों की खोज')) {
-            subtitle.textContent = t.tools_description;
-        } else if (text.includes('Comprehensive access') || text.includes('व्यापक पहुंच')) {
-            subtitle.textContent = t.comprehensive_access;
-        }
-    });
-    
-    // Update feature cards
-    const featureCards = document.querySelectorAll('.feature-card');
-    featureCards.forEach(card => {
-        const title = card.querySelector('h3');
-        const description = card.querySelector('p');
-        const button = card.querySelector('.btn-contained');
-        
-        if (title && title.textContent.includes('AI-Powered')) {
-            title.textContent = t.ai_powered_assistant;
-            if (description) {
-                description.textContent = t.ai_description;
-            }
-            if (button) {
-                button.innerHTML = `
-                    ${t.start_chatting}
-                    <span class="material-icons">arrow_forward</span>
-                `;
-            }
-        } else if (title && title.textContent.includes('Service Directory')) {
-            title.textContent = t.service_directory;
-            if (description) {
-                description.textContent = t.directory_description;
-            }
-            if (button) {
-                button.innerHTML = `
-                    ${t.browse_services}
-                    <span class="material-icons">arrow_forward</span>
-                `;
-            }
-        }
-    });
-    
-    // Update category chips
-    updateGovernmentCategoryChips();
-    
-    // Update accessibility section
-    const accessibilityTitle = document.querySelector('.accessibility-notice h3');
-    if (accessibilityTitle) {
-        accessibilityTitle.textContent = t.accessible_for_everyone;
-    }
-    
-    const accessibilityDesc = document.querySelector('.accessibility-notice p');
-    if (accessibilityDesc) {
-        accessibilityDesc.textContent = t.accessibility_description;
-    }
-    
-    // Update footer
-    const footer = document.querySelector('.footer p');
-    if (footer) {
-        footer.innerHTML = `&copy; 2024 Civic AI Assistant - ${t.built_with_love}`;
-    }
-    
-    console.log('✅ Government UI updated successfully');
-}
-
-// Update category chips with government translations
-function updateGovernmentCategoryChips() {
-    const lang = currentLanguage;
-    const ct = categoryTranslations[lang] || categoryTranslations['en'];
-    
-    document.querySelectorAll('.category-chip').forEach(chip => {
-        const category = chip.getAttribute('data-category');
-        const categoryInfo = chip.querySelector('.category-info');
-        
-        if (category && categoryInfo && ct[category]) {
-            const nameSpan = categoryInfo.querySelector('.category-name');
-            const descSpan = categoryInfo.querySelector('.category-desc');
-            
-            if (nameSpan) {
-                nameSpan.textContent = ct[category];
-            }
-            if (descSpan) {
-                descSpan.textContent = ct[category + '_desc'] || '';
-            }
-        }
-    });
-}
 
 // ============================================================================
 // APPLICATION INITIALIZATION
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Initializing Civic AI Assistant...');
+    console.log('🚀 Initializing Complete Civic AI Assistant...');
     initializeApp();
 });
 
@@ -393,7 +125,7 @@ async function initializeApp() {
         // Initialize theme system
         initializeTheme();
         
-        // Initialize government-grade language system
+        // Initialize government language system
         initializeLanguageSystem();
         
         // Load available languages
@@ -421,7 +153,7 @@ async function initializeApp() {
         // Show success notification
         showNotification('🇮🇳 Civic AI Assistant Ready!', 'success');
         
-        console.log('✅ Application initialized successfully');
+        console.log('✅ Complete application initialized successfully');
         
     } catch (error) {
         console.error('❌ Initialization error:', error);
@@ -445,20 +177,6 @@ function initializeTheme() {
         document.body.setAttribute('data-theme', 'light');
         if (themeIcon) themeIcon.textContent = 'dark_mode';
     }
-    
-    // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (!localStorage.getItem('theme')) {
-            const themeIcon = document.getElementById('theme-icon');
-            if (e.matches) {
-                document.body.setAttribute('data-theme', 'dark');
-                if (themeIcon) themeIcon.textContent = 'light_mode';
-            } else {
-                document.body.setAttribute('data-theme', 'light');
-                if (themeIcon) themeIcon.textContent = 'dark_mode';
-            }
-        }
-    });
 }
 
 function toggleTheme() {
@@ -480,6 +198,178 @@ function toggleTheme() {
 }
 
 // ============================================================================
+// LANGUAGE SYSTEM
+// ============================================================================
+
+function initializeLanguageSystem() {
+    translations = GOVERNMENT_TRANSLATIONS;
+    categoryTranslations = GOVERNMENT_CATEGORY_TRANSLATIONS;
+    isTranslationsLoaded = true;
+    
+    const savedLanguage = localStorage.getItem('preferredLanguage');
+    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'hi')) {
+        currentLanguage = savedLanguage;
+    } else {
+        currentLanguage = 'en';
+    }
+    
+    const languageSelect = document.getElementById('language-select');
+    if (languageSelect) {
+        languageSelect.value = currentLanguage;
+    }
+    
+    console.log('🇮🇳 Government language system initialized:', currentLanguage);
+}
+
+function changeLanguage(languageCode) {
+    console.log('🌐 Government language change requested:', languageCode);
+    
+    if (languageCode !== 'en' && languageCode !== 'hi') {
+        console.error('❌ Unsupported language code:', languageCode);
+        return;
+    }
+    
+    if (!isTranslationsLoaded) {
+        console.error('❌ Translations not loaded yet');
+        return;
+    }
+    
+    currentLanguage = languageCode;
+    localStorage.setItem('preferredLanguage', languageCode);
+    
+    updateGovernmentUI();
+    
+    const languageSelect = document.getElementById('language-select');
+    if (languageSelect) {
+        languageSelect.value = languageCode;
+    }
+    
+    const languageName = languageCode === 'hi' ? 'हिन्दी' : 'English';
+    showNotification(`भाषा बदली गई / Language changed to ${languageName}`, 'success');
+    
+    console.log('✅ Government language change completed:', languageCode);
+}
+
+function updateGovernmentUI() {
+    const lang = currentLanguage;
+    const t = translations[lang] || translations['en'];
+    const ct = categoryTranslations[lang] || categoryTranslations['en'];
+    
+    console.log('🏛️ Updating government UI to:', lang);
+    
+    document.title = t.app_title;
+    
+    const navbarTitle = document.querySelector('.navbar-title');
+    if (navbarTitle) {
+        navbarTitle.innerHTML = `<span class="gov-emblem">🇮🇳</span>${t.app_title}<span class="beta-tag">BETA</span>`;
+    }
+    
+    document.querySelectorAll('.nav-button').forEach(btn => {
+        const href = btn.getAttribute('href');
+        if (href === '#services') btn.textContent = t.nav_services;
+        else if (href === '#chat') btn.textContent = t.nav_chat;
+    });
+    
+    const heroTitle = document.querySelector('.hero h1');
+    if (heroTitle) heroTitle.textContent = t.hero_title;
+    
+    const heroSubtitle = document.querySelector('.hero p');
+    if (heroSubtitle) heroSubtitle.textContent = t.hero_subtitle;
+    
+    const heroDisclaimer = document.querySelector('.hero-disclaimer');
+    if (heroDisclaimer) {
+        heroDisclaimer.innerHTML = `<span class="material-icons">info</span>${t.hero_disclaimer}`;
+    }
+    
+    const heroBadge = document.querySelector('.hero-badge');
+    if (heroBadge) {
+        heroBadge.innerHTML = `<span class="material-icons">verified</span>${t.government_platform}`;
+    }
+    
+    const startChatBtn = document.getElementById('start-chat-btn');
+    if (startChatBtn) {
+        startChatBtn.innerHTML = `<span class="material-icons">chat</span>${t.start_ai_assistant}`;
+    }
+    
+    const browseServicesBtn = document.getElementById('browse-services-btn');
+    if (browseServicesBtn) {
+        browseServicesBtn.innerHTML = `<span class="material-icons">search</span>${t.browse_all_services}`;
+    }
+    
+    const statLabels = document.querySelectorAll('.stat-label');
+    if (statLabels.length >= 3) {
+        statLabels[0].textContent = t.services_count;
+        statLabels[1].textContent = t.languages_count;
+        statLabels[2].textContent = t.ai_assistance;
+    }
+    
+    document.querySelectorAll('.section-header h2').forEach(header => {
+        const text = header.textContent.trim();
+        if (text.includes('How We Help') || text.includes('हम आपके समुदाय')) {
+            header.textContent = t.how_we_help;
+        } else if (text.includes('Government Service Categories') || text.includes('सरकारी सेवा श्रेणियां')) {
+            header.textContent = t.government_services;
+        }
+    });
+    
+    document.querySelectorAll('.section-header p').forEach(subtitle => {
+        const text = subtitle.textContent.trim();
+        if (text.includes('tools designed') || text.includes('उपकरणों की खोज')) {
+            subtitle.textContent = t.tools_description;
+        } else if (text.includes('Comprehensive access') || text.includes('व्यापक पहुंच')) {
+            subtitle.textContent = t.comprehensive_access;
+        }
+    });
+    
+    document.querySelectorAll('.feature-card').forEach(card => {
+        const title = card.querySelector('h3');
+        const description = card.querySelector('p');
+        const button = card.querySelector('.btn-contained');
+        
+        if (title && (title.textContent.includes('AI-Powered') || title.textContent.includes('AI-संचालित'))) {
+            title.textContent = t.ai_powered_assistant;
+            if (description) description.textContent = t.ai_description;
+            if (button) button.innerHTML = `${t.start_chatting}<span class="material-icons">arrow_forward</span>`;
+        } else if (title && (title.textContent.includes('Service Directory') || title.textContent.includes('सेवा निर्देशिका'))) {
+            title.textContent = t.service_directory;
+            if (description) description.textContent = t.directory_description;
+            if (button) button.innerHTML = `${t.browse_services}<span class="material-icons">arrow_forward</span>`;
+        }
+    });
+    
+    updateGovernmentCategoryChips();
+    
+    const accessibilityTitle = document.querySelector('.accessibility-notice h3');
+    if (accessibilityTitle) accessibilityTitle.textContent = t.accessible_for_everyone;
+    
+    const accessibilityDesc = document.querySelector('.accessibility-notice p');
+    if (accessibilityDesc) accessibilityDesc.textContent = t.accessibility_description;
+    
+    const footer = document.querySelector('.footer p');
+    if (footer) footer.innerHTML = `&copy; 2024 Civic AI Assistant - ${t.built_with_love}`;
+    
+    console.log('✅ Government UI updated successfully');
+}
+
+function updateGovernmentCategoryChips() {
+    const lang = currentLanguage;
+    const ct = categoryTranslations[lang] || categoryTranslations['en'];
+    
+    document.querySelectorAll('.category-chip').forEach(chip => {
+        const category = chip.getAttribute('data-category');
+        const categoryInfo = chip.querySelector('.category-info');
+        
+        if (category && categoryInfo && ct[category]) {
+            const nameSpan = categoryInfo.querySelector('.category-name');
+            const descSpan = categoryInfo.querySelector('.category-desc');
+            
+            if (nameSpan) nameSpan.textContent = ct[category];
+            if (descSpan) descSpan.textContent = ct[category + '_desc'] || '';
+        }
+    });
+}
+
+// ============================================================================
 // DATA LOADING
 // ============================================================================
 
@@ -496,60 +386,16 @@ async function loadAvailableLanguages() {
         availableLanguages = data.languages || [];
         
         console.log(`✅ Loaded ${availableLanguages.length} languages`);
-        
-        // Update language selector
-        updateLanguageSelector();
-        
         return availableLanguages;
         
     } catch (error) {
         console.error('❌ Error loading languages:', error);
-        // Fallback to basic languages
         availableLanguages = [
             { code: 'en', name: 'English', englishName: 'English' },
             { code: 'hi', name: 'हिन्दी', englishName: 'Hindi' }
         ];
         return availableLanguages;
     }
-}
-
-function updateLanguageSelector() {
-    const languageSelect = document.getElementById('language-select');
-    if (!languageSelect) {
-        console.error('❌ Language selector not found');
-        return;
-    }
-    
-    console.log('🌐 Updating language selector with', availableLanguages.length, 'languages');
-    
-    if (availableLanguages.length === 0) {
-        console.log('⚠️ No available languages, using fallback');
-        // Fallback languages if API fails
-        availableLanguages = [
-            { code: 'en', name: 'English', englishName: 'English' },
-            { code: 'hi', name: 'हिन्दी', englishName: 'Hindi' },
-            { code: 'bn', name: 'বাংলা', englishName: 'Bengali' },
-            { code: 'te', name: 'తెలుగు', englishName: 'Telugu' },
-            { code: 'ta', name: 'தமிழ்', englishName: 'Tamil' },
-            { code: 'gu', name: 'ગુજરાતી', englishName: 'Gujarati' }
-        ];
-    }
-    
-    // Clear existing options
-    languageSelect.innerHTML = '';
-    
-    // Add language options
-    availableLanguages.forEach(lang => {
-        const option = document.createElement('option');
-        option.value = lang.code;
-        option.textContent = `${lang.name} (${lang.englishName})`;
-        languageSelect.appendChild(option);
-    });
-    
-    // Set current language
-    languageSelect.value = currentLanguage;
-    
-    console.log('✅ Language selector updated with options:', availableLanguages.map(l => l.code));
 }
 
 async function loadBharatServices() {
@@ -565,366 +411,14 @@ async function loadBharatServices() {
         bharatServices = data.services || [];
         
         console.log(`✅ Loaded ${bharatServices.length} Bharat services`);
-        
-        // Update category counts
         updateCategoryCounts();
-        
         return bharatServices;
         
     } catch (error) {
         console.error('❌ Error loading services:', error);
         showNotification('Unable to load services. Please check your connection.', 'error');
-        
-        // Fallback to empty array
         bharatServices = [];
         return [];
-    }
-}
-
-async function loadTranslations() {
-    try {
-        console.log('🌐 Loading translations...');
-        
-        // Load main translations
-        const translationsResponse = await fetch('/data/translations.json');
-        if (!translationsResponse.ok) {
-            throw new Error(`HTTP ${translationsResponse.status}: ${translationsResponse.statusText}`);
-        }
-        const translationsData = await translationsResponse.json();
-        translations = translationsData.translations || {};
-        console.log('✅ Main translations loaded:', Object.keys(translations));
-        
-        // Load category translations
-        const categoryResponse = await fetch('/data/categoryTranslations.json');
-        if (!categoryResponse.ok) {
-            throw new Error(`HTTP ${categoryResponse.status}: ${categoryResponse.statusText}`);
-        }
-        const categoryData = await categoryResponse.json();
-        categoryTranslations = categoryData.categories || {};
-        console.log('✅ Category translations loaded:', Object.keys(categoryTranslations));
-        
-        console.log('✅ All translations loaded successfully');
-        
-    } catch (error) {
-        console.error('❌ Error loading translations:', error);
-        // Fallback to empty translations
-        translations = {};
-        categoryTranslations = {};
-    }
-}
-
-function initializeLanguage() {
-    // Get language from localStorage or browser preference
-    const savedLanguage = localStorage.getItem('preferredLanguage');
-    const browserLanguage = navigator.language.split('-')[0];
-    
-    // Check if saved language is available
-    if (savedLanguage && availableLanguages.some(lang => lang.code === savedLanguage)) {
-        currentLanguage = savedLanguage;
-    } else if (availableLanguages.some(lang => lang.code === browserLanguage)) {
-        currentLanguage = browserLanguage;
-    } else {
-        currentLanguage = 'en'; // Default fallback
-    }
-    
-    // Update language selector
-    const languageSelect = document.getElementById('language-select');
-    if (languageSelect) {
-        languageSelect.value = currentLanguage;
-    }
-    
-    // Apply initial language
-    updateUILanguage();
-    
-    console.log(`🌐 Language initialized: ${currentLanguage}`);
-}
-
-function changeLanguage(languageCode) {
-    console.log('🌐 changeLanguage called with:', languageCode);
-    console.log('🌐 Current language:', currentLanguage);
-    console.log('🌐 Available translations:', Object.keys(translations));
-    
-    if (!languageCode || languageCode === currentLanguage) {
-        console.log('⚠️ Language code invalid or same as current');
-        return;
-    }
-    
-    // Validate language code
-    if (!availableLanguages.some(lang => lang.code === languageCode)) {
-        console.error('❌ Invalid language code:', languageCode);
-        console.log('Available languages:', availableLanguages.map(l => l.code));
-        return;
-    }
-    
-    console.log(`🌐 Changing language from ${currentLanguage} to ${languageCode}`);
-    
-    currentLanguage = languageCode;
-    localStorage.setItem('preferredLanguage', languageCode);
-    
-    // Update UI
-    updateUILanguage();
-    
-    // Update language selector
-    const languageSelect = document.getElementById('language-select');
-    if (languageSelect) {
-        languageSelect.value = languageCode;
-    }
-    
-    // Show notification
-    const languageName = availableLanguages.find(lang => lang.code === languageCode)?.name || languageCode;
-    showNotification(`Language changed to ${languageName}`, 'success');
-    
-    console.log('✅ Language change completed');
-}
-
-function updateUILanguage() {
-    const lang = currentLanguage;
-    const t = translations[lang] || translations['en'] || {};
-    const ct = categoryTranslations[lang] || categoryTranslations['en'] || {};
-    
-    console.log(`🌐 Updating UI to language: ${lang}`);
-    console.log('🌐 Translation object keys:', Object.keys(t));
-    console.log('🌐 Category translations keys:', Object.keys(ct));
-    
-    if (Object.keys(t).length === 0) {
-        console.error('❌ No translations available for language:', lang);
-        return;
-    }
-    
-    // Update page title
-    document.title = t.app_title || 'Civic AI Assistant';
-    console.log('📝 Updated page title to:', document.title);
-    
-    // Update navbar
-    const navbarTitle = document.querySelector('.navbar-title');
-    if (navbarTitle) {
-        navbarTitle.innerHTML = `
-            <span class="gov-emblem">🇮🇳</span>
-            ${t.app_title || 'Civic AI Assistant'}
-            <span class="beta-tag">BETA</span>
-        `;
-    }
-    
-    // Update navigation buttons
-    const navButtons = document.querySelectorAll('.nav-button');
-    navButtons.forEach(btn => {
-        const href = btn.getAttribute('href');
-        if (href === '#services') {
-            btn.textContent = t.nav_services || 'Services';
-        } else if (href === '#chat') {
-            btn.textContent = t.nav_chat || 'Chat Assistant';
-        }
-    });
-    
-    // Update hero section
-    const heroTitle = document.querySelector('.hero h1');
-    if (heroTitle) {
-        heroTitle.textContent = t.hero_title || 'Your Comprehensive Civic Information Assistant';
-    }
-    
-    const heroSubtitle = document.querySelector('.hero p');
-    if (heroSubtitle) {
-        heroSubtitle.textContent = t.hero_subtitle || 'Connecting citizens with government services, public welfare schemes, and civic information through advanced AI assistance. Available in all official Indian languages.';
-    }
-    
-    const heroDisclaimer = document.querySelector('.hero-disclaimer');
-    if (heroDisclaimer) {
-        heroDisclaimer.innerHTML = `
-            <span class="material-icons">info</span>
-            ${t.hero_disclaimer || 'This is an AI-powered assistant. For official procedures, please contact the relevant government department.'}
-        `;
-    }
-    
-    // Update hero buttons
-    const startChatBtn = document.getElementById('start-chat-btn');
-    if (startChatBtn) {
-        startChatBtn.innerHTML = `
-            <span class="material-icons">chat</span>
-            ${t.start_ai_assistant || 'Start AI Assistant'}
-        `;
-    }
-    
-    const browseServicesBtn = document.getElementById('browse-services-btn');
-    if (browseServicesBtn) {
-        browseServicesBtn.innerHTML = `
-            <span class="material-icons">search</span>
-            ${t.browse_all_services || 'Browse All Services'}
-        `;
-    }
-    
-    // Update hero badge
-    const heroBadge = document.querySelector('.hero-badge');
-    if (heroBadge) {
-        heroBadge.innerHTML = `
-            <span class="material-icons">verified</span>
-            ${t.government_platform || 'Government of India Official Platform'}
-        `;
-    }
-    
-    // Update stats labels
-    const statLabels = document.querySelectorAll('.stat-label');
-    if (statLabels.length >= 3) {
-        statLabels[0].textContent = t.services_count || 'Government Services';
-        statLabels[1].textContent = t.languages_count || 'Official Languages';
-        statLabels[2].textContent = t.ai_assistance || 'AI Assistance';
-    }
-    
-    // Update section headers
-    const sectionHeaders = document.querySelectorAll('.section-header h2');
-    sectionHeaders.forEach(header => {
-        const text = header.textContent.trim();
-        if (text.includes('How We Help')) {
-            header.textContent = t.how_we_help || 'How We Help Your Community';
-        } else if (text.includes('Government Service Categories')) {
-            header.textContent = t.government_services || 'Government Service Categories';
-        }
-    });
-    
-    const sectionSubtitles = document.querySelectorAll('.section-header p');
-    sectionSubtitles.forEach(subtitle => {
-        const text = subtitle.textContent.trim();
-        if (text.includes('tools designed')) {
-            subtitle.textContent = t.tools_description || 'Discover the tools designed to make accessing public services simple and efficient.';
-        } else if (text.includes('Comprehensive access')) {
-            subtitle.textContent = t.comprehensive_access || 'Comprehensive access to all government departments and public services across India.';
-        }
-    });
-    
-    // Update feature cards
-    const featureCards = document.querySelectorAll('.feature-card');
-    featureCards.forEach(card => {
-        const title = card.querySelector('h3');
-        const description = card.querySelector('p');
-        const button = card.querySelector('.btn-contained');
-        
-        if (title && title.textContent.includes('AI-Powered')) {
-            title.textContent = t.ai_powered_assistant || 'AI-Powered Assistant';
-            if (description) {
-                description.textContent = t.ai_description || 'Get instant help finding public services and information through our intelligent chat assistant.';
-            }
-            if (button) {
-                button.innerHTML = `
-                    ${t.start_chatting || 'Start Chatting'}
-                    <span class="material-icons">arrow_forward</span>
-                `;
-            }
-        } else if (title && title.textContent.includes('Service Directory')) {
-            title.textContent = t.service_directory || 'Service Directory';
-            if (description) {
-                description.textContent = t.directory_description || 'Browse and search through comprehensive database of local public services and resources.';
-            }
-            if (button) {
-                button.innerHTML = `
-                    ${t.browse_services || 'Browse Services'}
-                    <span class="material-icons">arrow_forward</span>
-                `;
-            }
-        }
-    });
-    
-    // Update category chips
-    updateCategoryChips();
-    
-    // Update accessibility section
-    const accessibilityTitle = document.querySelector('.accessibility-notice h3');
-    if (accessibilityTitle) {
-        accessibilityTitle.textContent = t.accessible_for_everyone || 'Accessible for Everyone';
-    }
-    
-    const accessibilityDesc = document.querySelector('.accessibility-notice p');
-    if (accessibilityDesc) {
-        accessibilityDesc.textContent = t.accessibility_description || 'Our platform supports multiple languages, screen readers, high contrast mode, and keyboard navigation to ensure everyone can access public services.';
-    }
-    
-    // Update footer
-    const footer = document.querySelector('.footer p');
-    if (footer) {
-        footer.innerHTML = `&copy; 2024 Civic AI Assistant - ${t.built_with_love || 'Built with ❤️ for community empowerment'}`;
-    }
-    
-    // Update demo section
-    const demoTitle = document.querySelector('#chat .section-header h2');
-    if (demoTitle && demoTitle.textContent.includes('AI Chat Assistant')) {
-        demoTitle.textContent = `🇮🇳 ${t.nav_chat || 'AI Chat Assistant'} - Live Demo`;
-    }
-    
-    // Update modals if they exist
-    updateModalLanguage();
-    
-    console.log('✅ UI language updated successfully');
-}
-
-function updateCategoryChips() {
-    const lang = currentLanguage;
-    const ct = categoryTranslations[lang] || categoryTranslations['en'] || {};
-    
-    // Update category chips
-    document.querySelectorAll('.category-chip').forEach(chip => {
-        const category = chip.getAttribute('data-category');
-        const categoryInfo = chip.querySelector('.category-info');
-        
-        if (category && categoryInfo && ct[category]) {
-            const nameSpan = categoryInfo.querySelector('.category-name');
-            const descSpan = categoryInfo.querySelector('.category-desc');
-            
-            if (nameSpan) {
-                nameSpan.textContent = ct[category] || category;
-            }
-            if (descSpan) {
-                descSpan.textContent = ct[category + '_desc'] || '';
-            }
-        }
-    });
-}
-
-function updateModalLanguage() {
-    const lang = currentLanguage;
-    const t = translations[lang] || translations['en'] || {};
-    
-    // Update chat modal if it exists
-    const chatModalHeader = document.querySelector('#chat-modal .modal-header h2');
-    if (chatModalHeader) {
-        chatModalHeader.textContent = `🇮🇳 ${t.nav_chat || 'Civic AI Assistant'}`;
-    }
-    
-    const chatInput = document.getElementById('chat-input');
-    if (chatInput) {
-        if (lang === 'hi') {
-            chatInput.placeholder = 'हिंदी या अंग्रेजी में अपना प्रश्न टाइप करें...';
-        } else if (lang === 'bn') {
-            chatInput.placeholder = 'বাংলা বা ইংরেজিতে আপনার প্রশ্ন টাইপ করুন...';
-        } else if (lang === 'te') {
-            chatInput.placeholder = 'తెలుగు లేదా ఇంగ్లీష్‌లో మీ ప్రశ్నను టైప్ చేయండి...';
-        } else if (lang === 'ta') {
-            chatInput.placeholder = 'தமிழ் அல்லது ஆங்கிலத்தில் உங்கள் கேள்வியை தட்டச்சு செய்யுங்கள்...';
-        } else if (lang === 'gu') {
-            chatInput.placeholder = 'ગુજરાતી અથવા અંગ્રેજીમાં તમારો પ્રશ્ન ટાઇપ કરો...';
-        } else {
-            chatInput.placeholder = 'Type your question in Hindi or English...';
-        }
-    }
-    
-    // Update services modal if it exists
-    const servicesModalHeader = document.querySelector('#services-modal .modal-header h2');
-    if (servicesModalHeader) {
-        servicesModalHeader.textContent = `🇮🇳 ${t.government_services || 'Bharat Public Services Directory'}`;
-    }
-    
-    const servicesSearch = document.getElementById('services-search');
-    if (servicesSearch) {
-        if (lang === 'hi') {
-            servicesSearch.placeholder = 'सेवाएं खोजें...';
-        } else if (lang === 'bn') {
-            servicesSearch.placeholder = 'সেবা খুঁজুন...';
-        } else if (lang === 'te') {
-            servicesSearch.placeholder = 'సేవలను వెతకండి...';
-        } else if (lang === 'ta') {
-            servicesSearch.placeholder = 'சேவைகளைத் தேடுங்கள்...';
-        } else if (lang === 'gu') {
-            servicesSearch.placeholder = 'સેવાઓ શોધો...';
-        } else {
-            servicesSearch.placeholder = 'Search services...';
-        }
     }
 }
 
@@ -933,7 +427,6 @@ function updateServiceStatistics() {
     if (servicesCountElement) {
         servicesCountElement.textContent = `${bharatServices.length}+`;
     }
-    
     console.log('📊 Service statistics updated');
 }
 
@@ -944,7 +437,6 @@ function updateCategoryCounts() {
         categoryCounts[category] = (categoryCounts[category] || 0) + 1;
     });
     
-    // Update category chips with counts
     document.querySelectorAll('.category-chip').forEach(chip => {
         const category = chip.getAttribute('data-category');
         if (category && categoryCounts[category]) {
@@ -957,7 +449,6 @@ function updateCategoryCounts() {
     
     console.log('📊 Category counts updated:', categoryCounts);
 }
-
 // ============================================================================
 // BUTTON HANDLERS SETUP
 // ============================================================================
@@ -1045,12 +536,14 @@ function createChatModal() {
                             <h3>🙏 नमस्ते! Welcome to Civic AI Assistant</h3>
                             <p>I'm here to help you find government services and public information across India.</p>
                             <div class="welcome-features">
-                                <div class="feature-item">� <strong>Health Services</strong> - PHC, vaccination, medical aid</div>
-                                <div class="feature-item">� <strong>Employment</strong> - PMKVY, skill training, job assistance</div>
+                                <div class="feature-item">🏥 <strong>Health Services</strong> - PHC, vaccination, medical aid</div>
+                                <div class="feature-item">💼 <strong>Employment</strong> - PMKVY, skill training, job assistance</div>
+                                <div class="feature-item">🎓 <strong>Scholarships</strong> - NSP, education funding, student aid</div>
                                 <div class="feature-item">🏠 <strong>Housing</strong> - PMAY, housing subsidies</div>
-                                <div class="feature-item">� <strong>Education</strong> - Libraries, scholarships</div>
+                                <div class="feature-item">📚 <strong>Education</strong> - Libraries, scholarships</div>
                                 <div class="feature-item">⚖️ <strong>Legal Aid</strong> - Free legal assistance</div>
                                 <div class="feature-item">🚌 <strong>Transportation</strong> - Public transport info</div>
+                                <div class="feature-item">📱 <strong>Digital Services</strong> - DigiLocker, UMANG, MyGov</div>
                             </div>
                             <p><em>Ask me anything in Hindi or English!</em></p>
                         </div>
@@ -1059,8 +552,10 @@ function createChatModal() {
                 <div class="chat-suggestions" id="chat-suggestions">
                     <button class="suggestion-btn" onclick="sendSuggestion('मुझे स्वास्थ्य सेवा चाहिए')">🏥 Health services</button>
                     <button class="suggestion-btn" onclick="sendSuggestion('How to get skill training?')">💼 Skill training</button>
+                    <button class="suggestion-btn" onclick="sendSuggestion('National Scholarship Portal information')">🎓 Scholarships</button>
                     <button class="suggestion-btn" onclick="sendSuggestion('Housing subsidy schemes')">🏠 Housing schemes</button>
                     <button class="suggestion-btn" onclick="sendSuggestion('Free legal aid services')">⚖️ Legal aid</button>
+                    <button class="suggestion-btn" onclick="sendSuggestion('Digital India services')">📱 Digital services</button>
                 </div>
                 <div class="chat-input-container">
                     <input type="text" id="chat-input" placeholder="Type your question in Hindi or English..." />
@@ -1302,6 +797,11 @@ function createServicesModal() {
                         <option value="housing">Housing (आवास)</option>
                         <option value="legal">Legal Aid (कानूनी सहायता)</option>
                         <option value="transportation">Transportation (परिवहन)</option>
+                        <option value="documentation">Documentation (दस्तावेज़)</option>
+                        <option value="financial">Financial (वित्तीय)</option>
+                        <option value="emergency">Emergency (आपातकाल)</option>
+                        <option value="utilities">Utilities (उपयोगिताएं)</option>
+                        <option value="agriculture">Agriculture (कृषि)</option>
                         <option value="welfare">Welfare (कल्याण)</option>
                     </select>
                     <button id="search-btn" onclick="filterServices()">
@@ -1391,6 +891,11 @@ function createServiceCard(service) {
         housing: '#7c3aed',
         legal: '#ea580c',
         transportation: '#0891b2',
+        documentation: '#6366f1',
+        financial: '#10b981',
+        emergency: '#ef4444',
+        utilities: '#f59e0b',
+        agriculture: '#22c55e',
         welfare: '#be185d'
     };
     
@@ -1474,6 +979,43 @@ function filterServices() {
     console.log(`🔍 Filtered to ${filteredServices.length} services`);
 }
 
+function formatLinkName(key) {
+    const linkNames = {
+        mainPortal: 'Main Portal',
+        freshApplication: 'Fresh Application',
+        renewalApplication: 'Renewal Application',
+        statusCheck: 'Status Check',
+        guidelines: 'Guidelines',
+        discussions: 'Discussions',
+        polls: 'Polls & Surveys',
+        contests: 'Contests',
+        volunteer: 'Volunteer',
+        signup: 'Sign Up',
+        signin: 'Sign In',
+        mobileApp: 'Mobile App',
+        androidApp: 'Android App',
+        iosApp: 'iOS App',
+        webPortal: 'Web Portal',
+        services: 'All Services',
+        schemes: 'Government Schemes',
+        forms: 'Download Forms',
+        directory: 'Government Directory',
+        ayushmanBharat: 'Ayushman Bharat',
+        healthMinistry: 'Health Ministry',
+        cowin: 'CoWIN Portal',
+        esanjeevani: 'eSanjeevani Telemedicine',
+        pmkvy: 'PMKVY Portal',
+        skillIndia: 'Skill India',
+        nsdc: 'NSDC',
+        apprenticeship: 'Apprenticeship Portal',
+        pmay: 'PMAY Portal',
+        housingForAll: 'Housing for All',
+        clss: 'CLSS Portal',
+        ruralHousing: 'Rural Housing'
+    };
+    return linkNames[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+}
+
 function showServiceDetails(serviceId) {
     const service = bharatServices.find(s => s._id === serviceId);
     if (!service) {
@@ -1520,22 +1062,16 @@ function showServiceDetails(serviceId) {
                         </ul>
                     </div>
                     
-                    ${service.hours ? `
+                    ${service.realWorldLinks ? `
                     <div class="details-section">
-                        <h3>🕒 Operating Hours</h3>
-                        <div class="hours-grid">
-                            ${Object.entries(service.hours).map(([day, hours]) => 
-                                `<div class="hour-item"><strong>${day.charAt(0).toUpperCase() + day.slice(1)}:</strong> ${hours}</div>`
-                            ).join('')}
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    ${service.schemes && service.schemes.length > 0 ? `
-                    <div class="details-section">
-                        <h3>🏛️ Related Government Schemes</h3>
-                        <div class="schemes-list">
-                            ${service.schemes.map(scheme => `<span class="scheme-tag">${scheme}</span>`).join('')}
+                        <h3>🌐 Official Government Links</h3>
+                        <div class="real-world-links">
+                            ${Object.entries(service.realWorldLinks).map(([key, url]) => `
+                                <a href="${url}" target="_blank" class="gov-link">
+                                    <span class="material-icons">open_in_new</span>
+                                    ${formatLinkName(key)}
+                                </a>
+                            `).join('')}
                         </div>
                     </div>
                     ` : ''}
@@ -1702,5 +1238,5 @@ window.addEventListener('error', function(e) {
 // INITIALIZATION COMPLETE
 // ============================================================================
 
-console.log('🎉 Civic AI Assistant JavaScript loaded successfully!');
-console.log('🇮🇳 Ready to serve Indian citizens with AI-powered civic assistance');
+console.log('🎉 Complete Civic AI Assistant JavaScript loaded successfully!');
+console.log('🇮🇳 Ready to serve Indian citizens with bilingual AI-powered civic assistance');

@@ -11,18 +11,42 @@ import Profile from './pages/Profile';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AccessibilityProvider } from './contexts/AccessibilityContext';
+import { useTheme } from './contexts/ThemeContext';
 
 function AppContent() {
   const { user, loading } = useAuth();
+  const { isDarkMode } = useTheme();
+
+  // Set theme data attribute on document root for CSS targeting
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Box 
+        sx={{ 
+          minHeight: '100vh', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center' 
+        }}
+      >
+        <div>Loading...</div>
+      </Box>
+    );
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column',
+      backgroundColor: 'background.default',
+      transition: 'background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+    }}>
       <Navbar />
-      <Container maxWidth="lg" sx={{ flex: 1, py: 3 }}>
+      <Box component="main" sx={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/chat" element={<Chat />} />
@@ -40,7 +64,7 @@ function AppContent() {
             element={user ? <Profile /> : <Navigate to="/login" />} 
           />
         </Routes>
-      </Container>
+      </Box>
     </Box>
   );
 }

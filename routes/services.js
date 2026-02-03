@@ -1,9 +1,21 @@
 const express = require('express');
 const Service = require('../models/Service');
+const BharatCivicAI = require('../services/aiService');
 
 const router = express.Router();
+const bharatAI = new BharatCivicAI();
 
-// Get all services with filtering
+// Get available languages
+router.get('/languages', async (req, res) => {
+  try {
+    const languages = bharatAI.getAvailableLanguages();
+    res.json({ languages });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching languages' });
+  }
+});
+
+// Get all services with filtering (now uses Bharat data)
 router.get('/', async (req, res) => {
   try {
     const { 
@@ -17,46 +29,59 @@ router.get('/', async (req, res) => {
       limit = 20 
     } = req.query;
 
-    let query = { isActive: true };
-
-    if (category) query.category = category;
-    if (city) query['contact.address.city'] = new RegExp(city, 'i');
-    if (state) query['contact.address.state'] = new RegExp(state, 'i');
-    if (language) query.languages = language;
-
+    // Use AI service to search Bharat services
+    const services = bharatAI.searchServices(search, category, limit);
+    
+    // Apply additional filters
+    let filteredServices = services;
+    
+    if (city) {
+      filteredServices = filteredServices.filter(service => 
+        service.contact.address.city.toLowerCase().includes(city.toLowerCase())
+      );
+    }
+    
+    if (state) {
+      filteredServices = filteredServices.filter(service => 
+        service.contact.address.state.toLowerCase().includes(state.toLowerCase())
+      );
+    }
+    
+    if (language) {
+      filteredServices = filteredServices.filter(service => 
+        service.languages.includes(language)
+      );
+    }
+    
     if (accessibility) {
       const accessibilityFeatures = accessibility.split(',');
-      accessibilityFeatures.forEach(feature => {
-        query[`accessibility.${feature}`] = true;
+      filteredServices = filteredServices.filter(service => {
+        return accessibilityFeatures.every(feature => 
+          service.accessibility && service.accessibility[feature]
+        );
       });
     }
 
-    if (search) {
-      query.$text = { $search: search };
-    }
-
-    const services = await Service.find(query)
-      .sort(search ? { score: { $meta: 'textScore' } } : { name: 1 })
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
-
-    const total = await Service.countDocuments(query);
-
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const paginatedServices = filteredServices.slice(startIndex, startIndex + parseInt(limit));
+    
     res.json({
-      services,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-      total
+      services: paginatedServices,
+      totalPages: Math.ceil(filteredServices.length / limit),
+      currentPage: parseInt(page),
+      total: filteredServices.length
     });
   } catch (error) {
+    console.error('Error fetching services:', error);
     res.status(500).json({ message: 'Error fetching services', error: error.message });
   }
 });
 
-// Get service by ID
+// Get service by ID (from Bharat data)
 router.get('/:id', async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id);
+    const service = bharatAI.getServiceById(req.params.id);
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
@@ -72,71 +97,81 @@ router.get('/category/:category', async (req, res) => {
     const { category } = req.params;
     const { city, state } = req.query;
 
-    let query = { category, isActive: true };
-    if (city) query['contact.address.city'] = new RegExp(city, 'i');
-    if (state) query['contact.address.state'] = new RegExp(state, 'i');
+    let services = bharatAI.searchServices('', category, 50);
+    
+    // Apply location filters
+    if (city) {
+      services = services.filter(service => 
+        service.contact.address.city.toLowerCase().includes(city.toLowerCase())
+      );
+    }
+    
+    if (state) {
+      services = services.filter(service => 
+        service.contact.address.state.toLowerCase().includes(state.toLowerCase())
+      );
+    }
 
-    const services = await Service.find(query).sort({ name: 1 });
     res.json(services);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching services by category' });
   }
 });
 
-// Search services with AI-powered suggestions
+// AI-powered search with intelligent matching
 router.post('/search', async (req, res) => {
   try {
-    const { query, location, userNeeds } = req.body;
+    const { query, location, userNeeds, language = 'en' } = req.body;
 
-    // Text search
-    let searchQuery = { isActive: true };
-    if (query) {
-      searchQuery.$text = { $search: query };
-    }
+    // Use AI to process the search query
+    const aiResult = await bharatAI.processQuery(query, { language, location });
+    
+    // Get additional services based on intent
+    const additionalServices = bharatAI.searchServices('', aiResult.intent, 10);
+    
+    // Combine and categorize results
+    const allServices = [...aiResult.relevantServices, ...additionalServices];
+    const uniqueServices = allServices.filter((service, index, self) => 
+      index === self.findIndex(s => s._id === service._id)
+    );
 
-    if (location) {
-      if (location.city) searchQuery['contact.address.city'] = new RegExp(location.city, 'i');
-      if (location.state) searchQuery['contact.address.state'] = new RegExp(location.state, 'i');
-    }
-
-    const services = await Service.find(searchQuery)
-      .sort(query ? { score: { $meta: 'textScore' } } : { name: 1 });
-
-    // AI-powered categorization and suggestions
     const categorizedResults = {
-      exact: [],
-      related: [],
-      suggested: []
+      exact: aiResult.relevantServices,
+      related: additionalServices.slice(0, 5),
+      aiSuggestion: aiResult.response,
+      intent: aiResult.intent
     };
-
-    services.forEach(service => {
-      if (query && service.name.toLowerCase().includes(query.toLowerCase())) {
-        categorizedResults.exact.push(service);
-      } else if (query && service.description.toLowerCase().includes(query.toLowerCase())) {
-        categorizedResults.related.push(service);
-      } else {
-        categorizedResults.suggested.push(service);
-      }
-    });
 
     res.json({
       results: categorizedResults,
-      total: services.length,
-      suggestions: generateSearchSuggestions(query, services)
+      total: uniqueServices.length,
+      suggestions: aiResult.suggestions,
+      aiResponse: aiResult.response
     });
   } catch (error) {
+    console.error('Error in AI search:', error);
     res.status(500).json({ message: 'Error searching services' });
   }
 });
 
-function generateSearchSuggestions(query, services) {
-  const categories = [...new Set(services.map(s => s.category))];
-  const tags = [...new Set(services.flatMap(s => s.tags))];
-  
-  return {
-    categories: categories.slice(0, 5),
-    relatedTerms: tags.slice(0, 10)
-  };
-}
+// Get available languages
+router.get('/languages', async (req, res) => {
+  try {
+    const languages = bharatAI.getAvailableLanguages();
+    res.json({ languages });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching languages' });
+  }
+});
+
+// Get service categories with counts
+router.get('/meta/categories', async (req, res) => {
+  try {
+    const categories = bharatAI.getServiceCategories();
+    res.json(categories);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching categories' });
+  }
+});
 
 module.exports = router;

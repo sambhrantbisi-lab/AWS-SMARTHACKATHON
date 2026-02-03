@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Language Test</title>
+</head>
+<body>
+    <h1>Language Switching Test</h1>
+    <select id="lang-test" onchange="testLang(this.value)">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+    </select>
+    <p id="test-text">Hello World</p>
+    
+    <script>
+        const testTranslations = {
+            en: { text: "Hello World" },
+            hi: { text: "नमस्ते दुनिया" }
+        };
+        
+        function testLang(lang) {
+            console.log('Testing language:', lang);
+            document.getElementById('test-text').textContent = testTranslations[lang].text;
+        }
+    </script>
+</body>
+</html>

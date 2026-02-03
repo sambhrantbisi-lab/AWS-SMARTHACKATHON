@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic AI Assistant - Professional UI Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Light theme colors */
+            --primary-main: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary-main: #64748b;
+            --background-default: #f8fafc;
+            --background-paper: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --divider: #e2e8f0;
+            --success-main: #059669;
+            --warning-main: #d97706;
+            --error-main: #dc2626;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme colors */
+            --primary-main: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #2563eb;
+            --secondary-main: #94a3b8;
+            --background-default: #0f172a;
+            --background-paper: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --divider: #334155;
+            --success-main: #10b981;
+            --warning-main: #f59e0b;
+            --error-main: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background-default);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: var(--primary-main);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .navbar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9) 0%, rgba(59, 130, 246, 0.8) 100%);
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+            margin: 2rem;
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .hero {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: var(--primary-main);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:hover {
+            background-color: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-outline:hover {
+            border-color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--background-paper);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            text-align: center;
+            border: 1px solid var(--divider);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+
+        [data-theme="dark"] .feature-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(37, 99, 235, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .btn-contained {
+            background-color: var(--primary-main);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-contained:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Service Categories */
+        .categories {
+            max-width: 1200px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .categories-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .category-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-radius: 1.5rem;
+            border: 2px solid;
+            background: transparent;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .category-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-healthcare {
+            border-color: rgba(220, 38, 38, 0.3);
+            color: #dc2626;
+        }
+
+        .category-healthcare:hover {
+            background-color: rgba(220, 38, 38, 0.08);
+            border-color: #dc2626;
+        }
+
+        .category-education {
+            border-color: rgba(2, 132, 199, 0.3);
+            color: #0284c7;
+        }
+
+        .category-education:hover {
+            background-color: rgba(2, 132, 199, 0.08);
+            border-color: #0284c7;
+        }
+
+        .category-employment {
+            border-color: rgba(5, 150, 105, 0.3);
+            color: #059669;
+        }
+
+        .category-employment:hover {
+            background-color: rgba(5, 150, 105, 0.08);
+            border-color: #059669;
+        }
+
+        /* Accessibility Notice */
+        .accessibility-notice {
+            max-width: 1200px;
+            margin: 5rem auto 2rem;
+            padding: 3rem 2rem;
+            background-color: rgba(5, 150, 105, 0.05);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: 1.5rem;
+            text-align: center;
+        }
+
+        .accessibility-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(5, 150, 105, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .accessibility-notice h3 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--success-main);
+            margin-bottom: 1rem;
+        }
+
+        .accessibility-notice p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Material Icons */
+        .material-icons {
+            font-size: 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-title">Civic AI Assistant</div>
+            <div class="navbar-actions">
+                <button class="nav-button">Services</button>
+                <button class="nav-button">Chat Assistant</button>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span class="material-icons" id="theme-icon">dark_mode</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Your Civic Information Assistant</h1>
+        <p>Connecting communities with public services, resources, and opportunities through AI-powered assistance.</p>
+        <div class="hero-buttons">
+            <button class="btn btn-primary">
+                <span class="material-icons">chat</span>
+                Start Chat Assistant
+            </button>
+            <button class="btn btn-outline">
+                <span class="material-icons">search</span>
+                Browse Services
+            </button>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-header">
+            <h2>How We Help Your Community</h2>
+            <p>Discover the tools designed to make accessing public services simple and efficient.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="material-icons" style="font-size: 3rem; color: var(--primary-main);">chat</span>
+                </div>
+                <h3>AI-Powered Assistant</h3>
+                <p>Get instant help finding public services and information through our intelligent chat assistant.</p>
+                <button class="btn-contained">
+                    Start Chatting
+                    <span class="material-icons">arrow_forward</span>
+                </button>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="material-icons" style="font-size: 3rem; color: var(--primary-main);">search</span>
+                </div>
+                <h3>Service Directory</h3>
+                <p>Browse and search through comprehensive database of local public services and resources.</p>
+                <button class="btn-contained">
+                    Browse Services
+                    <span class="material-icons">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Categories -->
+    <section class="categories">
+        <div class="section-header">
+            <h2>Service Categories</h2>
+            <p>Explore services organized by category to find exactly what you need.</p>
+        </div>
+        <div class="categories-grid">
+            <div class="category-chip category-healthcare">
+                <span class="material-icons">local_hospital</span>
+                Healthcare
+            </div>
+            <div class="category-chip category-education">
+                <span class="material-icons">school</span>
+                Education
+            </div>
+            <div class="category-chip category-employment">
+                <span class="material-icons">work</span>
+                Employment
+            </div>
+            <div class="category-chip category-healthcare">
+                <span class="material-icons">home</span>
+                Housing
+            </div>
+            <div class="category-chip category-education">
+                <span class="material-icons">gavel</span>
+                Legal Aid
+            </div>
+            <div class="category-chip category-employment">
+                <span class="material-icons">directions_bus</span>
+                Transportation
+            </div>
+        </div>
+    </section>
+
+    <!-- Accessibility Notice -->
+    <section class="accessibility-notice">
+        <div class="accessibility-icon">
+            <span class="material-icons" style="font-size: 2.5rem; color: var(--success-main);">accessibility</span>
+        </div>
+        <h3>Accessible for Everyone</h3>
+        <p>Our platform supports multiple languages, screen readers, high contrast mode, and keyboard navigation to ensure everyone can access public services.</p>
+    </section>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = 'light_mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = 'dark_mode';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const themeIcon = document.getElementById('theme-icon');
+            
+            if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = 'light_mode';
+            } else {
+                document.body.setAttribute('data-theme', 'light');
+                themeIcon.textContent = 'dark_mode';
+            }
+        });
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            if (!localStorage.getItem('theme')) {
+                const themeIcon = document.getElementById('theme-icon');
+                if (e.matches) {
+                    document.body.setAttribute('data-theme', 'dark');
+                    themeIcon.textContent = 'light_mode';
+                } else {
+                    document.body.setAttribute('data-theme', 'light');
+                    themeIcon.textContent = 'dark_mode';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
