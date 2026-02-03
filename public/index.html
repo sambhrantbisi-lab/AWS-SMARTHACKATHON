@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic AI Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><polygon points="0,0 1000,0 1000,100 0,80"/></svg>');
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .chat-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .chat-sidebar {
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            border-right: 1px solid #dee2e6;
+            height: 600px;
+            overflow-y: auto;
+        }
+        
+        .chat-main {
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: between;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            animation: messageSlide 0.5s ease-out;
+        }
+        
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .message.user {
+            justify-content: flex-end;
+        }
+        
+        .message.user .message-slide {
+            animation: messageSlideRight 0.5s ease-out;
+        }
+        
+        @keyframes messageSlideRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            margin: 0 0.5rem;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .message-content:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .message.user .message-content {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+        }
+        
+        .message.assistant .message-content {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            border: 1px solid #dee2e6;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+        }
+        
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .typing-indicator.show {
+            opacity: 1;
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            margin-left: 10px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #007bff;
+            animation: typingDot 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typingDot {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        .chat-input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .chat-input {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+        
+        .chat-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chat-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .chat-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-send {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .btn-voice {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            color: white;
+        }
+        
+        .btn-voice.recording {
+            animation: recordingPulse 1s infinite;
+        }
+        
+        @keyframes recordingPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+        }
+        
+        .chat-room-item {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .chat-room-item:hover {
+            background: rgba(0, 123, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .chat-room-item.active {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+        }
+        
+        .chat-room-item .badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+        }
+        
+        .service-card {
+            border: none;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            animation: cardSlideIn 0.6s ease-out;
+        }
+        
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            animation: badgeBounce 0.8s ease-out;
+        }
+        
+        @keyframes badgeBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .accessibility-features {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 1px solid #c3e6cb;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 123, 255, 0.9) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn {
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .search-container {
+            position: relative;
+            animation: slideInDown 0.8s ease-out;
+        }
+        
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-control {
+            border-radius: 25px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .suggestion-chip {
+            padding: 0.5rem 1rem;
+            background: rgba(0, 123, 255, 0.1);
+            border: 1px solid #007bff;
+            border-radius: 20px;
+            color: #007bff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .suggestion-chip:hover {
+            background: #007bff;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            background: #28a745;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .high-contrast {
+            filter: contrast(150%) brightness(1.2);
+        }
+        
+        .large-text {
+            font-size: 1.2em !important;
+        }
+        
+        .large-text h1 { font-size: 2.5rem !important; }
+        .large-text h2 { font-size: 2rem !important; }
+        .large-text h3 { font-size: 1.75rem !important; }
+        .large-text .btn { font-size: 1.1rem !important; }
+        
+        @media (max-width: 768px) {
+            .chat-container {
+                margin: 1rem;
+                border-radius: 15px;
+            }
+            
+            .chat-main {
+                height: 500px;
+            }
+            
+            .hero-section {
+                padding: 2rem 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand animate__animated animate__fadeInLeft" href="#">
+                    <i class="fas fa-robot me-2"></i>Civic AI Assistant
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link animate__animated animate__fadeInDown" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link animate__animated animate__fadeInDown" href="#chat">Chat Rooms</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link animate__animated animate__fadeInDown" href="#services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <select class="form-select form-select-sm animate__animated animate__fadeInRight" id="languageSelect" style="width: auto;">
+                                <option value="en">🇺🇸 English</option>
+                                <option value="es">🇪🇸 Español</option>
+                                <option value="fr">🇫🇷 Français</option>
+                                <option value="zh">🇨🇳 中文</option>
+                                <option value="ar">🇸🇦 العربية</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div class="container">
+                <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInUp">
+                    Your AI-Powered Civic Assistant
+                </h1>
+                <p class="lead mb-4 animate__animated animate__fadeInUp animate__delay-1s">
+                    Connecting communities with public services, resources, and opportunities through intelligent assistance.
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap animate__animated animate__fadeInUp animate__delay-2s">
+                    <button class="btn btn-light btn-lg" onclick="scrollToSection('chat')">
+                        <i class="fas fa-comments me-2"></i>Join Chat Rooms
+                    </button>
+                    <button class="btn btn-outline-light btn-lg" onclick="scrollToSection('services')">
+                        <i class="fas fa-search me-2"></i>Browse Services
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chat Section with Rooms -->
+        <section id="chat" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-4 animate__animated animate__fadeInDown">
+                    <i class="fas fa-comments me-2"></i>AI Chat Rooms & Assistant
+                </h2>
+                <div class="chat-container">
+                    <div class="row g-0">
+                        <!-- Chat Rooms Sidebar -->
+                        <div class="col-md-4">
+                            <div class="chat-sidebar">
+                                <div class="p-3 border-bottom">
+                                    <h6 class="mb-0"><i class="fas fa-users me-2"></i>Chat Rooms</h6>
+                                    <small class="text-muted">Join topic-based discussions</small>
+                                </div>
+                                <div id="chatRoomsList">
+                                    <div class="chat-room-item active" data-room="general">
+                                        <div class="d-flex align-items-center">
+                                            <div class="online-indicator"></div>
+                                            <div>
+                                                <strong>General Help</strong>
+                                                <div class="small text-muted">Ask anything about civic services</div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-primary">24</span>
+                                    </div>
+                                    <div class="chat-room-item" data-room="healthcare">
+                                        <div class="d-flex align-items-center">
+                                            <div class="online-indicator"></div>
+                                            <div>
+                                                <strong>Healthcare Services</strong>
+                                                <div class="small text-muted">Medical services & insurance</div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-success">12</span>
+                                    </div>
+                                    <div class="chat-room-item" data-room="employment">
+                                        <div class="d-flex align-items-center">
+                                            <div class="online-indicator"></div>
+                                            <div>
+                                                <strong>Employment Help</strong>
+                                                <div class="small text-muted">Jobs & unemployment benefits</div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-warning">8</span>
+                                    </div>
+                                    <div class="chat-room-item" data-room="housing">
+                                        <div class="d-flex align-items-center">
+                                            <div class="online-indicator"></div>
+                                            <div>
+                                                <strong>Housing Assistance</strong>
+                                                <div class="small text-muted">Affordable housing & rentals</div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-info">15</span>
+                                    </div>
+                                    <div class="chat-room-item" data-room="education">
+                                        <div class="d-flex align-items-center">
+                                            <div class="online-indicator"></div>
+                                            <div>
+                                                <strong>Education Resources</strong>
+                                                <div class="small text-muted">Schools & learning programs</div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-secondary">6</span>
+                                    </div>
+                                    <div class="chat-room-item" data-room="emergency">
+                                        <div class="d-flex align-items-center">
+                                            <div class="online-indicator"></div>
+                                            <div>
+                                                <strong>Emergency Services</strong>
+                                                <div class="small text-muted">Urgent assistance & crisis help</div>
+                                            </div>
+                                        </div>
+                                        <span class="badge bg-danger">3</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Main Chat Area -->
+                        <div class="col-md-8">
+                            <div class="chat-main">
+                                <div class="chat-header">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-robot me-2"></i>
+                                        <div>
+                                            <strong id="currentRoomName">General Help</strong>
+                                            <div class="small opacity-75" id="currentRoomDesc">Ask anything about civic services</div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-light text-dark me-2" id="onlineCount">24 online</span>
+                                        <button class="btn btn-sm btn-outline-light" onclick="clearChat()">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="chat-messages" id="chatMessages">
+                                    <div class="message assistant">
+                                        <div class="message-avatar">
+                                            <i class="fas fa-robot"></i>
+                                        </div>
+                                        <div class="message-content">
+                                            <strong>AI Assistant:</strong> Welcome to the General Help room! I'm here to help you find public services and information. What can I assist you with today?
+                                            <div class="suggestion-chips">
+                                                <span class="suggestion-chip" onclick="quickMessage('Find healthcare services near me')">🏥 Healthcare</span>
+                                                <span class="suggestion-chip" onclick="quickMessage('Help with unemployment benefits')">💼 Employment</span>
+                                                <span class="suggestion-chip" onclick="quickMessage('Affordable housing options')">🏠 Housing</span>
+                                                <span class="suggestion-chip" onclick="quickMessage('Emergency assistance')">🚨 Emergency</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="typing-indicator" id="typingIndicator">
+                                    <div class="message-avatar">
+                                        <i class="fas fa-robot"></i>
+                                    </div>
+                                    <div class="message-content">
+                                        <span>AI is typing</span>
+                                        <div class="typing-dots">
+                                            <div class="typing-dot"></div>
+                                            <div class="typing-dot"></div>
+                                            <div class="typing-dot"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="chat-input-area">
+                                    <div class="chat-input-container">
+                                        <input type="text" class="chat-input" id="messageInput" 
+                                               placeholder="Type your message..." 
+                                               onkeypress="handleKeyPress(event)">
+                                        <button class="chat-btn btn-voice" id="voiceBtn" onclick="toggleVoiceInput()">
+                                            <i class="fas fa-microphone"></i>
+                                        </button>
+                                        <button class="chat-btn btn-send" onclick="sendMessage()">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-4 animate__animated animate__fadeInDown">
+                    <i class="fas fa-building me-2"></i>Public Services Directory
+                </h2>
+                
+                <!-- Search and Filter -->
+                <div class="search-container mb-4">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="position-relative">
+                                <input type="text" class="form-control form-control-lg" id="serviceSearch" 
+                                       placeholder="🔍 Search services, departments, or keywords..." 
+                                       onkeyup="filterServices()">
+                                <div class="position-absolute top-50 end-0 translate-middle-y me-3">
+                                    <i class="fas fa-search text-muted"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select form-select-lg" id="categoryFilter" onchange="filterServices()">
+                                <option value="">🏛️ All Categories</option>
+                                <option value="healthcare">🏥 Healthcare</option>
+                                <option value="education">🎓 Education</option>
+                                <option value="employment">💼 Employment</option>
+                                <option value="housing">🏠 Housing</option>
+                                <option value="legal">⚖️ Legal Aid</option>
+                                <option value="transportation">🚌 Transportation</option>
+                                <option value="emergency">🚨 Emergency</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services List -->
+                <div id="servicesList">
+                    <!-- Services will be loaded here -->
+                </div>
+                
+                <!-- Loading Animation -->
+                <div id="servicesLoading" class="text-center py-5" style="display: none;">
+                    <div class="loading-spinner mx-auto mb-3"></div>
+                    <p class="text-muted">Loading services...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accessibility Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="accessibility-features animate__animated animate__fadeInUp">
+                    <h3><i class="fas fa-universal-access me-2"></i>Accessible for Everyone</h3>
+                    <p class="mb-4">Our platform supports multiple languages, screen readers, high contrast mode, and keyboard navigation to ensure everyone can access public services.</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="highContrast" onchange="toggleHighContrast()">
+                                <label class="form-check-label" for="highContrast">
+                                    <i class="fas fa-adjust me-2"></i>High Contrast Mode
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="largeText" onchange="toggleLargeText()">
+                                <label class="form-check-label" for="largeText">
+                                    <i class="fas fa-text-height me-2"></i>Large Text
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="screenReader" onchange="toggleScreenReader()">
+                                <label class="form-check-label" for="screenReader">
+                                    <i class="fas fa-volume-up me-2"></i>Screen Reader Support
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="voiceEnabled" onchange="toggleVoice()">
+                                <label class="form-check-label" for="voiceEnabled">
+                                    <i class="fas fa-microphone me-2"></i>Voice Assistance
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-light py-4">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-robot me-2"></i>Civic AI Assistant</h5>
+                        <p class="mb-0">Empowering communities through AI-powered civic engagement</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-light"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="text-light"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="text-light"><i class="fab fa-github"></i></a>
+                        </div>
+                        <p class="mb-0 mt-2">&copy; 2024 Built with ❤️ for community empowerment</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
