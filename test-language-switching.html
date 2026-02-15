@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Switching Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .language-selector { margin: 20px 0; }
+        select { padding: 10px; font-size: 16px; }
+        button { padding: 10px 20px; margin: 5px; font-size: 16px; }
+        .result { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>Language Switching Test</h1>
+    
+    <div class="language-selector">
+        <label for="language-select">Select Language:</label>
+        <select id="language-select" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="bn">বাংলা</option>
+            <option value="te">తెలుగు</option>
+            <option value="ta">தமிழ்</option>
+            <option value="gu">ગુજરાતી</option>
+        </select>
+    </div>
+
+    <div class="test-section">
+        <h2 id="test-title">Test Title</h2>
+        <p id="test-description">Test description text</p>
+        <button id="test-button">Test Button</button>
+    </div>
+
+    <div class="result">
+        <h3>Current Language: <span id="current-lang">en</span></h3>
+        <p>Translation Status: <span id="translation-status">Loading...</span></p>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let translations = {};
+
+        // Test translations
+        const testTranslations = {
+            en: {
+                test_title: "Language Switching Test",
+                test_description: "This is a test to verify language switching functionality.",
+                test_button: "Click Me"
+            },
+            hi: {
+                test_title: "भाषा स्विचिंग परीक्षण",
+                test_description: "यह भाषा स्विचिंग कार्यक्षमता को सत्यापित करने के लिए एक परीक्षण है।",
+                test_button: "मुझे क्लिक करें"
+            },
+            bn: {
+                test_title: "ভাষা পরিবর্তন পরীক্ষা",
+                test_description: "এটি ভাষা পরিবর্তন কার্যকারিতা যাচাই করার জন্য একটি পরীক্ষা।",
+                test_button: "আমাকে ক্লিক করুন"
+            },
+            te: {
+                test_title: "భాష మార్చడం పరీక్ష",
+                test_description: "ఇది భాష మార్చడం కార్యాచరణను ధృవీకరించడానికి ఒక పరీక్ష.",
+                test_button: "నన్ను క్లిక్ చేయండి"
+            },
+            ta: {
+                test_title: "மொழி மாற்றும் சோதனை",
+                test_description: "இது மொழி மாற்றும் செயல்பாட்டை சரிபார்க்க ஒரு சோதனை.",
+                test_button: "என்னை கிளிக் செய்யுங்கள்"
+            },
+            gu: {
+                test_title: "ભાષા બદલવાની કસોટી",
+                test_description: "આ ભાષા બદલવાની કાર્યક્ષમતાને ચકાસવા માટેની કસોટી છે.",
+                test_button: "મને ક્લિક કરો"
+            }
+        };
+
+        function loadTranslations() {
+            translations = testTranslations;
+            document.getElementById('translation-status').textContent = 'Loaded';
+            updateUI();
+        }
+
+        function changeLanguage(languageCode) {
+            console.log('Changing language to:', languageCode);
+            currentLanguage = languageCode;
+            document.getElementById('current-lang').textContent = languageCode;
+            updateUI();
+        }
+
+        function updateUI() {
+            const t = translations[currentLanguage] || translations['en'] || {};
+            
+            document.getElementById('test-title').textContent = t.test_title || 'Test Title';
+            document.getElementById('test-description').textContent = t.test_description || 'Test description text';
+            document.getElementById('test-button').textContent = t.test_button || 'Test Button';
+            
+            console.log('UI updated for language:', currentLanguage);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTranslations();
+        });
+    </script>
+</body>
+</html>

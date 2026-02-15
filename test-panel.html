@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Panel Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .test-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .test-section h2 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .test-section p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .status.success {
+            background: #10b981;
+            color: white;
+        }
+        .status.info {
+            background: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-content">
+        <h1>🧪 AI Chat Panel Test Page</h1>
+        
+        <div class="test-section">
+            <h2>Panel Status</h2>
+            <p>
+                <span class="status success" id="panelStatus">Loading...</span>
+            </p>
+            <p>The AI chat panel should appear on the right side of this page.</p>
+        </div>
+
+        <div class="test-section">
+            <h2>Test Instructions</h2>
+            <p><strong>1. Resize Test:</strong> Drag the left edge of the panel to resize it (300-600px)</p>
+            <p><strong>2. Collapse Test:</strong> Click the arrow button in the panel header to collapse/expand</p>
+            <p><strong>3. Keyboard Test:</strong> Press Ctrl+B to toggle collapse/expand</p>
+            <p><strong>4. Chat Test:</strong> Type a message and press Enter to test AI chat</p>
+            <p><strong>5. Context Test:</strong> Ask "What page am I on?" to test context awareness</p>
+        </div>
+
+        <div class="test-section">
+            <h2>Expected Behavior</h2>
+            <p>✅ Panel appears on right side with purple gradient</p>
+            <p>✅ Main content adjusts width automatically</p>
+            <p>✅ Resize handle visible on left edge of panel</p>
+            <p>✅ Collapse button in panel header</p>
+            <p>✅ Welcome message from AI assistant</p>
+            <p>✅ Input box at bottom of panel</p>
+        </div>
+
+        <div class="test-section">
+            <h2>Sample Content</h2>
+            <p>This is sample content to demonstrate how the main page content adjusts when the panel is resized or collapsed.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <p>Notice how this content area width changes as you resize or collapse the panel.</p>
+        </div>
+
+        <div class="test-section">
+            <h2>Debug Info</h2>
+            <p><strong>Panel Width:</strong> <span id="panelWidth">-</span></p>
+            <p><strong>Panel Collapsed:</strong> <span id="panelCollapsed">-</span></p>
+            <p><strong>Body Margin Right:</strong> <span id="bodyMargin">-</span></p>
+        </div>
+    </div>
+
+    <!-- Context hotfix for testing -->
+    <script>
+        window.gatherPageContextFixed = function() {
+            return {
+                page: '/test-panel.html',
+                pageName: 'AI Panel Test Page',
+                description: 'Testing the resizable AI chat panel',
+                testMode: true,
+                timestamp: new Date().toISOString()
+            };
+        };
+    </script>
+
+    <!-- AI Chat Panel -->
+    <script src="/ai-chat-panel.js?v=1.0"></script>
+
+    <!-- Debug script -->
+    <script>
+        function updateDebugInfo() {
+            const panelWidth = sessionStorage.getItem('aiPanelWidth') || 'default (400px)';
+            const panelCollapsed = sessionStorage.getItem('aiPanelCollapsed') || 'false';
+            const bodyMargin = window.getComputedStyle(document.body).marginRight;
+
+            document.getElementById('panelWidth').textContent = panelWidth + 'px';
+            document.getElementById('panelCollapsed').textContent = panelCollapsed;
+            document.getElementById('bodyMargin').textContent = bodyMargin;
+        }
+
+        // Check if panel loaded
+        setTimeout(() => {
+            const panel = document.getElementById('ai-chat-panel');
+            const statusEl = document.getElementById('panelStatus');
+            
+            if (panel) {
+                statusEl.textContent = '✅ Panel Loaded Successfully';
+                statusEl.className = 'status success';
+            } else {
+                statusEl.textContent = '❌ Panel Not Found';
+                statusEl.className = 'status danger';
+            }
+
+            updateDebugInfo();
+        }, 500);
+
+        // Update debug info every second
+        setInterval(updateDebugInfo, 1000);
+    </script>
+</body>
+</html>

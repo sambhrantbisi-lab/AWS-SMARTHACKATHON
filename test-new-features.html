@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test New Features - Digital India</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .feature-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #e8f5e8;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        .api-test {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        button {
+            background: #FF6B35;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #e55a2b;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Digital India - New Features Test</h1>
+    
+    <div class="test-section">
+        <h2>✅ Features Successfully Implemented</h2>
+        <ul class="feature-list">
+            <li>🌙 Dark Mode Toggle - Complete theme switching system</li>
+            <li>🔐 Prominent Login Interface - Enhanced user authentication UI</li>
+            <li>📊 Stock Market Integration - NSE/BSE stock data with charts</li>
+            <li>📈 Interactive Charts - Chart.js integration for market data</li>
+            <li>🎨 Visual Improvements - Glassmorphism, shadows, gradients</li>
+            <li>⚙️ Admin Content Management - Dynamic tab creation and content editing</li>
+            <li>📱 Responsive Design - Mobile-friendly interface</li>
+            <li>🎭 Animation Controls - Toggle animations on/off</li>
+            <li>♿ Accessibility Features - High contrast, large text options</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 API Endpoints Test</h2>
+        
+        <div class="api-test">
+            <h3>Stock Market API</h3>
+            <button onclick="testStockAPI()">Test /api/stocks</button>
+            <button onclick="testIndicesAPI()">Test /api/stocks/indices</button>
+            <button onclick="testGainersAPI()">Test /api/stocks/gainers</button>
+            <div id="stockResult" class="result"></div>
+        </div>
+
+        <div class="api-test">
+            <h3>Market Data API</h3>
+            <button onclick="testMarketAPI()">Test /api/market</button>
+            <div id="marketResult" class="result"></div>
+        </div>
+
+        <div class="api-test">
+            <h3>Services API</h3>
+            <button onclick="testServicesAPI()">Test /api/services</button>
+            <div id="servicesResult" class="result"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 Key Improvements Made</h2>
+        <ul class="feature-list">
+            <li><strong>Dark Mode:</strong> Complete CSS variable system with theme switching</li>
+            <li><strong>Login UI:</strong> Prominent login button in navigation with better UX</li>
+            <li><strong>Stock Charts:</strong> Real-time stock data visualization with Chart.js</li>
+            <li><strong>Visual Design:</strong> Enhanced with glassmorphism effects and better shadows</li>
+            <li><strong>Admin Tools:</strong> Content management system for dynamic website editing</li>
+            <li><strong>Performance:</strong> Optimized loading and responsive design</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔗 Quick Links</h2>
+        <a href="http://localhost:5000" target="_blank">
+            <button>🌐 Open Main Application</button>
+        </a>
+        <a href="http://localhost:5000/api/stocks" target="_blank">
+            <button>📊 View Stock API</button>
+        </a>
+        <a href="http://localhost:5000/api/market" target="_blank">
+            <button>🏪 View Market API</button>
+        </a>
+    </div>
+
+    <script>
+        async function testStockAPI() {
+            const result = document.getElementById('stockResult');
+            result.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch('/api/stocks');
+                const data = await response.json();
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testIndicesAPI() {
+            const result = document.getElementById('stockResult');
+            result.textContent = 'Loading indices...';
+            
+            try {
+                const response = await fetch('/api/stocks/indices');
+                const data = await response.json();
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testGainersAPI() {
+            const result = document.getElementById('stockResult');
+            result.textContent = 'Loading gainers...';
+            
+            try {
+                const response = await fetch('/api/stocks/gainers');
+                const data = await response.json();
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testMarketAPI() {
+            const result = document.getElementById('marketResult');
+            result.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch('/api/market');
+                const data = await response.json();
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testServicesAPI() {
+            const result = document.getElementById('servicesResult');
+            result.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch('/api/services');
+                const data = await response.json();
+                result.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

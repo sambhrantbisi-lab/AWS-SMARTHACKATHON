@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Language Test</title>
+</head>
+<body>
+    <h1 id="title">Your Comprehensive Civic Information Assistant</h1>
+    <p id="subtitle">Connecting citizens with government services</p>
+    
+    <select onchange="changeLang(this.value)">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+    </select>
+    
+    <script>
+        const translations = {
+            en: {
+                title: "Your Comprehensive Civic Information Assistant",
+                subtitle: "Connecting citizens with government services"
+            },
+            hi: {
+                title: "आपका व्यापक नागरिक सूचना सहायक",
+                subtitle: "नागरिकों को सरकारी सेवाओं से जोड़ना"
+            }
+        };
+        
+        function changeLang(lang) {
+            console.log('Changing to:', lang);
+            document.getElementById('title').textContent = translations[lang].title;
+            document.getElementById('subtitle').textContent = translations[lang].subtitle;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMMODITY PRICES - BRUTALIST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/brutalist-style.css">
+</head>
+<body>
+    <!-- Brutalist Header -->
+    <header class="brutal-header">
+        <h1 class="brutal-title">COMMODITY MARKET</h1>
+        <p class="brutal-subtitle">State-Wise Prices • Wholesale & Retail • Daily Updates</p>
+        <nav class="brutal-nav">
+            <a href="javascript:history.back()" class="brutal-nav-btn">← BACK</a>
+            <a href="/index-brutalist.html" class="brutal-nav-btn">HOME</a>
+            <a href="/services-brutalist.html" class="brutal-nav-btn">SERVICES</a>
+            <a href="/stocks-brutalist.html" class="brutal-nav-btn">STOCKS</a>
+            <a href="/market-brutalist.html" class="brutal-nav-btn active">MARKET</a>
+            <a href="/nearby-brutalist.html" class="brutal-nav-btn">NEARBY</a>
+            <a href="/login-brutalist.html" class="brutal-nav-btn">LOGIN</a>
+            <select class="brutal-select" id="languageSelector" onchange="changeLanguage(this.value)">
+                <option value="en">ENGLISH</option>
+                <option value="hi">हिंदी</option>
+                <option value="bn">বাংলা</option>
+                <option value="te">తెలుగు</option>
+                <option value="ta">தமிழ்</option>
+                <option value="gu">ગુજરાતી</option>
+            </select>
+            <button class="brutal-btn" onclick="toggleAccessibility()" style="padding: 10px 15px;">
+                ⚙️ ACCESSIBILITY
+            </button>
+        </nav>
+    </header>
+
+    <!-- Accessibility Panel -->
+    <div class="accessibility-panel" id="accessibilityPanel">
+        <h3>⚙️ SETTINGS</h3>
+        
+        <div class="accessibility-option">
+            <label>Theme</label>
+            <div class="accessibility-buttons">
+                <button class="accessibility-btn active" onclick="setTheme('light')" id="lightBtn">
+                    ☀️ LIGHT
+                </button>
+                <button class="accessibility-btn" onclick="setTheme('dark')" id="darkBtn">
+                    🌙 DARK
+                </button>
+            </div>
+        </div>
+
+        <div class="accessibility-option">
+            <label>Font Size</label>
+            <div class="accessibility-buttons">
+                <button class="accessibility-btn" onclick="setFontSize('small')">
+                    A-
+                </button>
+                <button class="accessibility-btn active" onclick="setFontSize('normal')" id="normalFontBtn">
+                    A
+                </button>
+                <button class="accessibility-btn" onclick="setFontSize('large')">
+                    A+
+                </button>
+                <button class="accessibility-btn" onclick="setFontSize('xlarge')">
+                    A++
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="brutal-container">
+        <!-- Disclaimer Top -->
+        <div style="margin-bottom: 20px; padding: 20px; background: #fff3cd; border: 4px solid #000;">
+            <p style="font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; margin: 0;">
+                💡 NOTE: All prices are per quintal unless otherwise specified. Data sourced from AGMARKNET via data.gov.in.
+            </p>
+        </div>
+
+        <!-- Search & Filter -->
+        <div style="background: #fff; border: 6px solid #000; padding: 30px; margin-bottom: 30px;">
+            <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 15px; align-items: center;">
+                <input 
+                    type="text" 
+                    class="brutal-input" 
+                    id="commoditySearch" 
+                    placeholder="SEARCH COMMODITIES..."
+                    style="margin: 0;"
+                >
+                <select class="brutal-select" id="stateFilter" onchange="filterCommodities()">
+                    <option value="">ALL STATES</option>
+                    <option value="Maharashtra">MAHARASHTRA</option>
+                    <option value="Karnataka">KARNATAKA</option>
+                    <option value="Tamil Nadu">TAMIL NADU</option>
+                    <option value="Gujarat">GUJARAT</option>
+                    <option value="Rajasthan">RAJASTHAN</option>
+                </select>
+                <button class="brutal-btn" onclick="loadCommodities()">REFRESH</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            <div class="brutal-stat">
+                <span class="brutal-stat-number" id="totalCommodities">0</span>
+                <span class="brutal-stat-label">COMMODITIES</span>
+            </div>
+            <div class="brutal-stat">
+                <span class="brutal-stat-number" id="totalStates">0</span>
+                <span class="brutal-stat-label">STATES</span>
+            </div>
+            <div class="brutal-stat">
+                <span class="brutal-stat-number" id="lastUpdated">TODAY</span>
+                <span class="brutal-stat-label">LAST UPDATED</span>
+            </div>
+            <div class="brutal-stat">
+                <span class="brutal-stat-number">LIVE</span>
+                <span class="brutal-stat-label">DATA SOURCE</span>
+            </div>
+        </div>
+
+        <!-- Loading Progress Bar -->
+        <div id="loadingProgress" style="margin-bottom: 30px; background: #fff; border: 4px solid #7b2cbf; padding: 20px; display: none; box-shadow: 0 4px 0 #000;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-family: 'Space Mono', monospace; font-size: 16px; font-weight: 700; color: #000;">
+                    🌾 LOADING COMMODITIES...
+                </span>
+                <span id="progressText" style="font-family: 'Space Mono', monospace; font-size: 14px; color: #7b2cbf; font-weight: 700;">
+                    0 / 600
+                </span>
+            </div>
+            <div style="width: 100%; height: 16px; background: #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
+                <div id="progressBar" style="height: 100%; background: linear-gradient(90deg, #7b2cbf, #9d4edd, #c77dff); width: 0%; transition: width 0.3s ease; box-shadow: 0 0 10px rgba(123, 44, 191, 0.5);"></div>
+            </div>
+            <div style="margin-top: 10px; font-family: 'Space Mono', monospace; font-size: 12px; color: #666;">
+                <span id="progressStatus">Initializing...</span>
+            </div>
+        </div>
+
+        <!-- Commodities Table -->
+        <div style="background: #fff; border: 6px solid #000; overflow-x: auto;">
+            <table class="brutal-table" id="commoditiesTable">
+                <thead>
+                    <tr>
+                        <th>COMMODITY</th>
+                        <th>LOCATION</th>
+                        <th>MARKET</th>
+                        <th>WHOLESALE</th>
+                        <th>RETAIL</th>
+                        <th>DATE</th>
+                    </tr>
+                </thead>
+                <tbody id="commoditiesBody">
+                    <!-- Commodities loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Disclaimer Bottom -->
+        <div style="margin-top: 20px; padding: 20px; background: #fff3cd; border: 4px solid #000;">
+            <p style="font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; margin: 0;">
+                💡 NOTE: All prices are per quintal unless otherwise specified. Data sourced from AGMARKNET via data.gov.in.
+            </p>
+        </div>
+
+        <!-- Info Section -->
+        <div id="bottomLoadingIndicator" style="margin-top: 30px; padding: 20px; background: #fff; border: 4px solid #7b2cbf; text-align: center; display: none; box-shadow: 0 4px 0 #000;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                <div class="brutal-loading" style="width: 30px; height: 30px; border-width: 4px;"></div>
+                <div>
+                    <div style="font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 700; color: #000;">
+                        LOADING MORE COMMODITIES...
+                    </div>
+                    <div style="font-family: 'Space Mono', monospace; font-size: 12px; color: #7b2cbf; margin-top: 5px;">
+                        <span id="bottomProgressText">Loading batch...</span>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; margin-top: 15px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
+                <div id="bottomProgressBar" style="height: 100%; background: linear-gradient(90deg, #7b2cbf, #9d4edd); width: 0%; transition: width 0.3s ease;"></div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" style="text-align: center; padding: 60px;">
+            <div class="brutal-loading" style="width: 60px; height: 60px; border-width: 6px;"></div>
+            <p style="font-family: 'Space Mono', monospace; font-size: 18px; margin-top: 20px; text-transform: uppercase;">
+                LOADING COMMODITIES...
+            </p>
+        </div>
+
+        <!-- Info Section -->
+        <div style="margin-top: 40px; padding: 30px; border: 6px solid #000; background: #FFFF00;">
+            <h3 style="font-family: 'Space Mono', monospace; font-size: 20px; margin-bottom: 15px;">
+                📊 DATA SOURCE
+            </h3>
+            <p style="margin-bottom: 10px;">
+                All commodity prices are sourced from <strong>data.gov.in</strong> - 
+                the official open data platform of the Government of India.
+            </p>
+            <p style="font-size: 14px; color: #000;">
+                Prices are updated daily and reflect actual wholesale and retail rates 
+                across different states and markets.
+            </p>
+        </div>
+    </div>
+
+    <!-- Commodity Detail Modal -->
+    <div class="brutal-modal" id="commodityModal">
+        <div class="brutal-modal-content">
+            <div class="brutal-modal-header">
+                <h2 id="modalCommodityName" style="font-size: 32px; margin: 0;"></h2>
+                <button class="brutal-modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="brutal-modal-body">
+                <div id="modalCommodityDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Manager -->
+    <script src="/language-manager.js?v=1.0"></script>
+    
+    <!-- Comprehensive Context Gathering for AI -->
+    <script>
+        // Global context gathering function for AI chat
+        globalThis.gatherPageContextFixed = function() {
+            const context = {
+                page: window.location.pathname,
+                pageName: document.title,
+                pageType: 'commodities',
+                timestamp: new Date().toISOString(),
+                language: localStorage.getItem('language') || 'en',
+                
+                // Commodity data context
+                commodities: {
+                    total: allCommodities.length,
+                    displayed: filteredCommodities.length,
+                    loading: isBackgroundLoading,
+                    currentOffset: currentOffset,
+                    estimatedTotal: estimatedTotal,
+                    
+                    // Sample of visible commodities
+                    visibleCommodities: filteredCommodities.slice(0, 20).map(commodity => {
+                        const wholesalePrice = commodity.prices?.wholesale?.average || 
+                                              commodity.wholesalePrice || 
+                                              'N/A';
+                        const retailPrice = commodity.prices?.retail?.average || 
+                                           commodity.retailPrice || 
+                                           'N/A';
+                        const location = commodity.state || commodity.location || 'N/A';
+                        
+                        return {
+                            commodity: commodity.commodity,
+                            location: location,
+                            district: commodity.district,
+                            market: commodity.market,
+                            wholesalePrice: wholesalePrice,
+                            retailPrice: retailPrice,
+                            unit: commodity.unit,
+                            category: commodity.category
+                        };
+                    }),
+                    
+                    // Statistics
+                    stats: {
+                        totalCommodities: allCommodities.length,
+                        uniqueStates: [...new Set(allCommodities.map(c => c.state || c.location))].filter(Boolean).length,
+                        uniqueMarkets: [...new Set(allCommodities.map(c => c.market))].filter(Boolean).length
+                    },
+                    
+                    // Categories
+                    categories: [...new Set(allCommodities.map(c => c.category))].filter(Boolean),
+                    
+                    // States
+                    states: [...new Set(allCommodities.map(c => c.state || c.location))].filter(Boolean).slice(0, 10),
+                    
+                    // Popular commodities
+                    popularCommodities: [...new Set(allCommodities.map(c => c.commodity))]
+                        .filter(Boolean)
+                        .slice(0, 10),
+                    
+                    // Price ranges by category
+                    priceRanges: (() => {
+                        const ranges = {};
+                        ['vegetables', 'fruits', 'grains', 'pulses', 'spices'].forEach(cat => {
+                            const items = allCommodities.filter(c => c.category === cat);
+                            if (items.length > 0) {
+                                const prices = items
+                                    .map(c => parseFloat(c.prices?.wholesale?.average || c.wholesalePrice || 0))
+                                    .filter(p => p > 0);
+                                if (prices.length > 0) {
+                                    ranges[cat] = {
+                                        min: Math.min(...prices).toFixed(2),
+                                        max: Math.max(...prices).toFixed(2),
+                                        avg: (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(2)
+                                    };
+                                }
+                            }
+                        });
+                        return ranges;
+                    })()
+                },
+                
+                // Search/filter context
+                filters: {
+                    searchQuery: document.getElementById('commoditySearch')?.value || '',
+                    selectedCategory: document.getElementById('categoryFilter')?.value || 'all',
+                    selectedState: document.getElementById('stateFilter')?.value || 'all'
+                },
+                
+                // UI state
+                ui: {
+                    progressBarVisible: document.getElementById('loadingProgress')?.style.display !== 'none',
+                    bottomIndicatorVisible: document.getElementById('bottomLoadingIndicator')?.style.display !== 'none'
+                },
+                
+                // Page capabilities
+                capabilities: [
+                    'View 600+ commodity prices from data.gov.in',
+                    'Search commodities by name or location',
+                    'Filter by category (vegetables, fruits, grains, pulses, spices, oilseeds)',
+                    'Filter by state',
+                    'View wholesale and retail prices',
+                    'See prices per quintal or other units',
+                    'Data from AGMARKNET via Government of India',
+                    'Multi-language support (English, Hindi, Tamil, Telugu, Bengali)'
+                ],
+                
+                description: `User is viewing the Commodity Market page with ${allCommodities.length} commodities loaded. ` +
+                            `Currently displaying ${filteredCommodities.length} commodities. ` +
+                            `Data covers ${[...new Set(allCommodities.map(c => c.state || c.location))].filter(Boolean).length} states ` +
+                            `and ${[...new Set(allCommodities.map(c => c.market))].filter(Boolean).length} markets. ` +
+                            `Categories available: ${[...new Set(allCommodities.map(c => c.category))].filter(Boolean).join(', ')}.`
+            };
+            
+            return context;
+        };
+    </script>
+    
+    <!-- AI Chat Floating Window -->
+    <script src="/ai-chat-floating.js?v=2.1"></script>
+
+    <script>
+        let allCommodities = [];
+        let filteredCommodities = [];
+        let isBackgroundLoading = false;
+        let currentOffset = 0;
+        const chunkSize = 20;
+        let estimatedTotal = 600;
+
+        // Update progress bar
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressStatus = document.getElementById('progressStatus');
+            const progressContainer = document.getElementById('loadingProgress');
+            const bottomIndicator = document.getElementById('bottomLoadingIndicator');
+            const bottomProgressBar = document.getElementById('bottomProgressBar');
+            const bottomProgressText = document.getElementById('bottomProgressText');
+            
+            if (isBackgroundLoading) {
+                const percentage = Math.min((allCommodities.length / estimatedTotal) * 100, 95);
+                progressBar.style.width = percentage + '%';
+                progressText.textContent = `${allCommodities.length} / ${estimatedTotal}`;
+                progressStatus.innerHTML = `Loading batch ${Math.floor(currentOffset / chunkSize)}...`;
+                progressContainer.style.display = 'block';
+                
+                // Show bottom indicator after initial load
+                if (allCommodities.length > 20) {
+                    bottomIndicator.style.display = 'block';
+                    bottomProgressBar.style.width = percentage + '%';
+                    bottomProgressText.textContent = `${allCommodities.length} commodities loaded, fetching more...`;
+                }
+            } else {
+                progressBar.style.width = '100%';
+                progressText.textContent = `${allCommodities.length} commodities loaded`;
+                progressStatus.innerHTML = `✓ Complete!`;
+                
+                bottomIndicator.style.display = 'none';
+                
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Load data in background continuously
+        async function loadInBackground() {
+            if (isBackgroundLoading) return;
+            isBackgroundLoading = true;
+            updateProgress();
+            
+            let consecutiveErrors = 0;
+            const maxConsecutiveErrors = 5;
+            let emptyResponses = 0;
+            
+            while (true) {
+                try {
+                    const response = await fetch(`/api/realdata/commodities/paginated?limit=${chunkSize}&offset=${currentOffset}`);
+                    const data = await response.json();
+                    
+                    if (data.success && data.data.length > 0) {
+                        allCommodities.push(...data.data);
+                        currentOffset += data.data.length;
+                        consecutiveErrors = 0;
+                        emptyResponses = 0;
+                        
+                        // Update display dynamically
+                        filteredCommodities = allCommodities;
+                        displayCommodities();
+                        updateStats();
+                        updateProgress();
+                        
+                        console.log(`📦 Loaded ${data.data.length} commodities (total: ${allCommodities.length})`);
+                        
+                        if (!data.hasMore || data.data.length < chunkSize) {
+                            console.log('✅ All commodities loaded!');
+                            break;
+                        }
+                        
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    } else if (data.success && data.data.length === 0) {
+                        emptyResponses++;
+                        console.log(`⚠️ Empty response ${emptyResponses}/3`);
+                        
+                        if (emptyResponses >= 3) {
+                            console.log('✅ Reached end of data (3 empty responses)');
+                            break;
+                        }
+                        
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        currentOffset += chunkSize;
+                    } else {
+                        console.log('✅ Reached end of data');
+                        break;
+                    }
+                } catch (error) {
+                    consecutiveErrors++;
+                    console.error(`⚠️ Error loading chunk at offset ${currentOffset}:`, error.message);
+                    
+                    if (consecutiveErrors >= maxConsecutiveErrors) {
+                        console.log(`❌ Stopping after ${consecutiveErrors} consecutive errors`);
+                        console.log(`✅ Successfully loaded ${allCommodities.length} commodities before errors`);
+                        break;
+                    }
+                    
+                    const waitTime = 3000 * consecutiveErrors;
+                    console.log(`⏳ Retrying in ${waitTime/1000} seconds... (attempt ${consecutiveErrors}/${maxConsecutiveErrors})`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                    
+                    if (consecutiveErrors >= 3) {
+                        console.log('⏭️ Skipping ahead 40 records...');
+                        currentOffset += chunkSize * 2;
+                    }
+                }
+            }
+            
+            isBackgroundLoading = false;
+            updateProgress();
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('commoditiesTable').style.display = 'table';
+            console.log(`✅ Background loading complete: ${allCommodities.length} total commodities`);
+            estimatedTotal = allCommodities.length;
+        }
+
+        // Initial quick load
+        async function initialLoad() {
+            try {
+                document.getElementById('loadingState').style.display = 'block';
+                document.getElementById('commoditiesTable').style.display = 'none';
+                
+                const response = await fetch(`/api/realdata/commodities/paginated?limit=20&offset=0`);
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    allCommodities = data.data;
+                    currentOffset = data.data.length;
+                    
+                    console.log(`✅ Initial load: ${data.data.length} commodities`);
+                    
+                    filteredCommodities = allCommodities;
+                    displayCommodities();
+                    updateStats();
+                    
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('commoditiesTable').style.display = 'table';
+                    document.getElementById('loadingProgress').style.display = 'block';
+                    
+                    // Start background loading immediately
+                    setTimeout(() => loadInBackground(), 500);
+                } else {
+                    throw new Error(data.message || 'No data available');
+                }
+            } catch (error) {
+                console.error('Error in initial load:', error);
+                document.getElementById('loadingState').innerHTML = `
+                    <div class="brutal-alert brutal-alert-error">
+                        <strong>ERROR LOADING COMMODITIES</strong><br>
+                        ${error.message}<br><br>
+                        <button class="brutal-btn" onclick="location.reload()">RELOAD PAGE</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Display commodities
+        function displayCommodities() {
+            const tbody = document.getElementById('commoditiesBody');
+            const displayCount = Math.min(filteredCommodities.length, 200);
+            const commodities = filteredCommodities.slice(0, displayCount);
+
+            tbody.innerHTML = commodities.map(commodity => {
+                const date = formatDate(commodity.lastUpdated);
+                
+                const wholesalePrice = commodity.prices?.wholesale?.average || 
+                                      commodity.wholesalePrice || 
+                                      'N/A';
+                const retailPrice = commodity.prices?.retail?.average || 
+                                   commodity.retailPrice || 
+                                   'N/A';
+                const location = commodity.state || commodity.location || 'N/A';
+                const commodityName = commodity.commodity || 'N/A';
+                const market = commodity.market || 'N/A';
+                
+                return `
+                    <tr>
+                        <td style="font-weight: 700;">${commodityName}</td>
+                        <td>${location}</td>
+                        <td style="color: #666; font-size: 14px;">${market}</td>
+                        <td style="font-family: 'Space Mono', monospace; font-weight: 700;">
+                            ₹${wholesalePrice}
+                        </td>
+                        <td style="font-family: 'Space Mono', monospace; font-weight: 700;">
+                            ₹${retailPrice}
+                        </td>
+                        <td style="font-size: 12px;">${date}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            if (!dateStr) return 'Recently';
+            try {
+                const date = new Date(dateStr);
+                if (date.getFullYear() < 2000) return 'Recently';
+                return date.toLocaleDateString('en-IN', { 
+                    day: '2-digit', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
+            } catch {
+                return 'Recently';
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('totalCommodities').textContent = allCommodities.length;
+            
+            const uniqueStates = [...new Set(allCommodities.map(c => c.state || c.location))].filter(Boolean).length;
+            document.getElementById('totalStates').textContent = uniqueStates;
+            
+            if (allCommodities.length > 0 && allCommodities[0].lastUpdated) {
+                const date = formatDate(allCommodities[0].lastUpdated);
+                document.getElementById('lastUpdated').textContent = date;
+            }
+        }
+
+        // Filter commodities
+        function filterCommodities() {
+            const searchTerm = document.getElementById('commoditySearch').value.toLowerCase();
+            const state = document.getElementById('stateFilter').value;
+
+            filteredCommodities = allCommodities.filter(commodity => {
+                const matchesSearch = !searchTerm || 
+                    (commodity.commodity && commodity.commodity.toLowerCase().includes(searchTerm)) ||
+                    (commodity.location && commodity.location.toLowerCase().includes(searchTerm));
+                
+                const matchesState = !state || commodity.location === state;
+                
+                return matchesSearch && matchesState;
+            });
+
+            displayCommodities();
+        }
+
+        // Open commodity modal
+        function openCommodityModal(name, location) {
+            const commodities = allCommodities.filter(c => 
+                c.commodity === name && (c.state === location || c.location === location)
+            );
+            
+            if (commodities.length === 0) return;
+            
+            const commodity = commodities[0];
+            
+            // Extract prices from nested structure
+            const wholesalePrice = commodity.prices?.wholesale?.average || 
+                                  commodity.wholesalePrice || 
+                                  'N/A';
+            const retailPrice = commodity.prices?.retail?.average || 
+                               commodity.retailPrice || 
+                               'N/A';
+            const commodityLocation = commodity.state || commodity.location || 'N/A';
+            const unit = commodity.unit || 'quintal';
+            
+            document.getElementById('modalCommodityName').textContent = 
+                `${commodity.commodity} - ${commodityLocation}`;
+            
+            document.getElementById('modalCommodityDetails').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                    <div class="brutal-section">
+                        <div class="brutal-section-title">WHOLESALE PRICE</div>
+                        <div style="font-family: 'Space Mono', monospace; font-size: 42px; font-weight: 700; color: #9d4edd;">
+                            ₹${wholesalePrice}
+                        </div>
+                        <div style="font-size: 14px; color: #808080;">
+                            PER ${unit.toUpperCase()}
+                        </div>
+                    </div>
+                    
+                    <div class="brutal-section">
+                        <div class="brutal-section-title">RETAIL PRICE</div>
+                        <div style="font-family: 'Space Mono', monospace; font-size: 42px; font-weight: 700; color: #c77dff;">
+                            ₹${retailPrice}
+                        </div>
+                        <div style="font-size: 14px; color: #808080;">
+                            PER ${unit.toUpperCase()}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="brutal-section" style="margin-top: 30px;">
+                    <div class="brutal-section-title">DETAILS</div>
+                    <table style="width: 100%; font-family: 'Space Mono', monospace;">
+                        <tr>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;"><strong>COMMODITY:</strong></td>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;">${commodity.commodity}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;"><strong>LOCATION:</strong></td>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;">${commodityLocation}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;"><strong>DISTRICT:</strong></td>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;">${commodity.district || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;"><strong>MARKET:</strong></td>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;">${commodity.market || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;"><strong>UNIT:</strong></td>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;">${unit}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;"><strong>SOURCE:</strong></td>
+                            <td style="padding: 10px 0; border-bottom: 2px solid #000;">${commodity.source || 'data.gov.in'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0;"><strong>UPDATED:</strong></td>
+                            <td style="padding: 10px 0;">${formatDate(commodity.lastUpdated)}</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                ${wholesalePrice !== 'N/A' && retailPrice !== 'N/A' ? `
+                <div style="margin-top: 30px; padding: 20px; background: #c77dff; border: 4px solid #000;">
+                    <strong>💡 PRICE DIFFERENCE:</strong><br>
+                    Retail markup: ₹${(parseFloat(retailPrice) - parseFloat(wholesalePrice)).toFixed(2)} 
+                    per ${unit}
+                </div>
+                ` : ''}
+            `;
+            
+            document.getElementById('commodityModal').classList.add('active');
+        }
+
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('commodityModal').classList.remove('active');
+        }
+
+        // Language switching
+        function changeLanguage(lang) {
+            if (window.LanguageManager) {
+                window.LanguageManager.changeLanguage(lang);
+            }
+        }
+
+        // Accessibility functions
+        function toggleAccessibility() {
+            const panel = document.getElementById('accessibilityPanel');
+            panel.classList.toggle('active');
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            document.getElementById('lightBtn').classList.toggle('active', theme === 'light');
+            document.getElementById('darkBtn').classList.toggle('active', theme === 'dark');
+        }
+
+        function setFontSize(size) {
+            document.body.className = document.body.className.replace(/font-size-\w+/g, '');
+            document.body.classList.add(`font-size-${size}`);
+            localStorage.setItem('fontSize', size);
+            
+            document.querySelectorAll('.accessibility-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Load saved preferences
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedFontSize = localStorage.getItem('fontSize') || 'normal';
+            
+            setTheme(savedTheme);
+            document.body.classList.add(`font-size-${savedFontSize}`);
+            
+            // Close accessibility panel when clicking outside
+            document.addEventListener('click', (e) => {
+                const panel = document.getElementById('accessibilityPanel');
+                const isAccessibilityBtn = e.target.closest('[onclick="toggleAccessibility()"]');
+                const isInsidePanel = e.target.closest('.accessibility-panel');
+                
+                if (!isAccessibilityBtn && !isInsidePanel && panel.classList.contains('active')) {
+                    panel.classList.remove('active');
+                }
+            });
+        });
+
+        // Search on input
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('commoditySearch').addEventListener('input', filterCommodities);
+            initialLoad();
+            
+            // Close modal on ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+        });
+    </script>
+</body>
+</html>

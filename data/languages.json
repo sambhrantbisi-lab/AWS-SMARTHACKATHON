@@ -1,0 +1,188 @@
+{
+  "languages": [
+    {
+      "code": "hi",
+      "name": "हिन्दी",
+      "englishName": "Hindi",
+      "script": "Devanagari",
+      "speakers": "600M+",
+      "official": true
+    },
+    {
+      "code": "en",
+      "name": "English",
+      "englishName": "English",
+      "script": "Latin",
+      "speakers": "125M+",
+      "official": true
+    },
+    {
+      "code": "bn",
+      "name": "বাংলা",
+      "englishName": "Bengali",
+      "script": "Bengali",
+      "speakers": "100M+",
+      "official": true
+    },
+    {
+      "code": "te",
+      "name": "తెలుగు",
+      "englishName": "Telugu",
+      "script": "Telugu",
+      "speakers": "95M+",
+      "official": true
+    },
+    {
+      "code": "mr",
+      "name": "मराठी",
+      "englishName": "Marathi",
+      "script": "Devanagari",
+      "speakers": "90M+",
+      "official": true
+    },
+    {
+      "code": "ta",
+      "name": "தமிழ்",
+      "englishName": "Tamil",
+      "script": "Tamil",
+      "speakers": "80M+",
+      "official": true
+    },
+    {
+      "code": "gu",
+      "name": "ગુજરાતી",
+      "englishName": "Gujarati",
+      "script": "Gujarati",
+      "speakers": "60M+",
+      "official": true
+    },
+    {
+      "code": "ur",
+      "name": "اردو",
+      "englishName": "Urdu",
+      "script": "Arabic",
+      "speakers": "50M+",
+      "official": true
+    },
+    {
+      "code": "kn",
+      "name": "ಕನ್ನಡ",
+      "englishName": "Kannada",
+      "script": "Kannada",
+      "speakers": "45M+",
+      "official": true
+    },
+    {
+      "code": "ml",
+      "name": "മലയാളം",
+      "englishName": "Malayalam",
+      "script": "Malayalam",
+      "speakers": "35M+",
+      "official": true
+    },
+    {
+      "code": "or",
+      "name": "ଓଡ଼ିଆ",
+      "englishName": "Odia",
+      "script": "Odia",
+      "speakers": "35M+",
+      "official": true
+    },
+    {
+      "code": "pa",
+      "name": "ਪੰਜਾਬੀ",
+      "englishName": "Punjabi",
+      "script": "Gurmukhi",
+      "speakers": "30M+",
+      "official": true
+    },
+    {
+      "code": "as",
+      "name": "অসমীয়া",
+      "englishName": "Assamese",
+      "script": "Bengali",
+      "speakers": "15M+",
+      "official": true
+    },
+    {
+      "code": "mai",
+      "name": "मैथिली",
+      "englishName": "Maithili",
+      "script": "Devanagari",
+      "speakers": "12M+",
+      "official": true
+    },
+    {
+      "code": "sa",
+      "name": "संस्कृतम्",
+      "englishName": "Sanskrit",
+      "script": "Devanagari",
+      "speakers": "25K+",
+      "official": true
+    },
+    {
+      "code": "ne",
+      "name": "नेपाली",
+      "englishName": "Nepali",
+      "script": "Devanagari",
+      "speakers": "2.9M+",
+      "official": true
+    },
+    {
+      "code": "ks",
+      "name": "कॉशुर / کٲشُر",
+      "englishName": "Kashmiri",
+      "script": "Devanagari/Arabic",
+      "speakers": "7M+",
+      "official": true
+    },
+    {
+      "code": "sd",
+      "name": "سنڌي",
+      "englishName": "Sindhi",
+      "script": "Arabic",
+      "speakers": "2.7M+",
+      "official": true
+    },
+    {
+      "code": "doi",
+      "name": "डोगरी",
+      "englishName": "Dogri",
+      "script": "Devanagari",
+      "speakers": "2.3M+",
+      "official": true
+    },
+    {
+      "code": "mni",
+      "name": "ꯃꯤꯇꯩ ꯂꯣꯟ",
+      "englishName": "Manipuri",
+      "script": "Meitei Mayek",
+      "speakers": "1.8M+",
+      "official": true
+    },
+    {
+      "code": "kok",
+      "name": "कोंकणी",
+      "englishName": "Konkani",
+      "script": "Devanagari",
+      "speakers": "2.3M+",
+      "official": true
+    },
+    {
+      "code": "sat",
+      "name": "ᱥᱟᱱᱛᱟᱲᱤ",
+      "englishName": "Santali",
+      "script": "Ol Chiki",
+      "speakers": "7.6M+",
+      "official": true
+    },
+    {
+      "code": "bo",
+      "name": "བོད་སྐད་",
+      "englishName": "Tibetan",
+      "script": "Tibetan",
+      "speakers": "150K+",
+      "official": false
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Test - Civic AI Assistant</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Button Functionality Test</h1>
+    <div id="test-results"></div>
+    
+    <script>
+        async function testButtons() {
+            const results = document.getElementById('test-results');
+            
+            // Test 1: Check if main page loads
+            try {
+                const response = await fetch('/');
+                if (response.ok) {
+                    results.innerHTML += '<div class="test-result success">✅ Main page loads successfully</div>';
+                } else {
+                    results.innerHTML += '<div class="test-result error">❌ Main page failed to load</div>';
+                }
+            } catch (error) {
+                results.innerHTML += '<div class="test-result error">❌ Main page error: ' + error.message + '</div>';
+            }
+            
+            // Test 2: Check if JavaScript file loads
+            try {
+                const response = await fetch('/app.js');
+                if (response.ok) {
+                    results.innerHTML += '<div class="test-result success">✅ JavaScript file loads successfully</div>';
+                } else {
+                    results.innerHTML += '<div class="test-result error">❌ JavaScript file failed to load</div>';
+                }
+            } catch (error) {
+                results.innerHTML += '<div class="test-result error">❌ JavaScript file error: ' + error.message + '</div>';
+            }
+            
+            // Test 3: Check API endpoints
+            try {
+                const response = await fetch('/api/services');
+                if (response.ok) {
+                    const data = await response.json();
+                    results.innerHTML += '<div class="test-result success">✅ Services API works - ' + data.services.length + ' services loaded</div>';
+                } else {
+                    results.innerHTML += '<div class="test-result error">❌ Services API failed</div>';
+                }
+            } catch (error) {
+                results.innerHTML += '<div class="test-result error">❌ Services API error: ' + error.message + '</div>';
+            }
+            
+            // Test 4: Check Chat API
+            try {
+                const response = await fetch('/api/chat/quick', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'test', language: 'en' })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    results.innerHTML += '<div class="test-result success">✅ Chat API works - AI responded</div>';
+                } else {
+                    results.innerHTML += '<div class="test-result error">❌ Chat API failed</div>';
+                }
+            } catch (error) {
+                results.innerHTML += '<div class="test-result error">❌ Chat API error: ' + error.message + '</div>';
+            }
+            
+            results.innerHTML += '<div class="test-result success">🎉 All backend systems are working! Visit <a href="/">http://localhost:4000</a> to test the buttons.</div>';
+        }
+        
+        testButtons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN LOGIN - DIGITAL INDIA PORTAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: #fff;
+            border: 8px solid #000;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 16px 16px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header {
+            background: #7b2cbf;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 6px solid #000;
+            position: relative;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #fff;
+            color: #7b2cbf;
+            border: 3px solid #000;
+            padding: 8px 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .back-btn:hover {
+            background: #000;
+            color: #fff;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .login-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+        }
+
+        .login-body {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 4px solid #000;
+            background: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #7b2cbf;
+            box-shadow: 0 0 0 4px rgba(123, 44, 191, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: #7b2cbf;
+            border: 4px solid #000;
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        .login-btn:hover {
+            background: #9d4edd;
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        .login-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: none;
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 4px solid #000;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert-error {
+            background: #ffc7c7;
+            color: #aa0000;
+        }
+
+        .alert-success {
+            background: #c7fdff;
+            color: #00aa00;
+        }
+
+        .login-footer {
+            padding: 20px 40px;
+            background: #f5f5f5;
+            border-top: 4px solid #000;
+            text-align: center;
+        }
+
+        .login-footer a {
+            color: #7b2cbf;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .credentials-hint {
+            background: #fff3cd;
+            border: 4px solid #000;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+        }
+
+        .credentials-hint strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                border-width: 6px;
+            }
+
+            .login-header h1 {
+                font-size: 24px;
+            }
+
+            .login-body {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <a href="javascript:history.back()" class="back-btn">← BACK</a>
+            <h1>🔐 ADMIN LOGIN</h1>
+            <p>Digital India Portal</p>
+        </div>
+
+        <div class="login-body">
+            <div id="alertBox" class="alert"></div>
+
+            <div class="credentials-hint">
+                <strong>DEFAULT CREDENTIALS:</strong>
+                Email: admin@digitalindia.gov.in<br>
+                Password: admin123
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        id="email" 
+                        value="admin@digitalindia.gov.in"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input 
+                        type="password" 
+                        class="form-input" 
+                        id="password" 
+                        value="admin123"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    LOGIN
+                </button>
+            </form>
+        </div>
+
+        <div class="login-footer">
+            <a href="/index-brutalist.html">← BACK TO HOME</a>
+        </div>
+    </div>
+
+    <script>
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const alertBox = document.getElementById('alertBox');
+
+            // Disable button
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'LOGGING IN...';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    // Store token
+                    localStorage.setItem('adminToken', data.token);
+                    localStorage.setItem('adminUser', JSON.stringify(data.user));
+
+                    // Show success
+                    showAlert('Login successful! Redirecting...', 'success');
+
+                    // Redirect to admin panel
+                    setTimeout(() => {
+                        window.location.href = '/admin-brutalist.html';
+                    }, 1000);
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert(error.message || 'Login failed. Please check your credentials.', 'error');
+                
+                // Re-enable button
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'LOGIN';
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = 'block';
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('adminToken');
+            if (token) {
+                window.location.href = '/admin-brutalist.html';
+            }
+        });
+    </script>
+</body>
+</html>

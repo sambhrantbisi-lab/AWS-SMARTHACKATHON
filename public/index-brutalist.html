@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIGITAL INDIA - BRUTALIST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/brutalist-style.css">
+</head>
+<body>
+    <!-- Brutalist Header -->
+    <header class="brutal-header">
+        <h1 class="brutal-title">DIGITAL INDIA PORTAL</h1>
+        <p class="brutal-subtitle">Government Services • AI Assistant • Real-Time Data</p>
+        <nav class="brutal-nav">
+            <a href="javascript:history.back()" class="brutal-nav-btn">← BACK</a>
+            <a href="/index-brutalist.html" class="brutal-nav-btn active">HOME</a>
+            <a href="/services-brutalist.html" class="brutal-nav-btn">SERVICES</a>
+            <a href="/stocks-brutalist.html" class="brutal-nav-btn">STOCKS</a>
+            <a href="/market-brutalist.html" class="brutal-nav-btn">MARKET</a>
+            <a href="/nearby-brutalist.html" class="brutal-nav-btn">NEARBY</a>
+            <a href="/login-brutalist.html" class="brutal-nav-btn">LOGIN</a>
+            <select class="brutal-select" id="languageSelector" onchange="changeLanguage(this.value)">
+                <option value="en">ENGLISH</option>
+                <option value="hi">हिंदी</option>
+                <option value="bn">বাংলা</option>
+                <option value="te">తెలుగు</option>
+                <option value="ta">தமிழ்</option>
+                <option value="gu">ગુજરાતી</option>
+            </select>
+            <button class="brutal-btn" onclick="toggleAccessibility()" style="padding: 10px 15px;">
+                ⚙️ ACCESSIBILITY
+            </button>
+        </nav>
+    </header>
+
+    <!-- Accessibility Panel -->
+    <div class="accessibility-panel" id="accessibilityPanel">
+        <h3>⚙️ SETTINGS</h3>
+        
+        <div class="accessibility-option">
+            <label>Theme</label>
+            <div class="accessibility-buttons">
+                <button class="accessibility-btn active" onclick="setTheme('light')" id="lightBtn">
+                    ☀️ LIGHT
+                </button>
+                <button class="accessibility-btn" onclick="setTheme('dark')" id="darkBtn">
+                    🌙 DARK
+                </button>
+            </div>
+        </div>
+
+        <div class="accessibility-option">
+            <label>Font Size</label>
+            <div class="accessibility-buttons">
+                <button class="accessibility-btn" onclick="setFontSize('small')">
+                    A-
+                </button>
+                <button class="accessibility-btn active" onclick="setFontSize('normal')" id="normalFontBtn">
+                    A
+                </button>
+                <button class="accessibility-btn" onclick="setFontSize('large')">
+                    A+
+                </button>
+                <button class="accessibility-btn" onclick="setFontSize('xlarge')">
+                    A++
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="brutal-container">
+        <div style="text-align: center; padding: 60px 20px; border: 8px solid #000; background: #fff; margin-bottom: 40px;">
+            <div class="brutal-icon">🇮🇳</div>
+            <h2 style="font-family: 'Space Mono', monospace; font-size: 56px; font-weight: 700; text-transform: uppercase; margin-bottom: 20px;">
+                YOUR CIVIC ASSISTANT
+            </h2>
+            <p style="font-size: 20px; max-width: 800px; margin: 0 auto 30px; color: #808080;">
+                Access government services, live stock market data, commodity prices, and AI-powered assistance. 
+                All in one brutally honest platform.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <button class="brutal-btn" onclick="openAIChat()">START AI ASSISTANT</button>
+                <a href="/services-brutalist.html" class="brutal-btn brutal-btn-cyan">BROWSE SERVICES</a>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="brutal-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+            <div class="brutal-stat">
+                <span class="brutal-stat-number">500+</span>
+                <span class="brutal-stat-label">Government Services</span>
+            </div>
+            <div class="brutal-stat">
+                <span class="brutal-stat-number">2000+</span>
+                <span class="brutal-stat-label">Live Stocks</span>
+            </div>
+            <div class="brutal-stat">
+                <span class="brutal-stat-number">8</span>
+                <span class="brutal-stat-label">Languages</span>
+            </div>
+            <div class="brutal-stat">
+                <span class="brutal-stat-number">24/7</span>
+                <span class="brutal-stat-label">AI Assistance</span>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <h2 style="font-family: 'Space Mono', monospace; font-size: 36px; font-weight: 700; text-transform: uppercase; margin: 60px 0 30px; text-align: center;">
+            WHAT WE OFFER
+        </h2>
+
+        <div class="brutal-grid">
+            <!-- Government Services -->
+            <div class="brutal-card" onclick="window.location.href='/services-brutalist.html'">
+                <div class="brutal-card-header">
+                    <div class="brutal-icon">🏛️</div>
+                    <h3 style="font-size: 24px; margin: 0;">GOVERNMENT SERVICES</h3>
+                </div>
+                <div class="brutal-card-body">
+                    <p style="margin-bottom: 15px; color: #808080;">
+                        Access Aadhaar, PAN, Passport, and 500+ other government services. 
+                        Complete information, requirements, and application links.
+                    </p>
+                    <div>
+                        <span class="brutal-tag">AADHAAR</span>
+                        <span class="brutal-tag">PAN</span>
+                        <span class="brutal-tag">PASSPORT</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Stocks -->
+            <div class="brutal-card" onclick="window.location.href='/stocks-brutalist.html'">
+                <div class="brutal-card-header">
+                    <div class="brutal-icon">📈</div>
+                    <h3 style="font-size: 24px; margin: 0;">LIVE STOCK MARKET</h3>
+                </div>
+                <div class="brutal-card-body">
+                    <p style="margin-bottom: 15px; color: #808080;">
+                        Real-time NSE stock prices, charts, and market data. 
+                        Track 2000+ stocks with live updates and AI analysis.
+                    </p>
+                    <div>
+                        <span class="brutal-tag brutal-tag-green">REAL-TIME</span>
+                        <span class="brutal-tag brutal-tag-cyan">NSE</span>
+                        <span class="brutal-tag">2000+ STOCKS</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Prices -->
+            <div class="brutal-card" onclick="window.location.href='/market-brutalist.html'">
+                <div class="brutal-card-header">
+                    <div class="brutal-icon">🌾</div>
+                    <h3 style="font-size: 24px; margin: 0;">COMMODITY PRICES</h3>
+                </div>
+                <div class="brutal-card-body">
+                    <p style="margin-bottom: 15px; color: #808080;">
+                        State-wise wholesale and retail prices for agricultural commodities. 
+                        Updated daily from official government sources.
+                    </p>
+                    <div>
+                        <span class="brutal-tag">WHOLESALE</span>
+                        <span class="brutal-tag">RETAIL</span>
+                        <span class="brutal-tag brutal-tag-green">DAILY</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Assistant -->
+            <div class="brutal-card" onclick="openAIChat()">
+                <div class="brutal-card-header">
+                    <div class="brutal-icon">🤖</div>
+                    <h3 style="font-size: 24px; margin: 0;">AI ASSISTANT</h3>
+                </div>
+                <div class="brutal-card-body">
+                    <p style="margin-bottom: 15px; color: #808080;">
+                        Context-aware AI powered by Gemini and Groq. 
+                        Ask questions about services, stocks, or commodities in 8 languages.
+                    </p>
+                    <div>
+                        <span class="brutal-tag brutal-tag-red">GEMINI</span>
+                        <span class="brutal-tag brutal-tag-cyan">GROQ</span>
+                        <span class="brutal-tag">8 LANGUAGES</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi-Language -->
+            <div class="brutal-card">
+                <div class="brutal-card-header">
+                    <div class="brutal-icon">🌐</div>
+                    <h3 style="font-size: 24px; margin: 0;">MULTI-LANGUAGE</h3>
+                </div>
+                <div class="brutal-card-body">
+                    <p style="margin-bottom: 15px; color: #808080;">
+                        Full support for 8 Indian languages. 
+                        Switch languages anytime, AI translates automatically.
+                    </p>
+                    <div>
+                        <span class="brutal-tag">HINDI</span>
+                        <span class="brutal-tag">TAMIL</span>
+                        <span class="brutal-tag">TELUGU</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Real-Time Data -->
+            <div class="brutal-card">
+                <div class="brutal-card-header">
+                    <div class="brutal-icon">⚡</div>
+                    <h3 style="font-size: 24px; margin: 0;">REAL-TIME DATA</h3>
+                </div>
+                <div class="brutal-card-body">
+                    <p style="margin-bottom: 15px; color: #808080;">
+                        Live updates from NSE, data.gov.in, and official sources. 
+                        No fake data, no delays, just brutal honesty.
+                    </p>
+                    <div>
+                        <span class="brutal-tag brutal-tag-green">LIVE</span>
+                        <span class="brutal-tag">OFFICIAL</span>
+                        <span class="brutal-tag brutal-tag-red">NO BS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <h2 style="font-family: 'Space Mono', monospace; font-size: 36px; font-weight: 700; text-transform: uppercase; margin: 60px 0 30px; text-align: center;">
+            HOW IT WORKS
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px;">
+            <div style="border: 6px solid #000; padding: 30px; background: #fff;">
+                <div style="font-family: 'Space Mono', monospace; font-size: 48px; font-weight: 700; color: #FF0000; margin-bottom: 15px;">01</div>
+                <h3 style="font-family: 'Space Mono', monospace; font-size: 20px; margin-bottom: 10px;">CHOOSE SERVICE</h3>
+                <p style="color: #808080;">Browse government services, stocks, or commodities. Click to see details.</p>
+            </div>
+
+            <div style="border: 6px solid #000; padding: 30px; background: #fff;">
+                <div style="font-family: 'Space Mono', monospace; font-size: 48px; font-weight: 700; color: #FFFF00; margin-bottom: 15px;">02</div>
+                <h3 style="font-family: 'Space Mono', monospace; font-size: 20px; margin-bottom: 10px;">ASK AI</h3>
+                <p style="color: #808080;">Open AI assistant, ask questions in your language. Get instant answers.</p>
+            </div>
+
+            <div style="border: 6px solid #000; padding: 30px; background: #fff;">
+                <div style="font-family: 'Space Mono', monospace; font-size: 48px; font-weight: 700; color: #00FFFF; margin-bottom: 15px;">03</div>
+                <h3 style="font-family: 'Space Mono', monospace; font-size: 20px; margin-bottom: 10px;">TAKE ACTION</h3>
+                <p style="color: #808080;">Apply for services, track stocks, check prices. All in one place.</p>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div style="text-align: center; padding: 60px 20px; border: 8px solid #000; background: #000; color: #fff;">
+            <h2 style="font-family: 'Space Mono', monospace; font-size: 42px; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; color: #FFFF00;">
+                READY TO START?
+            </h2>
+            <p style="font-size: 18px; margin-bottom: 30px; color: #fff;">
+                No registration required. No hidden fees. Just brutal efficiency.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="/services-brutalist.html" class="brutal-btn" style="background: #FFFF00; color: #000;">EXPLORE SERVICES</a>
+                <a href="/stocks-brutalist.html" class="brutal-btn" style="background: #00FFFF; color: #000;">VIEW STOCKS</a>
+                <a href="/market-brutalist.html" class="brutal-btn" style="background: #00FF00; color: #000;">CHECK PRICES</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="margin-top: 60px; padding: 40px 20px; border-top: 6px solid #000; text-align: center;">
+            <p style="font-family: 'Space Mono', monospace; font-size: 14px; text-transform: uppercase; margin-bottom: 10px;">
+                BUILT WITH ❤️ FOR DIGITAL INDIA
+            </p>
+            <p style="font-size: 12px; color: #808080;">
+                Data from NSE, data.gov.in, and official government sources • AI powered by Gemini & Groq
+            </p>
+        </div>
+    </div>
+
+    <!-- Language Manager -->
+    <script src="/language-manager.js?v=1.0"></script>
+    
+    <!-- Comprehensive Context Gathering for AI -->
+    <script>
+        // Global context gathering function for AI chat
+        globalThis.gatherPageContextFixed = function() {
+            const context = {
+                page: window.location.pathname,
+                pageName: document.title,
+                pageType: 'home',
+                timestamp: new Date().toISOString(),
+                language: localStorage.getItem('language') || 'en',
+                
+                // Home page context
+                features: [
+                    {
+                        name: 'Live Stocks',
+                        description: '2000+ stocks from NSE with real-time data',
+                        link: '/stocks-brutalist.html'
+                    },
+                    {
+                        name: 'Commodity Market',
+                        description: '600+ commodity prices from data.gov.in',
+                        link: '/market-brutalist.html'
+                    },
+                    {
+                        name: 'Government Services',
+                        description: 'Browse and access government schemes and services',
+                        link: '/services-brutalist.html'
+                    }
+                ],
+                
+                // Page capabilities
+                capabilities: [
+                    'Navigate to Live Stocks page for real-time stock market data',
+                    'Navigate to Commodity Market for agricultural prices',
+                    'Navigate to Government Services for schemes and applications',
+                    'Multi-language support (English, Hindi, Tamil, Telugu, Bengali, Gujarati)',
+                    'AI-powered assistance for all pages',
+                    'Brutalist design with purple theme'
+                ],
+                
+                description: 'User is on the Digital India Portal home page. ' +
+                            'This is the main landing page with navigation to stocks, commodities, and government services.'
+            };
+            
+            return context;
+        };
+    </script>
+    
+    <!-- AI Chat Floating Window -->
+    <script src="/ai-chat-floating.js?v=2.1"></script>
+
+    <script>
+        // Language switching
+        function changeLanguage(lang) {
+            if (window.LanguageManager) {
+                window.LanguageManager.changeLanguage(lang);
+            }
+        }
+
+        // Open AI chat
+        function openAIChat() {
+            // AI chat window will auto-initialize
+            const chatBtn = document.querySelector('.ai-chat-btn');
+            if (chatBtn) {
+                chatBtn.click();
+            }
+        }
+
+        // Accessibility functions
+        function toggleAccessibility() {
+            const panel = document.getElementById('accessibilityPanel');
+            panel.classList.toggle('active');
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            document.getElementById('lightBtn').classList.toggle('active', theme === 'light');
+            document.getElementById('darkBtn').classList.toggle('active', theme === 'dark');
+        }
+
+        function setFontSize(size) {
+            document.body.className = document.body.className.replace(/font-size-\w+/g, '');
+            document.body.classList.add(`font-size-${size}`);
+            localStorage.setItem('fontSize', size);
+            
+            document.querySelectorAll('.accessibility-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎨 Brutalist Home Page Loaded');
+            
+            // Load saved preferences
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedFontSize = localStorage.getItem('fontSize') || 'normal';
+            
+            setTheme(savedTheme);
+            document.body.classList.add(`font-size-${savedFontSize}`);
+            
+            // Close accessibility panel when clicking outside
+            document.addEventListener('click', (e) => {
+                const panel = document.getElementById('accessibilityPanel');
+                const isAccessibilityBtn = e.target.closest('[onclick="toggleAccessibility()"]');
+                const isInsidePanel = e.target.closest('.accessibility-panel');
+                
+                if (!isAccessibilityBtn && !isInsidePanel && panel.classList.contains('active')) {
+                    panel.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

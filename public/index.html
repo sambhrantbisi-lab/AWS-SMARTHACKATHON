@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital India Portal - Civic AI Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #10b981;
+            --accent-color: #8b5cf6;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --success-color: #10b981;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            /* Light theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --surface-bg: #ffffff;
+            --card-bg: #ffffff;
+        }
+
+        /* Dark theme - Modern Glass Design */
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0f0f0f 100%);
+            --bg-secondary: rgba(20, 20, 20, 0.95);
+            --bg-tertiary: rgba(40, 40, 40, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-muted: #b0b0b0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --surface-bg: rgba(25, 25, 25, 0.9);
+            --card-bg: rgba(30, 30, 30, 0.85);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.6);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            background-attachment: fixed;
+        }
+
+        /* Accessibility Bar - Glass Effect */
+        .accessibility-bar {
+            background: var(--surface-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        [data-theme="dark"] .accessibility-bar {
+            background: rgba(15, 15, 15, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .accessibility-controls {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--success-color);
+            font-weight: 700;
+            font-size: 15px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .language-selector select {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 600;
+            min-width: 160px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .language-selector select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .accessibility-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .access-btn {
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .access-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .access-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Navigation - Glass Effect */
+        .navbar {
+            background: var(--surface-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 100;
+        }
+
+        [data-theme="dark"] .navbar {
+            background: rgba(20, 20, 20, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* User dropdown positioning */
+        .dropdown-menu {
+            z-index: 1050 !important;
+            position: absolute !important;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Tab Navigation - Updated for Page Links */
+        .tab-navigation {
+            background: var(--surface-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            z-index: 50;
+        }
+
+        [data-theme="dark"] .tab-navigation {
+            background: rgba(25, 25, 25, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tabs {
+            border: none;
+            background: transparent;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 16px 24px;
+            transition: var(--transition);
+            background: transparent;
+            text-decoration: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background: var(--bg-tertiary);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            color: white;
+            background: var(--primary-color);
+        }
+
+        .nav-tabs {
+            border: none;
+            background: transparent;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 16px 24px;
+            transition: var(--transition);
+            background: transparent;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--primary-color);
+            background: transparent;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        /* Content */
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 80px 0;
+            margin-bottom: 80px;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 24px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .feature-card {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 24px;
+        }
+
+        .feature-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .feature-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .feature-link:hover {
+            color: var(--secondary-color);
+            transform: translateX(4px);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stats-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--text-primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        [data-theme="dark"] .stat-card {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        /* Stock Display */
+        .stock-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .price-up { color: var(--success-color); }
+        .price-down { color: var(--danger-color); }
+
+        /* News Feed */
+        .news-feed {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .news-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .news-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .news-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .news-excerpt {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Form Elements */
+        .form-control {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px;
+            border-radius: 8px;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Service Items */
+        .service-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: var(--transition);
+        }
+
+        .service-item:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        /* Stock Items */
+        .stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .stock-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .stock-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive - Enhanced for Better Text Visibility */
+        @media (max-width: 768px) {
+            .accessibility-controls {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .accessibility-buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .access-btn span {
+                display: none;
+            }
+            
+            .access-btn {
+                padding: 10px;
+                min-width: 44px;
+                justify-content: center;
+                font-size: 16px;
+            }
+            
+            .live-status {
+                font-size: 16px;
+                font-weight: 800;
+            }
+            
+            .language-selector select {
+                font-size: 16px;
+                padding: 12px 16px;
+                min-width: 180px;
+            }
+
+            .hero-title {
+                font-size: 48px;
+            }
+
+            .hero-subtitle {
+                font-size: 20px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-link {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .accessibility-bar {
+                padding: 20px 0;
+            }
+            
+            .accessibility-controls {
+                padding: 0 16px;
+                gap: 20px;
+            }
+            
+            .live-status {
+                font-size: 18px;
+                font-weight: 900;
+            }
+            
+            .language-selector select {
+                font-size: 18px;
+                padding: 14px 18px;
+                min-width: 200px;
+            }
+            
+            .access-btn {
+                padding: 12px;
+                min-width: 48px;
+                font-size: 18px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-link span {
+                display: none;
+            }
+        }
+
+        /* High Contrast Mode - FIXED */
+        .high-contrast,
+        .high-contrast * {
+            --text-primary: #000000 !important;
+            --text-secondary: #000000 !important;
+            --text-muted: #333333 !important;
+            --bg-primary: #ffffff !important;
+            --bg-secondary: #ffffff !important;
+            --bg-tertiary: #f0f0f0 !important;
+            --border-color: #000000 !important;
+            --card-bg: #ffffff !important;
+            --surface-bg: #ffffff !important;
+        }
+
+        [data-theme="dark"].high-contrast,
+        [data-theme="dark"].high-contrast * {
+            --text-primary: #ffffff !important;
+            --text-secondary: #ffffff !important;
+            --text-muted: #cccccc !important;
+            --bg-primary: #000000 !important;
+            --bg-secondary: #000000 !important;
+            --bg-tertiary: #333333 !important;
+            --border-color: #ffffff !important;
+            --card-bg: #000000 !important;
+            --surface-bg: #000000 !important;
+        }
+
+        .high-contrast .access-btn,
+        .high-contrast .language-selector select,
+        .high-contrast .nav-btn,
+        .high-contrast .btn {
+            border-width: 3px !important;
+            font-weight: 900 !important;
+            text-shadow: none !important;
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        .high-contrast .btn-primary {
+            background: var(--text-primary) !important;
+            color: var(--bg-primary) !important;
+        }
+
+        .high-contrast .live-status {
+            font-weight: 900 !important;
+            text-shadow: none !important;
+        }
+
+        /* Large Text Mode */
+        .large-text {
+            font-size: 18px;
+        }
+
+        .large-text .card-title {
+            font-size: 22px;
+        }
+
+        .large-text .news-title {
+            font-size: 18px;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Modal Dark Mode Support */
+        [data-theme="dark"] .modal-content {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="dark"] .modal-header {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        [data-theme="dark"] .modal-body {
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .form-control {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="dark"] .form-control:focus {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-color: var(--primary-color);
+        }
+
+        [data-theme="dark"] .form-label {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="dark"] .btn-close {
+            filter: invert(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Accessibility Bar -->
+        <div class="accessibility-bar">
+            <div class="accessibility-controls">
+                <div class="live-status">
+                    <div class="live-dot"></div>
+                    <span data-i18n="live_updates">Live Updates</span>
+                </div>
+                
+                <div class="language-selector">
+                    <select id="languageSelector" onchange="changeLanguage(this.value)">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="hi">🇮🇳 हिंदी</option>
+                        <option value="bn">🇧🇩 বাংলা</option>
+                        <option value="te">🇮🇳 తెలుగు</option>
+                        <option value="mr">🇮🇳 मराठी</option>
+                        <option value="ta">🇮🇳 தமிழ்</option>
+                        <option value="gu">🇮🇳 ગુજરાતી</option>
+                        <option value="kn">🇮🇳 ಕನ್ನಡ</option>
+                    </select>
+                </div>
+                
+                <div class="accessibility-buttons">
+                    <button class="access-btn" onclick="toggleHighContrast()" id="contrastBtn" title="High Contrast">
+                        <i class="fas fa-adjust"></i>
+                        <span data-i18n="contrast">Contrast</span>
+                    </button>
+                    <button class="access-btn" onclick="toggleLargeText()" id="textSizeBtn" title="Large Text">
+                        <i class="fas fa-text-height"></i>
+                        <span data-i18n="text_size">Text Size</span>
+                    </button>
+                    <button class="access-btn" onclick="toggleDarkMode()" id="themeToggle" title="Toggle Theme">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                        <span id="themeText" data-i18n="dark_mode">Dark</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-flag me-2"></i>Digital India Portal
+                </a>
+                <div class="ms-auto">
+                    <button class="login-btn" onclick="showLogin()" id="loginSection">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login to Digital India
+                    </button>
+                    <div class="dropdown d-none" id="userSection">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i><span id="userDisplay">Guest</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="showProfile()"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li id="adminPanelLink" class="d-none"><a class="dropdown-item" href="/admin.html"><i class="fas fa-shield-alt me-2"></i>Admin Panel</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <div class="nav-tabs">
+                <a href="/" class="nav-link active">
+                    <i class="fas fa-home"></i><span data-i18n="home">Home</span>
+                </a>
+                <a href="/services.html" class="nav-link">
+                    <i class="fas fa-building"></i><span data-i18n="government_services">Government Services</span>
+                </a>
+                <a href="/stocks.html" class="nav-link">
+                    <i class="fas fa-chart-line"></i><span data-i18n="live_stocks">Live Stocks</span>
+                </a>
+                <a href="/market.html" class="nav-link">
+                    <i class="fas fa-chart-bar"></i><span data-i18n="market_prices">Market Prices</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Digital India Portal</h1>
+                    <p class="hero-subtitle">Your gateway to all Indian government services, live market data, and AI-powered assistance</p>
+                    <div class="hero-actions">
+                        <a href="/services.html" class="btn btn-primary btn-lg">
+                            <i class="fas fa-building me-2"></i>Explore Services
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3 class="feature-title">Government Services</h3>
+                    <p class="feature-description">Access all Indian government services including Aadhaar, PAN, Passport, and more with step-by-step guidance.</p>
+                    <a href="/services.html" class="feature-link">
+                        Explore Services <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Live Stock Market</h3>
+                    <p class="feature-description">Real-time stock prices, market indices, and interactive charts updated every second.</p>
+                    <a href="/stocks.html" class="feature-link">
+                        View Stocks <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="feature-title">Market Prices</h3>
+                    <p class="feature-description">Live commodity prices from major markets across India including vegetables, grains, and spices.</p>
+                    <a href="/market.html" class="feature-link">
+                        Check Prices <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="feature-title">AI Assistant</h3>
+                    <p class="feature-description">Get instant help with government procedures, document requirements, and market information using the AI panel on the right.</p>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="stats-section">
+                <h2 class="stats-title">Live Updates</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-value" id="niftyValue">19,674.25</div>
+                        <div class="stat-label">NIFTY 50</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💹</div>
+                        <div class="stat-value" id="sensexValue">66,112.44</div>
+                        <div class="stat-label">SENSEX</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🧅</div>
+                        <div class="stat-value">₹1,000</div>
+                        <div class="stat-label">Onion (per quintal)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🍅</div>
+                        <div class="stat-value">₹800</div>
+                        <div class="stat-label">Tomato (per quintal)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login to Digital India Portal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Theme toggle functionality
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+            
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            
+            if (darkMode) {
+                themeIcon.className = 'fas fa-sun';
+                themeText.textContent = 'Light';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+                themeText.textContent = 'Dark';
+            }
+            
+            localStorage.setItem('darkMode', darkMode);
+        }
+
+        function toggleHighContrast() {
+            const body = document.body;
+            body.classList.toggle('high-contrast');
+            
+            const btn = document.getElementById('contrastBtn');
+            btn.classList.toggle('active');
+            
+            const isActive = body.classList.contains('high-contrast');
+            localStorage.setItem('highContrast', isActive);
+        }
+
+        function toggleLargeText() {
+            const body = document.body;
+            body.classList.toggle('large-text');
+            
+            const btn = document.getElementById('textSizeBtn');
+            btn.classList.toggle('active');
+            
+            const isActive = body.classList.contains('large-text');
+            localStorage.setItem('largeText', isActive);
+        }
+
+        function changeLanguage(language) {
+            if (window.LanguageManager) {
+                window.LanguageManager.changeLanguage(language);
+            } else {
+                // Fallback if language manager not loaded yet
+                localStorage.setItem('language', language);
+                location.reload();
+            }
+        }
+
+        function showLogin() {
+            new bootstrap.Modal(document.getElementById('loginModal')).show();
+        }
+
+        // Initialize theme and preferences
+        function initializePreferences() {
+            // Load dark mode
+            if (darkMode) {
+                toggleDarkMode();
+            }
+
+            // Load high contrast
+            const highContrast = localStorage.getItem('highContrast');
+            if (highContrast === 'true') {
+                toggleHighContrast();
+            }
+
+            // Load large text
+            const largeText = localStorage.getItem('largeText');
+            if (largeText === 'true') {
+                toggleLargeText();
+            }
+
+            // Load language
+            const language = localStorage.getItem('language');
+            if (language) {
+                document.getElementById('languageSelector').value = language;
+            }
+        }
+
+        // Live stats updates
+        function updateLiveStats() {
+            // Simulate live updates for NIFTY and SENSEX
+            const niftyElement = document.getElementById('niftyValue');
+            const sensexElement = document.getElementById('sensexValue');
+            
+            if (niftyElement && sensexElement) {
+                const niftyBase = 19674.25;
+                const sensexBase = 66112.44;
+                
+                const niftyChange = (Math.random() - 0.5) * 100;
+                const sensexChange = (Math.random() - 0.5) * 300;
+                
+                niftyElement.textContent = (niftyBase + niftyChange).toFixed(2);
+                sensexElement.textContent = (sensexBase + sensexChange).toFixed(2);
+            }
+        }
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Save token and user data
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // Update UI
+                    document.getElementById('loginSection').classList.add('d-none');
+                    document.getElementById('userSection').classList.remove('d-none');
+                    document.getElementById('userDisplay').textContent = data.user.name;
+                    
+                    // Show admin panel link if user is admin
+                    if (data.user.role === 'admin' || data.user.role === 'service_admin') {
+                        document.getElementById('adminPanelLink').classList.remove('d-none');
+                    }
+                    
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                    
+                    // Show success message
+                    alert('Login successful! Welcome, ' + data.user.name);
+                } else {
+                    alert('Login failed: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed. Please try again.');
+            }
+        });
+
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            
+            document.getElementById('loginSection').classList.remove('d-none');
+            document.getElementById('userSection').classList.add('d-none');
+            document.getElementById('adminPanelLink').classList.add('d-none');
+            
+            alert('Logged out successfully');
+        }
+
+        // Check if user is already logged in
+        function checkLoginStatus() {
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+            
+            if (token && userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    document.getElementById('loginSection').classList.add('d-none');
+                    document.getElementById('userSection').classList.remove('d-none');
+                    document.getElementById('userDisplay').textContent = user.name;
+                    
+                    // Show admin panel link if user is admin
+                    if (user.role === 'admin' || user.role === 'service_admin') {
+                        document.getElementById('adminPanelLink').classList.remove('d-none');
+                    }
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                    logout();
+                }
+            }
+        }
+
+        function showProfile() {
+            alert('Profile page coming soon!');
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePreferences();
+            checkLoginStatus();
+            
+            // Update stats every 5 seconds
+            setInterval(updateLiveStats, 5000);
+        });
+    </script>
+    
+    <!-- Enhanced context gathering for AI chat -->
+    <script>
+        window.gatherPageContextFixed = function() {
+            try {
+                const context = {
+                    page: window.location.pathname || '/index.html',
+                    pageTitle: document.title || 'Digital India Portal',
+                    pageName: 'Home',
+                    description: 'Digital India Portal - Access government services, stock market data, and commodity prices',
+                    url: window.location.href || '',
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Gather feature cards
+                const featureCards = document.querySelectorAll('.feature-card');
+                if (featureCards.length > 0) {
+                    const features = [];
+                    featureCards.forEach(card => {
+                        const title = card.querySelector('.feature-title');
+                        const description = card.querySelector('.feature-description');
+                        const icon = card.querySelector('.feature-icon i');
+                        
+                        if (title) {
+                            const featureInfo = {
+                                title: title.textContent.trim()
+                            };
+                            if (description) featureInfo.description = description.textContent.trim();
+                            if (icon) featureInfo.icon = icon.className;
+                            features.push(featureInfo);
+                        }
+                    });
+                    if (features.length > 0) {
+                        context.availableFeatures = features;
+                    }
+                }
+                
+                // Gather quick stats if visible
+                const statCards = document.querySelectorAll('.stat-card');
+                if (statCards.length > 0) {
+                    const stats = [];
+                    statCards.forEach(card => {
+                        const value = card.querySelector('.stat-value');
+                        const label = card.querySelector('.stat-label');
+                        
+                        if (value && label) {
+                            stats.push({
+                                label: label.textContent.trim(),
+                                value: value.textContent.trim()
+                            });
+                        }
+                    });
+                    if (stats.length > 0) {
+                        context.quickStats = stats;
+                    }
+                }
+                
+                // Available navigation
+                context.availablePages = [
+                    { name: 'Services', url: '/services.html', description: 'Government services portal' },
+                    { name: 'Stocks', url: '/stocks.html', description: 'NSE stock market data' },
+                    { name: 'Market', url: '/market.html', description: 'Commodity market prices' }
+                ];
+                
+                console.log('📊 Home context gathered:', context);
+                return context;
+            } catch (error) {
+                console.error('Home context gathering failed:', error);
+                return { 
+                    page: '/index.html', 
+                    pageName: 'Home', 
+                    description: 'Digital India Portal homepage',
+                    error: error.message 
+                };
+            }
+        };
+        
+        console.log('🔧 Home context hotfix loaded');
+    </script>
+    
+    <!-- Language Manager -->
+    <script src="/language-manager.js?v=1.0"></script>
+    
+    <!-- AI Chat Floating Window -->
+    <script src="/ai-chat-floating.js?v=2.1"></script>
+</body>
+</html>
