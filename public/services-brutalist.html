@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOVERNMENT SERVICES - BRUTALIST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/brutalist-style.css">
+    <style>
+        /* Additional styles specific to services page */        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .brutal-nav {
+            display: flex;
+            gap: 0;
+            margin-top: 20px;
+        }
+
+        .brutal-nav-btn {
+            background: var(--white);
+            color: var(--black);
+            border: 4px solid var(--black);
+            padding: 15px 30px;
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.1s;
+            position: relative;
+        }
+
+        .brutal-nav-btn:hover {
+            background: var(--yellow);
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .brutal-nav-btn.active {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        /* Main Content */
+        .brutal-container {
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .brutal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        /* Service Tile - Brutalist Style */
+        .service-tile {
+            background: var(--white);
+            border: 6px solid var(--black);
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.03) 10px,
+                rgba(0,0,0,0.03) 20px
+            );
+            pointer-events: none;
+        }
+
+        .service-tile:hover {
+            transform: translate(-8px, -8px);
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .service-tile-header {
+            background: var(--black);
+            color: var(--white);
+            padding: 20px;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .service-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .service-tile-body {
+            padding: 20px;
+        }
+
+        .service-desc {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: var(--gray);
+        }
+
+        .service-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .service-tag {
+            background: var(--yellow);
+            color: var(--black);
+            padding: 5px 15px;
+            border: 3px solid var(--black);
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Nested Window - Modal */
+        .nested-window {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .nested-window.active {
+            display: flex;
+        }
+
+        .window-content {
+            background: var(--white);
+            border: 8px solid var(--black);
+            max-width: 1200px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .window-header {
+            background: var(--black);
+            color: var(--white);
+            padding: 30px;
+            border-bottom: 6px solid var(--cyan);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .window-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            width: 50px;
+            height: 50px;
+            font-size: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .window-close:hover {
+            transform: rotate(90deg);
+            background: var(--yellow);
+            color: var(--black);
+        }
+
+        .window-body {
+            padding: 40px;
+        }
+
+        .detail-section {
+            margin-bottom: 40px;
+            border-left: 6px solid var(--black);
+            padding-left: 20px;
+        }
+
+        .detail-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        /* Discussion Forum */
+        .forum-container {
+            background: #f5f5f5;
+            border: 6px solid var(--black);
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .forum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .forum-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .lang-selector {
+            background: var(--black);
+            color: var(--white);
+            border: 4px solid var(--black);
+            padding: 10px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .forum-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .forum-message {
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .message-author {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .message-text {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .message-meta {
+            font-size: 12px;
+            color: var(--gray);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .forum-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .forum-input {
+            flex: 1;
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 15px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px;
+        }
+
+        .forum-btn {
+            background: var(--accent);
+            color: var(--white);
+            border: 4px solid var(--black);
+            padding: 15px 30px;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .forum-btn:hover {
+            background: var(--yellow);
+            color: var(--black);
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--black);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .brutal-title {
+                font-size: 32px;
+            }
+
+            .brutal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .window-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Brutalist Header -->
+    <header class="brutal-header">
+        <h1 class="brutal-title">GOVERNMENT SERVICES</h1>
+        <p class="brutal-subtitle">Real Services • Discussion Forums • AI Translation</p>
+        <nav class="brutal-nav">
+            <a href="javascript:history.back()" class="brutal-nav-btn">← BACK</a>
+            <a href="/index-brutalist.html" class="brutal-nav-btn">HOME</a>
+            <a href="/services-brutalist.html" class="brutal-nav-btn active">SERVICES</a>
+            <a href="/stocks-brutalist.html" class="brutal-nav-btn">STOCKS</a>
+            <a href="/market-brutalist.html" class="brutal-nav-btn">MARKET</a>
+            <a href="/nearby-brutalist.html" class="brutal-nav-btn">NEARBY</a>
+            <a href="/login-brutalist.html" class="brutal-nav-btn">LOGIN</a>
+            <select class="brutal-select" id="languageSelector" onchange="changeLanguage(this.value)">
+                <option value="en">ENGLISH</option>
+                <option value="hi">हिंदी</option>
+                <option value="bn">বাংলা</option>
+                <option value="te">తెలుగు</option>
+                <option value="ta">தமிழ்</option>
+                <option value="gu">ગુજરાતી</option>
+            </select>
+            <button class="brutal-btn" onclick="toggleAccessibility()" style="padding: 10px 15px;">
+                ⚙️ ACCESSIBILITY
+            </button>
+        </nav>
+    </header>
+
+    <!-- Accessibility Panel -->
+    <div class="accessibility-panel" id="accessibilityPanel">
+        <h3>⚙️ SETTINGS</h3>
+        
+        <div class="accessibility-option">
+            <label>Theme</label>
+            <div class="accessibility-buttons">
+                <button class="accessibility-btn active" onclick="setTheme('light')" id="lightBtn">
+                    ☀️ LIGHT
+                </button>
+                <button class="accessibility-btn" onclick="setTheme('dark')" id="darkBtn">
+                    🌙 DARK
+                </button>
+            </div>
+        </div>
+
+        <div class="accessibility-option">
+            <label>Font Size</label>
+            <div class="accessibility-buttons">
+                <button class="accessibility-btn" onclick="setFontSize('small')">
+                    A-
+                </button>
+                <button class="accessibility-btn active" onclick="setFontSize('normal')" id="normalFontBtn">
+                    A
+                </button>
+                <button class="accessibility-btn" onclick="setFontSize('large')">
+                    A+
+                </button>
+                <button class="accessibility-btn" onclick="setFontSize('xlarge')">
+                    A++
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="brutal-container">
+        <!-- Loading State -->
+        <div id="loadingState" class="brutal-loading-container">
+            <div class="brutal-loading-spinner"></div>
+            <p style="font-family: 'Space Mono', monospace; font-size: 18px; margin-top: 20px; text-transform: uppercase;">
+                LOADING SERVICES...
+            </p>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="brutal-grid" id="servicesGrid" style="display: none;">
+            <!-- Services will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Nested Window Modal -->
+    <div class="nested-window" id="nestedWindow">
+        <div class="window-content">
+            <div class="window-header">
+                <h2 class="service-name" id="windowTitle"></h2>
+                <button class="window-close" onclick="closeWindow()">×</button>
+            </div>
+            <div class="window-body" id="windowBody">
+                <!-- Content loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/language-manager.js?v=1.0"></script>
+    
+    <!-- Comprehensive Context Gathering for AI -->
+    <script>
+        // Global context gathering function for AI chat
+        globalThis.gatherPageContextFixed = function() {
+            const context = {
+                page: window.location.pathname,
+                pageName: document.title,
+                pageType: 'services',
+                timestamp: new Date().toISOString(),
+                language: localStorage.getItem('language') || 'en',
+                
+                // Services data context
+                services: {
+                    total: allServices.length,
+                    displayed: filteredServices.length,
+                    loading: isLoading,
+                    
+                    // All visible services
+                    visibleServices: filteredServices.map(service => ({
+                        id: service.id,
+                        name: service.name,
+                        description: service.description,
+                        category: service.category,
+                        department: service.department,
+                        tags: service.tags,
+                        applicationUrl: service.applicationUrl,
+                        officialWebsite: service.officialWebsite
+                    })),
+                    
+                    // Categories
+                    categories: [...new Set(allServices.map(s => s.category))].filter(Boolean),
+                    
+                    // Departments
+                    departments: [...new Set(allServices.map(s => s.department))].filter(Boolean),
+                    
+                    // All tags
+                    allTags: [...new Set(allServices.flatMap(s => s.tags || []))].filter(Boolean)
+                },
+                
+                // Search/filter context
+                filters: {
+                    searchQuery: document.getElementById('serviceSearch')?.value || '',
+                    selectedCategory: document.getElementById('categoryFilter')?.value || 'all',
+                    selectedTag: document.getElementById('tagFilter')?.value || 'all'
+                },
+                
+                // UI state
+                ui: {
+                    loadingVisible: document.getElementById('loadingState')?.style.display !== 'none'
+                },
+                
+                // Page capabilities
+                capabilities: [
+                    'Browse government services and schemes',
+                    'Search services by name or description',
+                    'Filter by category (identity documents, financial services, education, etc.)',
+                    'Filter by tags',
+                    'View service details including requirements and application process',
+                    'Access official government websites',
+                    'Multi-language support (English, Hindi, Tamil, Telugu, Bengali, Gujarati)'
+                ],
+                
+                description: `User is viewing the Government Services page with ${allServices.length} services available. ` +
+                            `Currently displaying ${filteredServices.length} services. ` +
+                            `Categories include: ${[...new Set(allServices.map(s => s.category))].filter(Boolean).join(', ')}.`
+            };
+            
+            return context;
+        };
+    </script>
+    
+    <script src="/ai-chat-floating.js?v=2.1"></script>
+    <script>
+        // Sample services data - will be replaced with API data
+        let services = [];
+        let allServices = [];
+
+        // Load services from API
+        async function loadServicesFromAPI() {
+            try {
+                document.getElementById('loadingState').style.display = 'block';
+                document.getElementById('servicesGrid').style.display = 'none';
+
+                const response = await fetch('/api/services?limit=100');
+                const data = await response.json();
+                
+                console.log('📊 API Response:', data);
+                
+                if (data.services && data.services.length > 0) {
+                    // Use real services from API
+                    allServices = data.services.map(service => ({
+                        id: service._id || service.id,
+                        icon: getServiceIcon(service.category),
+                        name: service.name.toUpperCase(),
+                        description: service.description,
+                        category: service.category,
+                        tags: getServiceTags(service),
+                        fee: service.fees?.newApplication || service.fee || 'Free',
+                        processingTime: service.processingTime?.normal || service.processingTime || 'Varies',
+                        documents: service.requirements || service.requiredDocuments || [],
+                        onlineServices: service.onlineServices || [],
+                        website: service.contact?.website || service.officialWebsite || service.website || '#',
+                        contact: service.contact,
+                        hours: service.hours,
+                        schemes: service.schemes || []
+                    }));
+                    services = allServices;
+                    console.log(`✅ Loaded ${services.length} services from API`);
+                } else {
+                    // Fallback to sample data
+                    console.warn('⚠️ No services in API response, using sample data');
+                    loadSampleServices();
+                }
+                
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('servicesGrid').style.display = 'grid';
+                loadServices();
+            } catch (error) {
+                console.error('❌ Error loading services:', error);
+                // Fallback to sample data
+                loadSampleServices();
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('servicesGrid').style.display = 'grid';
+                loadServices();
+            }
+        }
+
+        // Fallback sample services
+        function loadSampleServices() {
+            services = [
+            {
+                id: 'aadhaar',
+                icon: '🆔',
+                name: 'AADHAAR CARD',
+                description: 'Unique identification for all Indian residents',
+                category: 'identity',
+                tags: ['FREE', 'ESSENTIAL', 'ONLINE'],
+                fee: 'Free',
+                processingTime: '90 days',
+                documents: ['Proof of Identity', 'Proof of Address', 'Date of Birth Proof'],
+                onlineServices: ['New Enrollment', 'Update Details', 'Download e-Aadhaar'],
+                website: 'https://uidai.gov.in'
+            },
+            {
+                id: 'pan',
+                icon: '💳',
+                name: 'PAN CARD',
+                description: 'Permanent Account Number for tax purposes',
+                category: 'financial',
+                tags: ['PAID', 'ESSENTIAL', 'ONLINE'],
+                fee: '₹110',
+                processingTime: '15 days',
+                documents: ['Identity Proof', 'Address Proof', 'Date of Birth Proof'],
+                onlineServices: ['New PAN', 'Reprint PAN', 'Update PAN'],
+                website: 'https://www.incometax.gov.in'
+            },
+            {
+                id: 'passport',
+                icon: '🛂',
+                name: 'PASSPORT',
+                description: 'International travel document',
+                category: 'identity',
+                tags: ['PAID', 'URGENT', 'ONLINE'],
+                fee: '₹1500',
+                processingTime: '30 days',
+                documents: ['Address Proof', 'Identity Proof', 'Birth Certificate'],
+                onlineServices: ['New Passport', 'Renewal', 'Tatkal Service'],
+                website: 'https://www.passportindia.gov.in'
+            }
+        ];
+        }
+
+        // Helper functions
+        function getServiceIcon(category) {
+            const icons = {
+                'identity': '🆔',
+                'identity-documents': '🆔',
+                'financial': '💳',
+                'financial-services': '💳',
+                'healthcare': '🏥',
+                'education': '📚',
+                'social-welfare': '🤝',
+                'agriculture': '🌾',
+                'transport': '🚗',
+                'housing': '🏠'
+            };
+            return icons[category] || '📄';
+        }
+
+        function getServiceTags(service) {
+            const tags = [];
+            if (service.fees?.newApplication === 0 || service.fee === 'Free') tags.push('FREE');
+            else tags.push('PAID');
+            
+            if (service.onlineServices && service.onlineServices.length > 0) tags.push('ONLINE');
+            if (service.category) tags.push(service.category.toUpperCase());
+            
+            return tags.slice(0, 3); // Max 3 tags
+        }
+
+        // Load services
+        function loadServices() {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = services.map(service => `
+                <div class="service-tile" onclick="openServiceWindow('${service.id}')">
+                    <div class="service-tile-header">
+                        <div class="service-icon">${service.icon}</div>
+                        <div class="service-name">${service.name}</div>
+                    </div>
+                    <div class="service-tile-body">
+                        <p class="service-desc">${service.description}</p>
+                        <div class="service-meta">
+                            ${service.tags.map(tag => `<span class="service-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open service window
+        function openServiceWindow(serviceId) {
+            const service = services.find(s => s.id === serviceId);
+            if (!service) return;
+
+            document.getElementById('windowTitle').textContent = service.name;
+            document.getElementById('windowBody').innerHTML = `
+                <div class="detail-section">
+                    <h3 class="detail-title">OVERVIEW</h3>
+                    <p>${service.description}</p>
+                    <p><strong>Fee:</strong> ${service.fee}</p>
+                    <p><strong>Processing Time:</strong> ${service.processingTime}</p>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="detail-title">REQUIRED DOCUMENTS</h3>
+                    <ul>
+                        ${service.documents.map(doc => `<li>${doc}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="detail-section">
+                    <h3 class="detail-title">ONLINE SERVICES</h3>
+                    <ul>
+                        ${service.onlineServices.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="forum-container">
+                    <div class="forum-header">
+                        <h3 class="forum-title">DISCUSSION FORUM</h3>
+                        <select class="lang-selector" id="forumLang" onchange="changeForumLanguage(this.value)">
+                            <option value="en">ENGLISH</option>
+                            <option value="hi">हिंदी</option>
+                            <option value="ta">தமிழ்</option>
+                            <option value="te">తెలుగు</option>
+                        </select>
+                    </div>
+                    <div class="forum-messages" id="forumMessages-${service.id}">
+                        <!-- Messages loaded here -->
+                    </div>
+                    <div class="forum-input-container">
+                        <input type="text" class="forum-input" id="messageInput-${service.id}" placeholder="Share your thoughts...">
+                        <button class="forum-btn" onclick="postMessage('${service.id}')">POST</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('nestedWindow').classList.add('active');
+            loadForumMessages(service.id);
+        }
+
+        // Close window
+        function closeWindow() {
+            document.getElementById('nestedWindow').classList.remove('active');
+        }
+
+        // Forum functionality
+        let currentForumLang = 'en';
+        let forumMessages = {};
+
+        function loadForumMessages(serviceId) {
+            if (!forumMessages[serviceId]) {
+                forumMessages[serviceId] = [
+                    { author: 'User123', text: 'This service is very helpful!', time: '2 hours ago', lang: 'en' }
+                ];
+            }
+
+            displayMessages(serviceId);
+        }
+
+        function displayMessages(serviceId) {
+            const container = document.getElementById(`forumMessages-${serviceId}`);
+            if (!container) return;
+
+            container.innerHTML = forumMessages[serviceId].map(msg => `
+                <div class="forum-message">
+                    <div class="message-author">${msg.author}</div>
+                    <div class="message-text">${msg.text}</div>
+                    <div class="message-meta">${msg.time} • ${msg.lang.toUpperCase()}</div>
+                </div>
+            `).join('');
+        }
+
+        async function postMessage(serviceId) {
+            const input = document.getElementById(`messageInput-${serviceId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Show loading
+            input.disabled = true;
+            input.value = 'Translating...';
+
+            // Translate if needed
+            let translatedText = text;
+            if (currentForumLang !== 'en') {
+                translatedText = await translateText(text, currentForumLang);
+            }
+
+            // Add message
+            if (!forumMessages[serviceId]) forumMessages[serviceId] = [];
+            forumMessages[serviceId].push({
+                author: 'You',
+                text: translatedText,
+                time: 'Just now',
+                lang: currentForumLang
+            });
+
+            // Reset input
+            input.value = '';
+            input.disabled = false;
+            displayMessages(serviceId);
+        }
+
+        function changeForumLanguage(lang) {
+            currentForumLang = lang;
+        }
+
+        // AI Translation using Gemini/Groq
+        async function translateText(text, targetLang) {
+            try {
+                const response = await fetch('/api/ai/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text, targetLang })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.translatedText;
+                }
+            } catch (error) {
+                console.error('Translation failed:', error);
+            }
+            return text; // Return original if translation fails
+        }
+
+        // Accessibility functions
+        function toggleAccessibility() {
+            const panel = document.getElementById('accessibilityPanel');
+            panel.classList.toggle('active');
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            document.getElementById('lightBtn').classList.toggle('active', theme === 'light');
+            document.getElementById('darkBtn').classList.toggle('active', theme === 'dark');
+        }
+
+        function setFontSize(size) {
+            document.body.className = document.body.className.replace(/font-size-\w+/g, '');
+            document.body.classList.add(`font-size-${size}`);
+            localStorage.setItem('fontSize', size);
+            
+            document.querySelectorAll('.accessibility-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Initialize
+        loadServicesFromAPI();
+
+        // Close window on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeWindow();
+        });
+
+        // Load saved preferences
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedFontSize = localStorage.getItem('fontSize') || 'normal';
+            
+            setTheme(savedTheme);
+            document.body.classList.add(`font-size-${savedFontSize}`);
+            
+            // Close accessibility panel when clicking outside
+            document.addEventListener('click', (e) => {
+                const panel = document.getElementById('accessibilityPanel');
+                const isAccessibilityBtn = e.target.closest('[onclick="toggleAccessibility()"]');
+                const isInsidePanel = e.target.closest('.accessibility-panel');
+                
+                if (!isAccessibilityBtn && !isInsidePanel && panel.classList.contains('active')) {
+                    panel.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

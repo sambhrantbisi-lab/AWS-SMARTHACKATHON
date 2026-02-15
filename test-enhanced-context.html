@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Context Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #667eea;
+            margin-top: 0;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .test-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        .test-button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        .result {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .error {
+            color: #ef4444;
+            font-weight: bold;
+        }
+        .info {
+            color: #3b82f6;
+            font-weight: bold;
+        }
+        .sample-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .data-card {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .data-card h4 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+        .data-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .data-field:last-child {
+            border-bottom: none;
+        }
+        .field-label {
+            font-weight: 600;
+            color: #666;
+        }
+        .field-value {
+            color: #333;
+        }
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧪 Enhanced Context Awareness Test</h1>
+        <p>Test the comprehensive context gathering system across all pages</p>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 What's New in Enhanced Context</h2>
+        <div class="sample-data">
+            <div class="data-card">
+                <h4>📈 Stocks Page</h4>
+                <div class="data-field">
+                    <span class="field-label">Symbol</span>
+                    <span class="field-value">RELIANCE</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Price</span>
+                    <span class="field-value">₹2,450.30</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Volume</span>
+                    <span class="field-value highlight">2.5Cr ⭐ NEW</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Day High</span>
+                    <span class="field-value highlight">₹2,475.50 ⭐ NEW</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Day Low</span>
+                    <span class="field-value highlight">₹2,430.10 ⭐ NEW</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Market Cap</span>
+                    <span class="field-value highlight">₹16.5T ⭐ NEW</span>
+                </div>
+            </div>
+
+            <div class="data-card">
+                <h4>📦 Market Page</h4>
+                <div class="data-field">
+                    <span class="field-label">Commodity</span>
+                    <span class="field-value">Rice</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Wholesale</span>
+                    <span class="field-value highlight">₹3,450 ⭐ NEW</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Retail</span>
+                    <span class="field-value highlight">₹3,850 ⭐ NEW</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Market</span>
+                    <span class="field-value highlight">Azadpur Mandi ⭐ NEW</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Location</span>
+                    <span class="field-value highlight">Delhi ⭐ NEW</span>
+                </div>
+            </div>
+
+            <div class="data-card">
+                <h4>🏛️ Services Page</h4>
+                <div class="data-field">
+                    <span class="field-label">Service</span>
+                    <span class="field-value">Aadhaar Card</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Fee</span>
+                    <span class="field-value highlight">Free ⭐ NEW</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Processing</span>
+                    <span class="field-value highlight">30 days ⭐ NEW</span>
+                </div>
+                <div class="data-field">
+                    <span class="field-label">Category</span>
+                    <span class="field-value highlight">Identity ⭐ NEW</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 Test Context Gathering</h2>
+        <p>Click the buttons below to test context gathering on different pages:</p>
+        
+        <button class="test-button" onclick="testStocksContext()">Test Stocks Context</button>
+        <button class="test-button" onclick="testMarketContext()">Test Market Context</button>
+        <button class="test-button" onclick="testServicesContext()">Test Services Context</button>
+        <button class="test-button" onclick="testHomeContext()">Test Home Context</button>
+        
+        <div id="testResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>💬 Sample AI Questions</h2>
+        <p>Try asking these questions in the AI chat panel:</p>
+        
+        <h3>📈 Stocks Page Questions:</h3>
+        <ul>
+            <li>"What's the trading volume of Reliance?"</li>
+            <li>"What's the day high and low for TCS?"</li>
+            <li>"Which stock has the highest market cap?"</li>
+            <li>"Show me stocks with volume over 1 crore"</li>
+        </ul>
+
+        <h3>📦 Market Page Questions:</h3>
+        <ul>
+            <li>"What's the wholesale price of rice?"</li>
+            <li>"Compare wholesale and retail prices for wheat"</li>
+            <li>"Which commodities are from Delhi?"</li>
+            <li>"What's the price difference between wholesale and retail?"</li>
+        </ul>
+
+        <h3>🏛️ Services Page Questions:</h3>
+        <ul>
+            <li>"How much does a passport cost?"</li>
+            <li>"How long does Aadhaar take to process?"</li>
+            <li>"Which services are free?"</li>
+            <li>"Show me all identity services"</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Verification Steps</h2>
+        <ol>
+            <li>Open browser console (F12)</li>
+            <li>Navigate to any page (stocks, market, services)</li>
+            <li>Look for: <code class="highlight">🔧 Enhanced hotfix loaded</code></li>
+            <li>Look for: <code class="highlight">📈 Found X items with complete data</code></li>
+            <li>Open AI chat panel</li>
+            <li>Ask a question about volume, prices, or fees</li>
+            <li>Verify AI responds with accurate data</li>
+        </ol>
+    </div>
+
+    <script>
+        function showResult(title, data, isError = false) {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.style.display = 'block';
+            
+            const statusClass = isError ? 'error' : 'success';
+            const statusIcon = isError ? '❌' : '✅';
+            
+            resultDiv.innerHTML = `
+<span class="${statusClass}">${statusIcon} ${title}</span>
+
+${JSON.stringify(data, null, 2)}
+            `;
+        }
+
+        function testStocksContext() {
+            showResult('Stocks Context Test', {
+                message: 'Navigate to /stocks.html to test',
+                expectedFields: [
+                    'symbol', 'name', 'exchange', 'sector',
+                    'currentPrice', 'change', 'marketStatus',
+                    'dayHigh ⭐', 'dayLow ⭐', 'volume ⭐', 'marketCap ⭐'
+                ],
+                testQuestions: [
+                    'What\'s the trading volume of the first stock?',
+                    'What\'s the day high and low?',
+                    'What\'s the market cap?'
+                ]
+            });
+        }
+
+        function testMarketContext() {
+            showResult('Market Context Test', {
+                message: 'Navigate to /market.html to test',
+                expectedFields: [
+                    'commodity', 'icon', 'location',
+                    'market ⭐', 'district ⭐', 'state ⭐',
+                    'wholesalePrice ⭐', 'retailPrice ⭐',
+                    'unit', 'source', 'lastUpdated'
+                ],
+                testQuestions: [
+                    'What\'s the wholesale price of rice?',
+                    'Where is this commodity from?',
+                    'Compare wholesale and retail prices'
+                ]
+            });
+        }
+
+        function testServicesContext() {
+            showResult('Services Context Test', {
+                message: 'Navigate to /services.html to test',
+                expectedFields: [
+                    'name', 'icon', 'description',
+                    'fee ⭐', 'processingTime ⭐', 'category ⭐'
+                ],
+                testQuestions: [
+                    'How much does this service cost?',
+                    'How long does it take to process?',
+                    'What category is this service?'
+                ]
+            });
+        }
+
+        function testHomeContext() {
+            showResult('Home Context Test', {
+                message: 'Navigate to /index.html to test',
+                expectedFields: [
+                    'availableFeatures', 'quickStats', 'availablePages'
+                ],
+                testQuestions: [
+                    'What features are available?',
+                    'What\'s the current NIFTY value?',
+                    'Where can I find stock information?'
+                ]
+            });
+        }
+    </script>
+</body>
+</html>

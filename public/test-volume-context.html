@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volume Context Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2 10px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .result {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .success { color: #10b981; font-weight: bold; }
+        .error { color: #ef4444; font-weight: bold; }
+        .warning { color: #f59e0b; font-weight: bold; }
+        .stock-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .stock-symbol { font-weight: bold; font-size: 18px; color: #667eea; }
+        .stock-name { color: #666; font-size: 14px; }
+        .stock-exchange { color: #999; font-size: 12px; }
+        .stock-price { font-size: 20px; font-weight: bold; }
+        .stock-change { font-size: 14px; }
+        .price-up { color: #10b981; }
+        .price-down { color: #ef4444; }
+        .market-status { font-size: 12px; color: #666; }
+        .stock-details {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .detail-item {
+            text-align: center;
+        }
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .detail-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧪 Volume Context Debug Test</h1>
+        <p>Test if trading volume and other stock data is captured in context</p>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 1: Create Sample Stock Cards</h2>
+        <p>First, let's create some sample stock cards with volume data:</p>
+        <button onclick="createSampleStocks()">Create Sample Stocks</button>
+        <div id="stocksContainer"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 2: Test Context Gathering</h2>
+        <p>Now let's test if the context gathering function can extract the volume data:</p>
+        <button onclick="testContextGathering()">Test Context Gathering</button>
+        <div id="contextResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 3: Test AI Query</h2>
+        <p>Finally, let's send a test query to the AI to see if it receives the volume data:</p>
+        <button onclick="testAIQuery()">Ask AI About Volume</button>
+        <div id="aiResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Step 4: Check Server Logs</h2>
+        <p>Check the server console for debug logs showing the received context.</p>
+        <p>Look for lines like:</p>
+        <pre>📊 Received context: {...}
+📈 Stocks in context: X
+📈 First stock data: {...}
+📈 Has volume? true/false</pre>
+    </div>
+
+    <!-- Context gathering hotfix -->
+    <script>
+        window.gatherPageContextFixed = function() {
+            try {
+                const context = {
+                    page: window.location.pathname || '/test-volume-context.html',
+                    pageTitle: document.title || 'Volume Context Test',
+                    pageName: 'Test',
+                    description: 'Testing volume context gathering',
+                    url: window.location.href || '',
+                    timestamp: new Date().toISOString()
+                };
+
+                const stockCards = document.querySelectorAll('.stock-card');
+                console.log(`Found ${stockCards.length} stock cards`);
+                
+                if (stockCards.length > 0) {
+                    const stocks = [];
+                    stockCards.forEach((card, idx) => {
+                        const stockInfo = {};
+                        
+                        // Basic info
+                        const symbol = card.querySelector('.stock-symbol');
+                        const name = card.querySelector('.stock-name');
+                        const exchange = card.querySelector('.stock-exchange');
+                        const price = card.querySelector('.stock-price');
+                        const change = card.querySelector('.stock-change');
+                        const status = card.querySelector('.market-status');
+                        
+                        // Detail items
+                        const detailItems = card.querySelectorAll('.detail-item');
+                        
+                        if (symbol) {
+                            stockInfo.symbol = symbol.textContent.trim();
+                            if (name) stockInfo.name = name.textContent.trim();
+                            if (exchange) {
+                                const exchangeText = exchange.textContent.trim();
+                                const parts = exchangeText.split('•').map(p => p.trim());
+                                if (parts.length >= 2) {
+                                    stockInfo.exchange = parts[0];
+                                    stockInfo.sector = parts[1];
+                                }
+                            }
+                            if (price) stockInfo.currentPrice = price.textContent.trim();
+                            if (change) stockInfo.change = change.textContent.trim();
+                            if (status) stockInfo.marketStatus = status.textContent.trim();
+                            
+                            // Extract detail values
+                            detailItems.forEach(item => {
+                                const label = item.querySelector('.detail-label');
+                                const value = item.querySelector('.detail-value');
+                                if (label && value) {
+                                    const labelText = label.textContent.trim();
+                                    const valueText = value.textContent.trim();
+                                    if (labelText === 'High') stockInfo.dayHigh = valueText;
+                                    else if (labelText === 'Low') stockInfo.dayLow = valueText;
+                                    else if (labelText === 'Volume') stockInfo.volume = valueText;
+                                    else if (labelText === 'Market Cap') stockInfo.marketCap = valueText;
+                                }
+                            });
+                            
+                            stocks.push(stockInfo);
+                        }
+                    });
+                    
+                    if (stocks.length > 0) {
+                        context.visibleStocks = stocks;
+                        context.totalStocksOnPage = stockCards.length;
+                        context.stocksInContext = stocks.length;
+                        console.log(`✅ Gathered ${stocks.length} stocks with data`);
+                    }
+                }
+                
+                return context;
+            } catch (error) {
+                console.error('Context gathering failed:', error);
+                return { 
+                    page: '/test-volume-context.html', 
+                    error: error.message 
+                };
+            }
+        };
+        
+        console.log('🔧 Context hotfix loaded');
+    </script>
+
+    <script>
+        function createSampleStocks() {
+            const container = document.getElementById('stocksContainer');
+            
+            const sampleStocks = [
+                {
+                    symbol: 'RELIANCE',
+                    name: 'Reliance Industries Ltd',
+                    exchange: 'NSE',
+                    sector: 'Energy',
+                    price: 2450.30,
+                    change: 45.20,
+                    changePercent: 1.88,
+                    status: 'Market Open',
+                    high: 2475.50,
+                    low: 2430.10,
+                    volume: '2.5Cr',
+                    marketCap: '₹16.5T'
+                },
+                {
+                    symbol: 'TCS',
+                    name: 'Tata Consultancy Services',
+                    exchange: 'NSE',
+                    sector: 'IT',
+                    price: 3456.78,
+                    change: -23.45,
+                    changePercent: -0.67,
+                    status: 'Market Open',
+                    high: 3489.12,
+                    low: 3445.67,
+                    volume: '1.8Cr',
+                    marketCap: '₹12.6T'
+                },
+                {
+                    symbol: 'HDFCBANK',
+                    name: 'HDFC Bank Ltd',
+                    exchange: 'NSE',
+                    sector: 'Banking',
+                    price: 1567.80,
+                    change: 12.30,
+                    changePercent: 0.79,
+                    status: 'Market Open',
+                    high: 1578.90,
+                    low: 1556.45,
+                    volume: '3.2Cr',
+                    marketCap: '₹11.8T'
+                }
+            ];
+
+            container.innerHTML = sampleStocks.map(stock => {
+                const isPositive = stock.change >= 0;
+                return `
+                    <div class="stock-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-symbol">${stock.symbol}</div>
+                                <div class="stock-name">${stock.name}</div>
+                                <div class="stock-exchange">${stock.exchange} • ${stock.sector}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="stock-price ${isPositive ? 'price-up' : 'price-down'}">
+                                    ₹${stock.price.toFixed(2)}
+                                </div>
+                                <div class="stock-change ${isPositive ? 'price-up' : 'price-down'}">
+                                    ${isPositive ? '+' : ''}₹${stock.change.toFixed(2)} (${isPositive ? '+' : ''}${stock.changePercent.toFixed(2)}%)
+                                </div>
+                                <div class="market-status">${stock.status}</div>
+                            </div>
+                        </div>
+                        <div class="stock-details">
+                            <div class="detail-item">
+                                <div class="detail-label">High</div>
+                                <div class="detail-value">₹${stock.high.toFixed(2)}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Low</div>
+                                <div class="detail-value">₹${stock.low.toFixed(2)}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Volume</div>
+                                <div class="detail-value">${stock.volume}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Market Cap</div>
+                                <div class="detail-value">${stock.marketCap}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            showResult('stocksResult', '✅ Created 3 sample stock cards with volume data', false);
+        }
+
+        function testContextGathering() {
+            const resultDiv = document.getElementById('contextResult');
+            resultDiv.style.display = 'block';
+
+            if (typeof window.gatherPageContextFixed !== 'function') {
+                resultDiv.innerHTML = '<span class="error">❌ Context gathering function not found!</span>';
+                return;
+            }
+
+            const context = window.gatherPageContextFixed();
+            
+            let result = '<span class="success">✅ Context Gathered Successfully</span>\n\n';
+            result += JSON.stringify(context, null, 2);
+            
+            if (context.visibleStocks && context.visibleStocks.length > 0) {
+                result += '\n\n<span class="success">📊 Stock Data Analysis:</span>\n';
+                result += `Total stocks: ${context.visibleStocks.length}\n\n`;
+                
+                context.visibleStocks.forEach((stock, idx) => {
+                    result += `Stock ${idx + 1}: ${stock.symbol}\n`;
+                    result += `  - Name: ${stock.name || 'N/A'}\n`;
+                    result += `  - Price: ${stock.currentPrice || 'N/A'}\n`;
+                    result += `  - Volume: ${stock.volume ? '<span class="success">✅ ' + stock.volume + '</span>' : '<span class="error">❌ MISSING</span>'}\n`;
+                    result += `  - Day High: ${stock.dayHigh || 'N/A'}\n`;
+                    result += `  - Day Low: ${stock.dayLow || 'N/A'}\n`;
+                    result += `  - Market Cap: ${stock.marketCap || 'N/A'}\n\n`;
+                });
+            } else {
+                result += '\n\n<span class="error">❌ No stocks found in context!</span>';
+            }
+            
+            resultDiv.innerHTML = result;
+        }
+
+        async function testAIQuery() {
+            const resultDiv = document.getElementById('aiResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<span class="warning">⏳ Sending query to AI...</span>';
+
+            try {
+                const context = window.gatherPageContextFixed();
+                
+                const response = await fetch('/api/ai/ai-query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'What is the trading volume of Reliance stock?',
+                        context: context
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    let result = '<span class="success">✅ AI Response Received</span>\n\n';
+                    result += '<strong>Question:</strong> What is the trading volume of Reliance stock?\n\n';
+                    result += '<strong>AI Answer:</strong>\n' + data.response;
+                    result += '\n\n<span class="warning">📋 Check server console for context debug logs!</span>';
+                    resultDiv.innerHTML = result;
+                } else {
+                    resultDiv.innerHTML = '<span class="error">❌ API Error: ' + response.status + '</span>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
+            }
+        }
+
+        function showResult(id, message, isError) {
+            const div = document.getElementById(id);
+            if (div) {
+                div.style.display = 'block';
+                div.innerHTML = `<span class="${isError ? 'error' : 'success'}">${message}</span>`;
+            }
+        }
+
+        // Auto-create stocks on load
+        window.addEventListener('load', () => {
+            setTimeout(createSampleStocks, 500);
+        });
+    </script>
+</body>
+</html>

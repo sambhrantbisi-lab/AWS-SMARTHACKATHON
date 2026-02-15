@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Digital India Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+        }
+
+        body {
+            background: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-color), #1e40af);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-create {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .btn-create:hover {
+            background: #059669;
+            color: white;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal fade show" style="display: none; background: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="fas fa-shield-alt me-2"></i>Admin Login</h5>
+                </div>
+                <div class="modal-body">
+                    <div id="loginError" class="alert alert-danger d-none"></div>
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" value="admin@digitalindia.gov.in" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" value="admin123" required>
+                            <small class="text-muted">Default: admin123</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="fas fa-shield-alt me-2"></i>Admin Panel</h1>
+                    <p class="mb-0">Manage Government Services</p>
+                </div>
+                <button class="btn btn-light" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="adminContent" style="display: none;">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Create New Service</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="serviceForm">
+                            <div class="mb-3">
+                                <label class="form-label">Service Name</label>
+                                <input type="text" class="form-control" id="serviceName" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="serviceDescription" rows="3" required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Short Description (max 150 chars)</label>
+                                <textarea class="form-control" id="serviceShortDescription" rows="2" maxlength="150" required></textarea>
+                                <small class="text-muted">Brief description shown on service card</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-control" id="serviceCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="identity-documents">Identity Documents</option>
+                                    <option value="financial-services">Financial Services</option>
+                                    <option value="education">Education</option>
+                                    <option value="health">Health</option>
+                                    <option value="agriculture">Agriculture</option>
+                                    <option value="housing">Housing</option>
+                                    <option value="employment">Employment</option>
+                                    <option value="social-welfare">Social Welfare</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Icon (Font Awesome class)</label>
+                                <input type="text" class="form-control" id="serviceIcon" placeholder="fa-id-card" required>
+                                <small class="text-muted">Example: fa-id-card, fa-university, fa-graduation-cap</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Official Website URL</label>
+                                <input type="url" class="form-control" id="serviceUrl" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Application URL</label>
+                                <input type="url" class="form-control" id="applicationUrl" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Department</label>
+                                <input type="text" class="form-control" id="serviceDepartment" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Processing Time (Normal)</label>
+                                <input type="text" class="form-control" id="processingTime" placeholder="15-20 days" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Fees (INR)</label>
+                                <input type="number" class="form-control" id="serviceFees" placeholder="0" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Required Documents (comma-separated)</label>
+                                <textarea class="form-control" id="requiredDocs" rows="2" placeholder="Aadhaar Card, PAN Card, Address Proof" required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Helpline Number</label>
+                                <input type="text" class="form-control" id="helpline" placeholder="1800-XXX-XXXX">
+                            </div>
+
+                            <button type="submit" class="btn btn-create w-100">
+                                <i class="fas fa-plus me-2"></i>Create Service
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-list me-2"></i>Existing Services</h5>
+                        <button class="btn btn-light btn-sm" onclick="loadServices()">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="servicesList">
+                            <div class="text-center py-5">
+                                <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+                                <p class="mt-3">Loading services...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let token = localStorage.getItem('token');
+
+        // Show login modal if not authenticated
+        function checkAuth() {
+            if (!token) {
+                document.getElementById('loginModal').style.display = 'block';
+                document.getElementById('adminContent').style.display = 'none';
+            } else {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadServices();
+            }
+        }
+
+        // Handle login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Check if user is admin
+                    if (data.user.role !== 'admin' && data.user.role !== 'service_admin') {
+                        errorDiv.textContent = 'Access denied. Admin privileges required.';
+                        errorDiv.classList.remove('d-none');
+                        return;
+                    }
+                    
+                    token = data.token;
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    errorDiv.classList.add('d-none');
+                    checkAuth();
+                } else {
+                    errorDiv.textContent = data.message || 'Login failed';
+                    errorDiv.classList.remove('d-none');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = 'Login failed. Please try again.';
+                errorDiv.classList.remove('d-none');
+            }
+        });
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            token = null;
+            checkAuth();
+        }
+
+        // Check authentication on page load
+        checkAuth();
+
+        // Load existing services
+        async function loadServices() {
+            try {
+                const response = await fetch('/api/services', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                
+                // Handle both array response and paginated response
+                const services = Array.isArray(data) ? data : (data.services || []);
+                
+                const servicesList = document.getElementById('servicesList');
+                
+                if (services.length === 0) {
+                    servicesList.innerHTML = '<p class="text-center text-muted">No services yet. Create your first service!</p>';
+                    return;
+                }
+                
+                servicesList.innerHTML = services.map(service => `
+                    <div class="service-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="service-icon text-primary">
+                                    ${service.icon || '📋'}
+                                </div>
+                                <h5>${service.name}</h5>
+                                <p class="text-muted mb-2">${service.shortDescription || service.description}</p>
+                                <div class="mb-2">
+                                    <span class="badge bg-primary">${service.category}</span>
+                                    <span class="badge bg-secondary">${service.department}</span>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>${service.processingTime?.normal || 'N/A'}
+                                    <i class="fas fa-rupee-sign ms-3 me-1"></i>${service.fees?.normal || 0}
+                                </small>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-danger" onclick="deleteService('${service._id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading services:', error);
+                document.getElementById('servicesList').innerHTML = 
+                    '<p class="text-center text-danger">Error loading services</p>';
+            }
+        }
+
+        // Create new service
+        document.getElementById('serviceForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const serviceData = {
+                name: document.getElementById('serviceName').value,
+                description: document.getElementById('serviceDescription').value,
+                shortDescription: document.getElementById('serviceShortDescription').value,
+                category: document.getElementById('serviceCategory').value,
+                icon: document.getElementById('serviceIcon').value,
+                officialWebsite: document.getElementById('serviceUrl').value,
+                applicationLinks: {
+                    web: document.getElementById('applicationUrl').value
+                },
+                department: document.getElementById('serviceDepartment').value,
+                processingTime: {
+                    normal: document.getElementById('processingTime').value
+                },
+                fees: {
+                    normal: parseInt(document.getElementById('serviceFees').value) || 0
+                },
+                eligibility: {
+                    documents: document.getElementById('requiredDocs').value.split(',').map(d => d.trim())
+                },
+                contact: {
+                    helpline: document.getElementById('helpline').value
+                },
+                isActive: true
+            };
+            
+            try {
+                const response = await fetch('/api/services', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(serviceData)
+                });
+                
+                if (response.ok) {
+                    alert('Service created successfully!');
+                    document.getElementById('serviceForm').reset();
+                    loadServices();
+                } else {
+                    const error = await response.json();
+                    alert('Error: ' + error.message);
+                }
+            } catch (error) {
+                console.error('Error creating service:', error);
+                alert('Error creating service');
+            }
+        });
+
+        // Delete service
+        async function deleteService(id) {
+            if (!confirm('Are you sure you want to delete this service?')) return;
+            
+            try {
+                const response = await fetch(`/api/services/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    alert('Service deleted successfully!');
+                    loadServices();
+                } else {
+                    alert('Error deleting service');
+                }
+            } catch (error) {
+                console.error('Error deleting service:', error);
+                alert('Error deleting service');
+            }
+        }
+    </script>
+</body>
+</html>

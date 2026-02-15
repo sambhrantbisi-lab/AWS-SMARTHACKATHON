@@ -1,0 +1,1032 @@
+{
+  "services": [
+    {
+      "_id": "pmc_health_001",
+      "name": "Primary Health Centre - Sector 15",
+      "description": "सामुदायिक स्वास्थ्य केंद्र जो मुफ्त चिकित्सा सेवा, टीकाकरण और मातृ स्वास्थ्य सेवाएं प्रदान करता है। Community health center providing free medical care, vaccination and maternal health services.",
+      "category": "healthcare",
+      "department": "स्वास्थ्य विभाग / Health Department",
+      "contact": {
+        "phone": "+91-11-2345-6789",
+        "email": "phc.sector15@gov.in",
+        "website": "https://health.delhi.gov.in",
+        "address": {
+          "street": "Sector 15, Near Government School",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110001"
+        }
+      },
+      "hours": {
+        "monday": "8:00 AM - 6:00 PM",
+        "tuesday": "8:00 AM - 6:00 PM",
+        "wednesday": "8:00 AM - 6:00 PM",
+        "thursday": "8:00 AM - 6:00 PM",
+        "friday": "8:00 AM - 6:00 PM",
+        "saturday": "8:00 AM - 2:00 PM",
+        "sunday": "Emergency only"
+      },
+      "eligibility": ["All Indian citizens", "Valid Aadhaar card required"],
+      "requirements": ["Aadhaar card", "Address proof", "Income certificate (for free services)"],
+      "languages": ["Hindi", "English", "Punjabi"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["health", "vaccination", "maternal care", "free treatment", "PHC"],
+      "schemes": ["Ayushman Bharat", "Pradhan Mantri Jan Arogya Yojana"],
+      "rating": { "average": 4.2, "count": 156 },
+      "priority": "high",
+      "realWorldLinks": {
+        "ayushmanBharat": "https://pmjay.gov.in",
+        "healthMinistry": "https://mohfw.gov.in",
+        "cowin": "https://cowin.gov.in",
+        "esanjeevani": "https://esanjeevani.in"
+      }
+    },
+    {
+      "_id": "skill_dev_001",
+      "name": "Pradhan Mantri Kaushal Vikas Kendra",
+      "description": "प्रधानमंत्री कौशल विकास योजना के तहत मुफ्त कौशल प्रशिक्षण। Free skill training under PM Skill Development Scheme for youth employment.",
+      "category": "employment",
+      "department": "कौशल विकास मंत्रालय / Ministry of Skill Development",
+      "contact": {
+        "phone": "+91-11-3456-7890",
+        "email": "pmkvy.delhi@gov.in",
+        "website": "https://pmkvyofficial.org",
+        "address": {
+          "street": "Industrial Area, Phase 2",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110020"
+        }
+      },
+      "hours": {
+        "monday": "9:00 AM - 5:00 PM",
+        "tuesday": "9:00 AM - 5:00 PM",
+        "wednesday": "9:00 AM - 5:00 PM",
+        "thursday": "9:00 AM - 5:00 PM",
+        "friday": "9:00 AM - 5:00 PM",
+        "saturday": "9:00 AM - 1:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["Age 18-35 years", "10th pass minimum", "Indian citizen"],
+      "requirements": ["Aadhaar card", "Educational certificates", "Bank account details"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": false
+      },
+      "tags": ["skill training", "employment", "PMKVY", "free training", "job placement"],
+      "schemes": ["Pradhan Mantri Kaushal Vikas Yojana", "Skill India"],
+      "courses": ["Computer basics", "Tailoring", "Electrical work", "Plumbing", "Beauty & wellness"],
+      "rating": { "average": 4.5, "count": 234 },
+      "priority": "high",
+      "realWorldLinks": {
+        "pmkvy": "https://pmkvyofficial.org",
+        "skillIndia": "https://skillindia.gov.in",
+        "nsdc": "https://nsdcindia.org",
+        "apprenticeship": "https://apprenticeship.gov.in"
+      }
+    },
+    {
+      "_id": "edu_lib_001",
+      "name": "District Central Library",
+      "description": "जिला केंद्रीय पुस्तकालय जो मुफ्त पुस्तकें, इंटरनेट और शिक्षा सेवाएं प्रदान करता है। District library providing free books, internet and educational services.",
+      "category": "education",
+      "department": "शिक्षा विभाग / Education Department",
+      "contact": {
+        "phone": "+91-11-4567-8901",
+        "email": "library.central@edu.gov.in",
+        "website": "https://library.delhi.gov.in",
+        "address": {
+          "street": "Civil Lines, Near District Court",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110054"
+        }
+      },
+      "hours": {
+        "monday": "9:00 AM - 8:00 PM",
+        "tuesday": "9:00 AM - 8:00 PM",
+        "wednesday": "9:00 AM - 8:00 PM",
+        "thursday": "9:00 AM - 8:00 PM",
+        "friday": "9:00 AM - 8:00 PM",
+        "saturday": "9:00 AM - 6:00 PM",
+        "sunday": "10:00 AM - 5:00 PM"
+      },
+      "eligibility": ["All citizens", "Students get priority"],
+      "requirements": ["Valid ID proof", "Address proof for membership"],
+      "languages": ["Hindi", "English", "Urdu"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["library", "books", "internet", "study", "competitive exams"],
+      "services": ["Book lending", "Internet access", "Study hall", "Competitive exam preparation"],
+      "rating": { "average": 4.3, "count": 89 },
+      "priority": "medium"
+    },
+    {
+      "_id": "housing_001",
+      "name": "Pradhan Mantri Awas Yojana Office",
+      "description": "प्रधानमंत्री आवास योजना के तहत किफायती आवास और आवास सब्सिडी। Affordable housing and housing subsidy under PM Housing Scheme.",
+      "category": "housing",
+      "department": "आवास विभाग / Housing Department",
+      "contact": {
+        "phone": "+91-11-5678-9012",
+        "email": "pmay.delhi@gov.in",
+        "website": "https://pmaymis.gov.in",
+        "address": {
+          "street": "Vikas Bhawan, IP Estate",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110002"
+        }
+      },
+      "hours": {
+        "monday": "10:00 AM - 5:00 PM",
+        "tuesday": "10:00 AM - 5:00 PM",
+        "wednesday": "10:00 AM - 5:00 PM",
+        "thursday": "10:00 AM - 5:00 PM",
+        "friday": "10:00 AM - 5:00 PM",
+        "saturday": "10:00 AM - 2:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["Annual income below ₹18 lakh", "First-time home buyer", "Indian citizen"],
+      "requirements": ["Income certificate", "Aadhaar card", "Bank statements", "Property documents"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["housing", "subsidy", "PMAY", "affordable housing", "home loan"],
+      "schemes": ["Pradhan Mantri Awas Yojana", "Credit Linked Subsidy Scheme"],
+      "rating": { "average": 3.8, "count": 167 },
+      "priority": "high",
+      "realWorldLinks": {
+        "pmay": "https://pmaymis.gov.in",
+        "housingForAll": "https://mohua.gov.in",
+        "clss": "https://pmay-urban.gov.in",
+        "ruralHousing": "https://pmayg.nic.in"
+      }
+    },
+    {
+      "_id": "legal_aid_001",
+      "name": "District Legal Services Authority",
+      "description": "जिला विधिक सेवा प्राधिकरण जो गरीबों को मुफ्त कानूनी सहायता प्रदान करता है। Free legal aid for poor and marginalized citizens.",
+      "category": "legal",
+      "department": "न्याय विभाग / Justice Department",
+      "contact": {
+        "phone": "+91-11-6789-0123",
+        "email": "dlsa.delhi@gov.in",
+        "website": "https://delhilegalservices.nic.in",
+        "address": {
+          "street": "Tis Hazari Courts Complex",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110054"
+        }
+      },
+      "hours": {
+        "monday": "10:00 AM - 4:00 PM",
+        "tuesday": "10:00 AM - 4:00 PM",
+        "wednesday": "10:00 AM - 4:00 PM",
+        "thursday": "10:00 AM - 4:00 PM",
+        "friday": "10:00 AM - 4:00 PM",
+        "saturday": "10:00 AM - 1:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["Income below poverty line", "SC/ST/OBC", "Women", "Disabled persons"],
+      "requirements": ["Income certificate", "Caste certificate (if applicable)", "Case documents"],
+      "languages": ["Hindi", "English", "Punjabi"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": false
+      },
+      "tags": ["legal aid", "free lawyer", "court cases", "legal advice"],
+      "services": ["Legal consultation", "Court representation", "Document drafting", "Mediation"],
+      "rating": { "average": 4.1, "count": 78 },
+      "priority": "high"
+    },
+    {
+      "_id": "transport_001",
+      "name": "Delhi Transport Corporation",
+      "description": "दिल्ली परिवहन निगम की बस सेवा और परिवहन सुविधाएं। Public bus services and transportation facilities by DTC.",
+      "category": "transportation",
+      "department": "परिवहन विभाग / Transport Department",
+      "contact": {
+        "phone": "+91-11-7890-1234",
+        "email": "info@dtc.gov.in",
+        "website": "https://dtc.delhi.gov.in",
+        "address": {
+          "street": "IP Estate, Ring Road",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110002"
+        }
+      },
+      "hours": {
+        "monday": "5:00 AM - 11:00 PM",
+        "tuesday": "5:00 AM - 11:00 PM",
+        "wednesday": "5:00 AM - 11:00 PM",
+        "thursday": "5:00 AM - 11:00 PM",
+        "friday": "5:00 AM - 11:00 PM",
+        "saturday": "5:00 AM - 11:00 PM",
+        "sunday": "6:00 AM - 10:00 PM"
+      },
+      "eligibility": ["All passengers", "Concession for students/senior citizens"],
+      "requirements": ["Valid ticket", "Student ID for concession"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["bus", "transport", "DTC", "public transport", "metro feeder"],
+      "services": ["City bus service", "AC buses", "Low floor buses", "Metro connectivity"],
+      "rating": { "average": 3.9, "count": 445 },
+      "priority": "medium"
+    },
+    {
+      "_id": "ration_001",
+      "name": "Public Distribution System - Fair Price Shop",
+      "description": "सार्वजनिक वितरण प्रणाली के तहत राशन की दुकान। Fair price shop under Public Distribution System for subsidized food grains.",
+      "category": "welfare",
+      "department": "खाद्य आपूर्ति विभाग / Food Supply Department",
+      "contact": {
+        "phone": "+91-11-8901-2345",
+        "email": "pds.delhi@gov.in",
+        "website": "https://nfs.delhi.gov.in",
+        "address": {
+          "street": "Block A, Lajpat Nagar",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110024"
+        }
+      },
+      "hours": {
+        "monday": "9:00 AM - 1:00 PM, 3:00 PM - 7:00 PM",
+        "tuesday": "9:00 AM - 1:00 PM, 3:00 PM - 7:00 PM",
+        "wednesday": "9:00 AM - 1:00 PM, 3:00 PM - 7:00 PM",
+        "thursday": "9:00 AM - 1:00 PM, 3:00 PM - 7:00 PM",
+        "friday": "9:00 AM - 1:00 PM, 3:00 PM - 7:00 PM",
+        "saturday": "9:00 AM - 1:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["BPL card holders", "APL card holders", "Antyodaya card holders"],
+      "requirements": ["Valid ration card", "Aadhaar card", "Address proof"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": false,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["ration", "PDS", "subsidized food", "wheat", "rice", "sugar"],
+      "items": ["Wheat", "Rice", "Sugar", "Kerosene", "Pulses"],
+      "rating": { "average": 3.5, "count": 234 },
+      "priority": "high"
+    },
+    {
+      "_id": "jan_aushadhi_001",
+      "name": "Jan Aushadhi Generic Medicine Store",
+      "description": "जन औषधि केंद्र जो सस्ती जेनेरिक दवाइयां प्रदान करता है। Generic medicine store providing affordable medicines to all citizens.",
+      "category": "healthcare",
+      "department": "स्वास्थ्य विभाग / Health Department",
+      "contact": {
+        "phone": "+91-11-9012-3456",
+        "email": "janaushadhi@gov.in",
+        "website": "https://janaushadhi.gov.in",
+        "address": {
+          "street": "Main Market, Lajpat Nagar",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110024"
+        }
+      },
+      "hours": {
+        "monday": "8:00 AM - 8:00 PM",
+        "tuesday": "8:00 AM - 8:00 PM",
+        "wednesday": "8:00 AM - 8:00 PM",
+        "thursday": "8:00 AM - 8:00 PM",
+        "friday": "8:00 AM - 8:00 PM",
+        "saturday": "8:00 AM - 8:00 PM",
+        "sunday": "9:00 AM - 6:00 PM"
+      },
+      "eligibility": ["All citizens", "No prescription required for OTC medicines"],
+      "requirements": ["Valid prescription for prescription medicines"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["generic medicines", "affordable", "Jan Aushadhi", "pharmacy"],
+      "services": ["Generic medicines", "Health supplements", "Medical devices", "Surgical items"],
+      "rating": { "average": 4.4, "count": 189 },
+      "priority": "high"
+    },
+    {
+      "_id": "passport_001",
+      "name": "Passport Seva Kendra",
+      "description": "पासपोर्ट सेवा केंद्र जो पासपोर्ट आवेदन और नवीनीकरण सेवाएं प्रदान करता है। Passport application and renewal services for Indian citizens.",
+      "category": "documentation",
+      "department": "विदेश मंत्रालय / Ministry of External Affairs",
+      "contact": {
+        "phone": "+91-11-1800-258-1800",
+        "email": "psk.delhi@gov.in",
+        "website": "https://passportindia.gov.in",
+        "address": {
+          "street": "Shivaji Stadium Metro Station",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110001"
+        }
+      },
+      "hours": {
+        "monday": "9:30 AM - 4:30 PM",
+        "tuesday": "9:30 AM - 4:30 PM",
+        "wednesday": "9:30 AM - 4:30 PM",
+        "thursday": "9:30 AM - 4:30 PM",
+        "friday": "9:30 AM - 4:30 PM",
+        "saturday": "9:30 AM - 4:30 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["Indian citizens", "Valid documents required"],
+      "requirements": ["Birth certificate", "Address proof", "Identity proof", "Photographs"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["passport", "travel document", "visa", "identity"],
+      "services": ["New passport", "Renewal", "Re-issue", "Police verification"],
+      "rating": { "average": 4.0, "count": 892 },
+      "priority": "high"
+    },
+    {
+      "_id": "aadhaar_001",
+      "name": "Aadhaar Enrollment Center",
+      "description": "आधार नामांकन केंद्र जो आधार कार्ड बनाने और अपडेट करने की सेवा प्रदान करता है। Aadhaar card enrollment and update services.",
+      "category": "documentation",
+      "department": "इलेक्ट्रॉनिक्स और सूचना प्रौद्योगिकी मंत्रालय / Ministry of Electronics & IT",
+      "contact": {
+        "phone": "+91-1947",
+        "email": "help@uidai.gov.in",
+        "website": "https://uidai.gov.in",
+        "address": {
+          "street": "Community Center, Sector 12",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110075"
+        }
+      },
+      "hours": {
+        "monday": "10:00 AM - 5:00 PM",
+        "tuesday": "10:00 AM - 5:00 PM",
+        "wednesday": "10:00 AM - 5:00 PM",
+        "thursday": "10:00 AM - 5:00 PM",
+        "friday": "10:00 AM - 5:00 PM",
+        "saturday": "10:00 AM - 2:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["All Indian residents", "Age proof required for minors"],
+      "requirements": ["Proof of Identity", "Proof of Address", "Date of Birth proof"],
+      "languages": ["Hindi", "English", "Regional languages"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["aadhaar", "identity", "biometric", "enrollment"],
+      "services": ["New enrollment", "Biometric update", "Demographic update", "Mobile update"],
+      "rating": { "average": 3.7, "count": 1245 },
+      "priority": "high"
+    },
+    {
+      "_id": "bank_001",
+      "name": "State Bank of India - Government Services Branch",
+      "description": "भारतीय स्टेट बैंक की सरकारी सेवा शाखा जो बैंकिंग और वित्तीय सेवाएं प्रदान करती है। Banking and financial services for government schemes.",
+      "category": "financial",
+      "department": "वित्त मंत्रालय / Ministry of Finance",
+      "contact": {
+        "phone": "+91-11-1800-11-2211",
+        "email": "sbi.govservices@sbi.co.in",
+        "website": "https://sbi.co.in",
+        "address": {
+          "street": "Parliament Street",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110001"
+        }
+      },
+      "hours": {
+        "monday": "10:00 AM - 4:00 PM",
+        "tuesday": "10:00 AM - 4:00 PM",
+        "wednesday": "10:00 AM - 4:00 PM",
+        "thursday": "10:00 AM - 4:00 PM",
+        "friday": "10:00 AM - 4:00 PM",
+        "saturday": "10:00 AM - 2:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["All citizens", "Valid KYC documents required"],
+      "requirements": ["Aadhaar card", "PAN card", "Address proof", "Photographs"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": true
+      },
+      "tags": ["banking", "loans", "savings", "government schemes"],
+      "services": ["Account opening", "Loan services", "Government scheme benefits", "Digital banking"],
+      "rating": { "average": 4.1, "count": 567 },
+      "priority": "high"
+    },
+    {
+      "_id": "police_001",
+      "name": "Police Station - Connaught Place",
+      "description": "पुलिस स्टेशन जो कानून व्यवस्था, शिकायत दर्ज करने और सुरक्षा सेवाएं प्रदान करता है। Police services for law and order, complaints, and security.",
+      "category": "security",
+      "department": "गृह मंत्रालय / Ministry of Home Affairs",
+      "contact": {
+        "phone": "+91-11-100",
+        "email": "cp.police@delhipolice.gov.in",
+        "website": "https://delhipolice.nic.in",
+        "address": {
+          "street": "Connaught Place",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110001"
+        }
+      },
+      "hours": {
+        "monday": "24 hours",
+        "tuesday": "24 hours",
+        "wednesday": "24 hours",
+        "thursday": "24 hours",
+        "friday": "24 hours",
+        "saturday": "24 hours",
+        "sunday": "24 hours"
+      },
+      "eligibility": ["All citizens", "Emergency services available 24/7"],
+      "requirements": ["Valid ID for non-emergency services"],
+      "languages": ["Hindi", "English", "Punjabi"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": false
+      },
+      "tags": ["police", "emergency", "FIR", "security", "law and order"],
+      "services": ["FIR registration", "Emergency response", "Traffic services", "Crime prevention"],
+      "rating": { "average": 3.8, "count": 234 },
+      "priority": "critical"
+    },
+    {
+      "_id": "fire_001",
+      "name": "Fire Station - Central Delhi",
+      "description": "अग्निशमन स्टेशन जो आग बुझाने, बचाव और आपातकालीन सेवाएं प्रदान करता है। Fire fighting, rescue and emergency services.",
+      "category": "emergency",
+      "department": "गृह मंत्रालय / Ministry of Home Affairs",
+      "contact": {
+        "phone": "+91-11-101",
+        "email": "fire.central@delhifire.gov.in",
+        "website": "https://delhifire.nic.in",
+        "address": {
+          "street": "Barakhamba Road",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110001"
+        }
+      },
+      "hours": {
+        "monday": "24 hours",
+        "tuesday": "24 hours",
+        "wednesday": "24 hours",
+        "thursday": "24 hours",
+        "friday": "24 hours",
+        "saturday": "24 hours",
+        "sunday": "24 hours"
+      },
+      "eligibility": ["Emergency services for all", "24/7 availability"],
+      "requirements": ["None for emergency services"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["fire", "emergency", "rescue", "disaster response"],
+      "services": ["Fire fighting", "Rescue operations", "Disaster response", "Safety training"],
+      "rating": { "average": 4.6, "count": 89 },
+      "priority": "critical"
+    },
+    {
+      "_id": "hospital_001",
+      "name": "All India Institute of Medical Sciences (AIIMS)",
+      "description": "अखिल भारतीय आयुर्विज्ञान संस्थान - देश का प्रमुख चिकित्सा संस्थान। Premier medical institution providing advanced healthcare services.",
+      "category": "healthcare",
+      "department": "स्वास्थ्य मंत्रालय / Ministry of Health",
+      "contact": {
+        "phone": "+91-11-2658-8500",
+        "email": "director@aiims.edu",
+        "website": "https://aiims.edu",
+        "address": {
+          "street": "Ansari Nagar",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110029"
+        }
+      },
+      "hours": {
+        "monday": "24 hours (Emergency)",
+        "tuesday": "24 hours (Emergency)",
+        "wednesday": "24 hours (Emergency)",
+        "thursday": "24 hours (Emergency)",
+        "friday": "24 hours (Emergency)",
+        "saturday": "24 hours (Emergency)",
+        "sunday": "24 hours (Emergency)"
+      },
+      "eligibility": ["All patients", "Referral preferred for specialty care"],
+      "requirements": ["Valid ID", "Previous medical records (if any)"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["hospital", "medical care", "emergency", "specialty treatment"],
+      "services": ["Emergency care", "Specialty treatment", "Surgery", "Diagnostics"],
+      "rating": { "average": 4.7, "count": 2341 },
+      "priority": "critical"
+    },
+    {
+      "_id": "tax_001",
+      "name": "Income Tax Office - Central Delhi",
+      "description": "आयकर कार्यालय जो कर संबंधी सेवाएं और सहायता प्रदान करता है। Income tax services and assistance for taxpayers.",
+      "category": "financial",
+      "department": "वित्त मंत्रालय / Ministry of Finance",
+      "contact": {
+        "phone": "+91-11-1961",
+        "email": "itd.delhi@gov.in",
+        "website": "https://incometaxindia.gov.in",
+        "address": {
+          "street": "Civic Centre, Minto Road",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110002"
+        }
+      },
+      "hours": {
+        "monday": "9:30 AM - 5:30 PM",
+        "tuesday": "9:30 AM - 5:30 PM",
+        "wednesday": "9:30 AM - 5:30 PM",
+        "thursday": "9:30 AM - 5:30 PM",
+        "friday": "9:30 AM - 5:30 PM",
+        "saturday": "Closed",
+        "sunday": "Closed"
+      },
+      "eligibility": ["All taxpayers", "PAN card holders"],
+      "requirements": ["PAN card", "Aadhaar card", "Relevant tax documents"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["income tax", "PAN", "tax filing", "refund"],
+      "services": ["Tax filing assistance", "PAN services", "Tax refund", "Grievance redressal"],
+      "rating": { "average": 3.4, "count": 445 },
+      "priority": "medium"
+    },
+    {
+      "_id": "electricity_001",
+      "name": "Delhi Vidyut Board (DVB) - Customer Service Center",
+      "description": "दिल्ली विद्युत बोर्ड ग्राहक सेवा केंद्र जो बिजली कनेक्शन और बिल संबंधी सेवाएं प्रदान करता है। Electricity connection and billing services.",
+      "category": "utilities",
+      "department": "ऊर्जा मंत्रालय / Ministry of Power",
+      "contact": {
+        "phone": "+91-11-19123",
+        "email": "customercare@dvb.gov.in",
+        "website": "https://dvb.delhi.gov.in",
+        "address": {
+          "street": "Vidyut Bhawan, Barakhamba Lane",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110001"
+        }
+      },
+      "hours": {
+        "monday": "9:00 AM - 5:00 PM",
+        "tuesday": "9:00 AM - 5:00 PM",
+        "wednesday": "9:00 AM - 5:00 PM",
+        "thursday": "9:00 AM - 5:00 PM",
+        "friday": "9:00 AM - 5:00 PM",
+        "saturday": "9:00 AM - 1:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["All residents", "Property owners"],
+      "requirements": ["Property documents", "Identity proof", "Address proof"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["electricity", "power", "billing", "connection"],
+      "services": ["New connection", "Bill payment", "Meter reading", "Complaint resolution"],
+      "rating": { "average": 3.6, "count": 678 },
+      "priority": "medium"
+    },
+    {
+      "_id": "water_001",
+      "name": "Delhi Jal Board - Water Supply Office",
+      "description": "दिल्ली जल बोर्ड जो पानी की आपूर्ति और सीवेज सेवाएं प्रदान करता है। Water supply and sewage services for Delhi residents.",
+      "category": "utilities",
+      "department": "जल संसाधन मंत्रालय / Ministry of Water Resources",
+      "contact": {
+        "phone": "+91-11-1916",
+        "email": "customercare@delhijalboard.nic.in",
+        "website": "https://delhijalboard.nic.in",
+        "address": {
+          "street": "Varunalaya, Jhandewalan",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110055"
+        }
+      },
+      "hours": {
+        "monday": "9:00 AM - 5:00 PM",
+        "tuesday": "9:00 AM - 5:00 PM",
+        "wednesday": "9:00 AM - 5:00 PM",
+        "thursday": "9:00 AM - 5:00 PM",
+        "friday": "9:00 AM - 5:00 PM",
+        "saturday": "9:00 AM - 1:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["All residents", "Property owners"],
+      "requirements": ["Property documents", "Identity proof", "Address proof"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["water supply", "sewage", "billing", "connection"],
+      "services": ["Water connection", "Bill payment", "Quality testing", "Complaint resolution"],
+      "rating": { "average": 3.2, "count": 534 },
+      "priority": "medium"
+    },
+    {
+      "_id": "pension_001",
+      "name": "Pension Disbursing Office",
+      "description": "पेंशन वितरण कार्यालय जो सरकारी कर्मचारियों और वरिष्ठ नागरिकों को पेंशन सेवाएं प्रदान करता है। Pension services for government employees and senior citizens.",
+      "category": "welfare",
+      "department": "कार्मिक मंत्रालय / Ministry of Personnel",
+      "contact": {
+        "phone": "+91-11-2309-2345",
+        "email": "pension.delhi@gov.in",
+        "website": "https://pensionersportal.gov.in",
+        "address": {
+          "street": "Lok Nayak Bhawan, Khan Market",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110003"
+        }
+      },
+      "hours": {
+        "monday": "10:00 AM - 5:00 PM",
+        "tuesday": "10:00 AM - 5:00 PM",
+        "wednesday": "10:00 AM - 5:00 PM",
+        "thursday": "10:00 AM - 5:00 PM",
+        "friday": "10:00 AM - 5:00 PM",
+        "saturday": "Closed",
+        "sunday": "Closed"
+      },
+      "eligibility": ["Retired government employees", "Senior citizens (60+)", "Widows/dependents"],
+      "requirements": ["Service records", "Bank account details", "Life certificate", "Identity proof"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": false
+      },
+      "tags": ["pension", "retirement", "senior citizens", "benefits"],
+      "services": ["Pension processing", "Life certificate", "Grievance redressal", "Family pension"],
+      "rating": { "average": 3.9, "count": 234 },
+      "priority": "high"
+    },
+    {
+      "_id": "employment_001",
+      "name": "Employment Exchange Office",
+      "description": "रोजगार कार्यालय जो नौकरी की तलाश करने वालों को रोजगार के अवसर प्रदान करता है। Employment opportunities and job placement services.",
+      "category": "employment",
+      "department": "श्रम मंत्रालय / Ministry of Labour",
+      "contact": {
+        "phone": "+91-11-2336-7890",
+        "email": "employment.delhi@gov.in",
+        "website": "https://employmentexchange.gov.in",
+        "address": {
+          "street": "Shram Shakti Bhawan, Rafi Marg",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110001"
+        }
+      },
+      "hours": {
+        "monday": "10:00 AM - 5:00 PM",
+        "tuesday": "10:00 AM - 5:00 PM",
+        "wednesday": "10:00 AM - 5:00 PM",
+        "thursday": "10:00 AM - 5:00 PM",
+        "friday": "10:00 AM - 5:00 PM",
+        "saturday": "10:00 AM - 2:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["Job seekers", "Unemployed youth", "Skilled workers"],
+      "requirements": ["Educational certificates", "Identity proof", "Address proof", "Photographs"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["employment", "jobs", "placement", "career guidance"],
+      "services": ["Job registration", "Placement assistance", "Career counseling", "Skill assessment"],
+      "rating": { "average": 3.7, "count": 456 },
+      "priority": "high"
+    },
+    {
+      "_id": "agriculture_001",
+      "name": "Krishi Vigyan Kendra (Agricultural Extension Center)",
+      "description": "कृषि विज्ञान केंद्र जो किसानों को कृषि तकनीक और सहायता प्रदान करता है। Agricultural technology and support services for farmers.",
+      "category": "agriculture",
+      "department": "कृषि मंत्रालय / Ministry of Agriculture",
+      "contact": {
+        "phone": "+91-11-2338-9012",
+        "email": "kvk.delhi@icar.gov.in",
+        "website": "https://kvk.icar.gov.in",
+        "address": {
+          "street": "Pusa Campus, IARI",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110012"
+        }
+      },
+      "hours": {
+        "monday": "9:00 AM - 5:00 PM",
+        "tuesday": "9:00 AM - 5:00 PM",
+        "wednesday": "9:00 AM - 5:00 PM",
+        "thursday": "9:00 AM - 5:00 PM",
+        "friday": "9:00 AM - 5:00 PM",
+        "saturday": "9:00 AM - 1:00 PM",
+        "sunday": "Closed"
+      },
+      "eligibility": ["Farmers", "Agricultural workers", "Rural entrepreneurs"],
+      "requirements": ["Land documents", "Identity proof", "Address proof"],
+      "languages": ["Hindi", "English", "Punjabi"],
+      "accessibility": {
+        "wheelchairAccessible": false,
+        "signLanguage": false,
+        "braille": false
+      },
+      "tags": ["agriculture", "farming", "technology", "training"],
+      "services": ["Technical training", "Seed distribution", "Soil testing", "Crop advisory"],
+      "rating": { "average": 4.2, "count": 123 },
+      "priority": "medium"
+    },
+    {
+      "_id": "scholarship_001",
+      "name": "National Scholarship Portal (NSP)",
+      "description": "राष्ट्रीय छात्रवृत्ति पोर्टल - सभी सरकारी छात्रवृत्ति योजनाओं के लिए एक मंच। One-stop platform for all government scholarship schemes for students across India.",
+      "category": "education",
+      "department": "शिक्षा मंत्रालय / Ministry of Education",
+      "contact": {
+        "phone": "+91-120-6619540",
+        "email": "helpdesk@nsp.gov.in",
+        "website": "https://scholarships.gov.in",
+        "address": {
+          "street": "National Informatics Centre, A-Block",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110003"
+        }
+      },
+      "hours": {
+        "monday": "24/7 Online Portal",
+        "tuesday": "24/7 Online Portal",
+        "wednesday": "24/7 Online Portal",
+        "thursday": "24/7 Online Portal",
+        "friday": "24/7 Online Portal",
+        "saturday": "24/7 Online Portal",
+        "sunday": "24/7 Online Portal"
+      },
+      "eligibility": ["Students from Class 1 to PhD", "All categories (General, SC, ST, OBC, Minority)", "Income criteria varies by scheme"],
+      "requirements": ["Aadhaar card", "Bank account details", "Educational certificates", "Income certificate", "Caste certificate (if applicable)"],
+      "languages": ["Hindi", "English", "Regional languages"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["scholarship", "education", "financial aid", "students", "NSP"],
+      "schemes": ["Pre-Matric Scholarship", "Post-Matric Scholarship", "Merit-cum-Means Scholarship", "Top Class Education", "Minority Scholarships"],
+      "services": ["Online application", "Status tracking", "Document verification", "Scholarship disbursement"],
+      "rating": { "average": 4.3, "count": 15678 },
+      "priority": "high",
+      "realWorldLinks": {
+        "mainPortal": "https://scholarships.gov.in",
+        "freshApplication": "https://scholarships.gov.in/fresh",
+        "renewalApplication": "https://scholarships.gov.in/renewal",
+        "statusCheck": "https://scholarships.gov.in/statusCheck",
+        "guidelines": "https://scholarships.gov.in/schemeGuidelines"
+      }
+    },
+    {
+      "_id": "mygov_001",
+      "name": "MyGov India - Citizen Engagement Platform",
+      "description": "मायगव इंडिया - नागरिक सहभागिता मंच जो सरकारी नीतियों में जनता की भागीदारी सुनिश्चित करता है। Citizen engagement platform for participatory governance and policy making.",
+      "category": "welfare",
+      "department": "प्रधानमंत्री कार्यालय / Prime Minister's Office",
+      "contact": {
+        "phone": "+91-11-2312-3456",
+        "email": "support@mygov.nic.in",
+        "website": "https://mygov.in",
+        "address": {
+          "street": "South Block, Raisina Hill",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110011"
+        }
+      },
+      "hours": {
+        "monday": "24/7 Online Platform",
+        "tuesday": "24/7 Online Platform",
+        "wednesday": "24/7 Online Platform",
+        "thursday": "24/7 Online Platform",
+        "friday": "24/7 Online Platform",
+        "saturday": "24/7 Online Platform",
+        "sunday": "24/7 Online Platform"
+      },
+      "eligibility": ["All Indian citizens", "Age 18+ for voting on policies"],
+      "requirements": ["Mobile number", "Email ID", "Aadhaar card (optional)"],
+      "languages": ["Hindi", "English", "22 official languages"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["citizen engagement", "governance", "policy", "participation", "democracy"],
+      "services": ["Policy discussions", "Surveys & polls", "Contests", "Volunteer opportunities", "Government updates"],
+      "rating": { "average": 4.1, "count": 2345 },
+      "priority": "high",
+      "realWorldLinks": {
+        "mainPortal": "https://mygov.in",
+        "discussions": "https://mygov.in/group-issue",
+        "polls": "https://mygov.in/polls",
+        "contests": "https://mygov.in/creative-corner",
+        "volunteer": "https://mygov.in/volunteer"
+      }
+    },
+    {
+      "_id": "digilocker_001",
+      "name": "DigiLocker - Digital Document Wallet",
+      "description": "डिजिलॉकर - डिजिटल दस्तावेज़ वॉलेट जो सभी सरकारी दस्तावेजों को सुरक्षित रूप से स्टोर करता है। Secure digital wallet for storing and sharing government-issued documents.",
+      "category": "documentation",
+      "department": "इलेक्ट्रॉनिक्स और सूचना प्रौद्योगिकी मंत्रालय / Ministry of Electronics & IT",
+      "contact": {
+        "phone": "+91-11-2430-5000",
+        "email": "support@digilocker.gov.in",
+        "website": "https://digilocker.gov.in",
+        "address": {
+          "street": "Electronics Niketan, 6 CGO Complex",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110003"
+        }
+      },
+      "hours": {
+        "monday": "24/7 Online Service",
+        "tuesday": "24/7 Online Service",
+        "wednesday": "24/7 Online Service",
+        "thursday": "24/7 Online Service",
+        "friday": "24/7 Online Service",
+        "saturday": "24/7 Online Service",
+        "sunday": "24/7 Online Service"
+      },
+      "eligibility": ["All Indian citizens", "Valid Aadhaar card required"],
+      "requirements": ["Aadhaar card", "Mobile number linked to Aadhaar", "Email ID"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["digital documents", "paperless", "secure storage", "government documents"],
+      "services": ["Document storage", "Document sharing", "Digital signatures", "Certificate verification"],
+      "rating": { "average": 4.5, "count": 8901 },
+      "priority": "high",
+      "realWorldLinks": {
+        "mainPortal": "https://digilocker.gov.in",
+        "signup": "https://digilocker.gov.in/signup",
+        "signin": "https://digilocker.gov.in/signin",
+        "mobileApp": "https://play.google.com/store/apps/details?id=com.digilocker.android"
+      }
+    },
+    {
+      "_id": "umang_001",
+      "name": "UMANG - Unified Mobile Application",
+      "description": "उमंग - एकीकृत मोबाइल एप्लिकेशन जो 1200+ सरकारी सेवाओं तक पहुंच प्रदान करता है। Single platform providing access to 1200+ government services through mobile app.",
+      "category": "utilities",
+      "department": "इलेक्ट्रॉनिक्स और सूचना प्रौद्योगिकी मंत्रालय / Ministry of Electronics & IT",
+      "contact": {
+        "phone": "+91-11-2430-5555",
+        "email": "support@umang.gov.in",
+        "website": "https://umang.gov.in",
+        "address": {
+          "street": "National Informatics Centre, A-Block",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110003"
+        }
+      },
+      "hours": {
+        "monday": "24/7 Mobile App",
+        "tuesday": "24/7 Mobile App",
+        "wednesday": "24/7 Mobile App",
+        "thursday": "24/7 Mobile App",
+        "friday": "24/7 Mobile App",
+        "saturday": "24/7 Mobile App",
+        "sunday": "24/7 Mobile App"
+      },
+      "eligibility": ["All Indian citizens", "Smartphone required"],
+      "requirements": ["Mobile number", "Aadhaar card (for some services)", "Email ID"],
+      "languages": ["Hindi", "English", "13 Indian languages"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["mobile app", "government services", "digital india", "one-stop platform"],
+      "services": ["Bill payments", "Certificate applications", "Tax filing", "Pension services", "Scholarship applications"],
+      "rating": { "average": 4.2, "count": 12456 },
+      "priority": "high",
+      "realWorldLinks": {
+        "mainPortal": "https://umang.gov.in",
+        "androidApp": "https://play.google.com/store/apps/details?id=in.gov.umang.negd",
+        "iosApp": "https://apps.apple.com/in/app/umang/id1287557815",
+        "webPortal": "https://web.umang.gov.in"
+      }
+    },
+    {
+      "_id": "india_gov_001",
+      "name": "India.gov.in - National Portal of India",
+      "description": "भारत.gov.in - भारत का राष्ट्रीय पोर्टल जो सभी सरकारी जानकारी और सेवाओं का केंद्रीय भंडार है। National portal providing comprehensive information about government services and schemes.",
+      "category": "welfare",
+      "department": "इलेक्ट्रॉनिक्स और सूचना प्रौद्योगिकी मंत्रालय / Ministry of Electronics & IT",
+      "contact": {
+        "phone": "+91-11-2430-5000",
+        "email": "info@india.gov.in",
+        "website": "https://india.gov.in",
+        "address": {
+          "street": "National Informatics Centre, A-Block",
+          "city": "New Delhi",
+          "state": "Delhi",
+          "zipCode": "110003"
+        }
+      },
+      "hours": {
+        "monday": "24/7 Online Portal",
+        "tuesday": "24/7 Online Portal",
+        "wednesday": "24/7 Online Portal",
+        "thursday": "24/7 Online Portal",
+        "friday": "24/7 Online Portal",
+        "saturday": "24/7 Online Portal",
+        "sunday": "24/7 Online Portal"
+      },
+      "eligibility": ["All citizens and visitors to India"],
+      "requirements": ["Internet access", "No registration required for browsing"],
+      "languages": ["Hindi", "English"],
+      "accessibility": {
+        "wheelchairAccessible": true,
+        "signLanguage": true,
+        "braille": true
+      },
+      "tags": ["government information", "national portal", "schemes", "services directory"],
+      "services": ["Government directory", "Scheme information", "Forms download", "Citizen services", "Government news"],
+      "rating": { "average": 4.0, "count": 5678 },
+      "priority": "high",
+      "realWorldLinks": {
+        "mainPortal": "https://india.gov.in",
+        "services": "https://india.gov.in/my-government/services",
+        "schemes": "https://india.gov.in/my-government/schemes",
+        "forms": "https://india.gov.in/my-government/forms",
+        "directory": "https://india.gov.in/my-government/directory"
+      }
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Context Debug</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        pre {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 AI Context Debug Tool</h1>
+    
+    <div class="section">
+        <h2>Test Stocks (for context gathering)</h2>
+        <div id="stocksGrid">
+            <div class="stock-card">
+                <div class="stock-symbol">TESTSTOCK1</div>
+                <div class="stock-name">Test Stock One</div>
+                <div class="stock-price">₹100.00</div>
+            </div>
+            <div class="stock-card">
+                <div class="stock-symbol">TESTSTOCK2</div>
+                <div class="stock-name">Test Stock Two</div>
+                <div class="stock-price">₹200.00</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>1. Test Context Gathering</h2>
+        <button onclick="testContextGathering()">Gather Context</button>
+        <pre id="contextOutput">Click button to test...</pre>
+    </div>
+
+    <div class="section">
+        <h2>2. Test API Call</h2>
+        <button onclick="testAPICall()">Send to AI API</button>
+        <pre id="apiOutput">Click button to test...</pre>
+    </div>
+
+    <script>
+        function testContextGathering() {
+            const output = document.getElementById('contextOutput');
+            
+            try {
+                // Simulate context gathering
+                const stockCards = document.querySelectorAll('.stock-card');
+                output.textContent = `Found ${stockCards.length} stock cards\n\n`;
+                
+                const stocks = [];
+                stockCards.forEach((card, idx) => {
+                    const symbol = card.querySelector('.stock-symbol');
+                    const name = card.querySelector('.stock-name');
+                    const price = card.querySelector('.stock-price');
+                    
+                    if (symbol) {
+                        const stockInfo = {
+                            symbol: symbol.textContent.trim(),
+                            name: name ? name.textContent.trim() : null,
+                            price: price ? price.textContent.trim() : null
+                        };
+                        stocks.push(stockInfo);
+                        output.textContent += `Stock ${idx + 1}:\n${JSON.stringify(stockInfo, null, 2)}\n\n`;
+                    }
+                });
+                
+                const context = {
+                    page: window.location.pathname,
+                    pageName: 'Test Page',
+                    visibleStocks: stocks
+                };
+                
+                output.textContent += '\n=== FULL CONTEXT ===\n';
+                output.textContent += JSON.stringify(context, null, 2);
+                
+            } catch (error) {
+                output.textContent = 'ERROR: ' + error.message + '\n' + error.stack;
+            }
+        }
+
+        async function testAPICall() {
+            const output = document.getElementById('apiOutput');
+            output.textContent = 'Sending request...\n';
+            
+            try {
+                const context = {
+                    page: '/test',
+                    pageName: 'Test Page',
+                    visibleStocks: [
+                        { symbol: 'TESTSTOCK1', name: 'Test Stock One', price: '₹100.00' },
+                        { symbol: 'TESTSTOCK2', name: 'Test Stock Two', price: '₹200.00' }
+                    ]
+                };
+                
+                output.textContent += 'Context being sent:\n';
+                output.textContent += JSON.stringify(context, null, 2) + '\n\n';
+                
+                const response = await fetch('/api/ai/ai-query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'What stocks are visible on screen?',
+                        context: context
+                    })
+                });
+                
+                output.textContent += `Response status: ${response.status}\n\n`;
+                
+                const data = await response.json();
+                output.textContent += 'AI Response:\n';
+                output.textContent += JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                output.textContent += '\nERROR: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

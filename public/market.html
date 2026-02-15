@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Prices - Digital India Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #10b981;
+            --accent-color: #8b5cf6;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --success-color: #10b981;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            
+            /* Light theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --surface-bg: #ffffff;
+            --card-bg: #ffffff;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0f0f0f 100%);
+            --bg-secondary: rgba(20, 20, 20, 0.95);
+            --bg-tertiary: rgba(40, 40, 40, 0.8);
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-muted: #b0b0b0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --surface-bg: rgba(25, 25, 25, 0.9);
+            --card-bg: rgba(30, 30, 30, 0.85);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            background-attachment: fixed;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(15, 15, 15, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .theme-toggle {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Content */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .page-title {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 48px 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-info {
+            text-align: center;
+            margin-top: 12px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 16px;
+            min-width: 200px;
+            cursor: pointer;
+        }
+
+        /* Market Grid */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .market-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            transition: var(--transition);
+        }
+
+        [data-theme="dark"] .market-card {
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .market-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .commodity-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .commodity-icon {
+            font-size: 32px;
+        }
+
+        .commodity-info h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .commodity-location {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .price-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .price-box {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .price-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .price-unit {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .market-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .page-btn {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            color: var(--text-primary);
+            font-weight: 600;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-title {
+                font-size: 36px;
+            }
+
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-select {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-flag me-2"></i>Digital India Portal
+            </a>
+            <div class="nav-buttons">
+                <a href="/" class="nav-btn">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="/services.html" class="nav-btn">
+                    <i class="fas fa-building"></i>
+                    <span>Services</span>
+                </a>
+                <a href="/stocks.html" class="nav-btn">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Stocks</span>
+                </a>
+                <a href="/market.html" class="nav-btn active">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Market</span>
+                </a>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <a href="/admin.html" class="nav-btn" id="adminNavBtn" style="display: none; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="content">
+        <div class="page-header">
+            <h1 class="page-title">Market Prices</h1>
+            <p class="page-subtitle">Search from 240+ commodities across 7,000+ mandis in India</p>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" 
+                           class="search-input" 
+                           id="commoditySearchInput"
+                           placeholder="Search commodities (e.g., Onion, Tomato, Rice, Wheat)..."
+                           autocomplete="off">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="search-info" id="searchInfo">
+                    <!-- Search info will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <select class="filter-select" id="categoryFilter">
+                <option value="">All Categories</option>
+                <option value="vegetables">🥬 Vegetables</option>
+                <option value="fruits">🍎 Fruits</option>
+                <option value="grains">🌾 Grains</option>
+                <option value="pulses">🫘 Pulses</option>
+                <option value="spices">🌶️ Spices</option>
+                <option value="oilseeds">🌻 Oilseeds</option>
+            </select>
+            <select class="filter-select" id="stateFilter">
+                <option value="">All States</option>
+                <!-- States will be populated dynamically -->
+            </select>
+        </div>
+
+        <!-- Loading Progress Bar -->
+        <div id="loadingProgress" style="display: none; margin-bottom: 24px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-weight: 600; color: var(--text-primary);">
+                    <i class="fas fa-download"></i> Loading commodities...
+                </span>
+                <span id="progressText" style="color: var(--text-muted); font-size: 14px;">0 / 2000</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: var(--bg-tertiary); border-radius: 4px; overflow: hidden;">
+                <div id="progressBar" style="height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); width: 0%; transition: width 0.3s ease;"></div>
+            </div>
+        </div>
+
+        <!-- Market Grid -->
+        <div class="market-grid" id="marketGrid">
+            <!-- Market cards will be populated by JavaScript -->
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn" id="prevPageBtn" onclick="loadPreviousPage()">
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <span class="page-info" id="pageInfo">Page 1 of 1</span>
+            <button class="page-btn" id="nextPageBtn" onclick="loadNextPage()">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Theme toggle
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        
+        function toggleTheme() {
+            darkMode = !darkMode;
+            document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+            document.getElementById('themeIcon').className = darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            localStorage.setItem('darkMode', darkMode);
+        }
+
+        // Initialize theme
+        if (darkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').className = 'fas fa-sun';
+        }
+
+        // Background Loading with Progress
+        let allMarketData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        const itemsPerPage = 20;
+        
+        // Cache configuration
+        const CACHE_KEY = 'digitalindia_market_cache';
+        const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes (market data changes less frequently)
+        
+        // Load from cache if available (sessionStorage - clears on tab close)
+        function loadFromCache() {
+            try {
+                const cached = sessionStorage.getItem(CACHE_KEY);
+                if (cached) {
+                    const { data, timestamp } = JSON.parse(cached);
+                    const age = Date.now() - timestamp;
+                    
+                    if (age < CACHE_DURATION) {
+                        console.log(`✅ Loaded ${data.length} commodities from cache (${Math.round(age/1000)}s old)`);
+                        allMarketData = data;
+                        applyFilters();
+                        return true;
+                    } else {
+                        console.log('Cache expired, will fetch fresh data');
+                        sessionStorage.removeItem(CACHE_KEY);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading from cache:', error);
+            }
+            return false;
+        }
+        
+        // Save to cache (sessionStorage - clears on tab close)
+        function saveToCache(data) {
+            try {
+                const cacheData = {
+                    data: data,
+                    timestamp: Date.now()
+                };
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+                console.log(`💾 Saved ${data.length} commodities to cache (session only)`);
+            } catch (error) {
+                console.error('Error saving to cache:', error);
+            }
+        }
+        let isBackgroundLoading = false;
+        let currentOffset = 0;
+        const chunkSize = 20; // Load 20 at a time
+        let estimatedTotal = 600; // Realistic estimate based on API limitations
+
+        // Category icons mapping
+        const categoryIcons = {
+            'vegetables': '🥬',
+            'fruits': '🍎',
+            'grains': '🌾',
+            'pulses': '🫘',
+            'spices': '🌶️',
+            'oilseeds': '🌻'
+        };
+
+        // Update progress bar
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressContainer = document.getElementById('loadingProgress');
+            
+            if (isBackgroundLoading) {
+                // While loading, show progress
+                const percentage = Math.min((allMarketData.length / estimatedTotal) * 100, 95); // Cap at 95% until done
+                progressBar.style.width = percentage + '%';
+                progressText.innerHTML = `<i class="fas fa-sync fa-spin"></i> Loading... ${allMarketData.length} commodities`;
+                progressContainer.style.display = 'block';
+            } else {
+                // When done, show 100% and final count
+                progressBar.style.width = '100%';
+                progressText.innerHTML = `<i class="fas fa-check-circle"></i> Complete! ${allMarketData.length} commodities loaded`;
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Load data in background continuously
+        async function loadInBackground() {
+            if (isBackgroundLoading) return;
+            isBackgroundLoading = true;
+            updateProgress();
+            
+            let consecutiveErrors = 0;
+            const maxConsecutiveErrors = 5; // Increased retries
+            let emptyResponses = 0;
+            
+            // Keep loading until we get no more data
+            while (true) {
+                try {
+                    const response = await fetch(`/api/realdata/commodities/paginated?limit=${chunkSize}&offset=${currentOffset}`);
+                    const data = await response.json();
+                    
+                    if (data.success && data.data.length > 0) {
+                        allMarketData.push(...data.data);
+                        currentOffset += data.data.length;
+                        consecutiveErrors = 0; // Reset error counter on success
+                        emptyResponses = 0; // Reset empty counter
+                        
+                        // Update UI
+                        populateStateFilter();
+                        if (filteredData.length === 0 || currentPage === 1) {
+                            applyFilters();
+                        }
+                        updateProgress();
+                        
+                        console.log(`📦 Loaded ${data.data.length} commodities (total: ${allMarketData.length})`);
+                        
+                        // Check if we've loaded everything
+                        if (!data.hasMore || data.data.length < chunkSize) {
+                            console.log('✅ All commodities loaded!');
+                            break;
+                        }
+                        
+                        // Longer delay to avoid overwhelming API
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    } else if (data.success && data.data.length === 0) {
+                        emptyResponses++;
+                        console.log(`⚠️ Empty response ${emptyResponses}/3`);
+                        
+                        if (emptyResponses >= 3) {
+                            console.log('✅ Reached end of data (3 empty responses)');
+                            break;
+                        }
+                        
+                        // Wait and try next offset
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        currentOffset += chunkSize; // Skip ahead
+                    } else {
+                        console.log('✅ Reached end of data');
+                        break;
+                    }
+                } catch (error) {
+                    consecutiveErrors++;
+                    console.error(`⚠️ Error loading chunk at offset ${currentOffset}:`, error.message);
+                    
+                    if (consecutiveErrors >= maxConsecutiveErrors) {
+                        console.log(`❌ Stopping after ${consecutiveErrors} consecutive errors`);
+                        console.log(`✅ Successfully loaded ${allMarketData.length} commodities before errors`);
+                        break;
+                    }
+                    
+                    // Wait longer before retry
+                    const waitTime = 3000 * consecutiveErrors; // Exponential backoff
+                    console.log(`⏳ Retrying in ${waitTime/1000} seconds... (attempt ${consecutiveErrors}/${maxConsecutiveErrors})`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                    
+                    // Try skipping ahead on repeated failures
+                    if (consecutiveErrors >= 3) {
+                        console.log('⏭️ Skipping ahead 40 records...');
+                        currentOffset += chunkSize * 2;
+                    }
+                }
+            }
+            
+            isBackgroundLoading = false;
+            updateProgress();
+            console.log(`✅ Background loading complete: ${allMarketData.length} total commodities`);
+            
+            // Update the estimated total to actual loaded amount
+            estimatedTotal = allMarketData.length;
+            updateSearchInfo();
+            
+            // Save to cache when loading is complete
+            saveToCache(allMarketData);
+        }
+
+        // Initial quick load - just 20 commodities to show immediately
+        async function initialLoad() {
+            try {
+                // Try loading from cache first
+                if (loadFromCache()) {
+                    populateStateFilter();
+                    // Data loaded from cache, start background refresh
+                    setTimeout(() => loadInBackground(), 1000);
+                    return;
+                }
+                
+                console.log('Starting initial load...');
+                
+                // Show loading message
+                document.getElementById('marketGrid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color);">
+                        <i class="fas fa-spinner fa-spin fa-3x" style="color: var(--primary-color); margin-bottom: 16px;"></i>
+                        <h3 style="margin-bottom: 8px;">Loading Commodities...</h3>
+                        <p style="color: var(--text-muted);">Fetching first 20 commodities</p>
+                    </div>
+                `;
+                
+                const response = await fetch(`/api/realdata/commodities/paginated?limit=20&offset=0`);
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    allMarketData = data.data;
+                    currentOffset = data.data.length;
+                    
+                    console.log(`✅ Initial load: ${data.data.length} commodities`);
+                    
+                    populateStateFilter();
+                    applyFilters();
+                    
+                    // Start background loading immediately
+                    setTimeout(() => loadInBackground(), 500);
+                } else {
+                    console.error('No data in response:', data);
+                    showErrorMessage(data.message || 'No data available');
+                }
+            } catch (error) {
+                console.error('Error in initial load:', error);
+                showErrorMessage(error.message);
+            }
+        }
+
+        function showErrorMessage(message) {
+            document.getElementById('marketGrid').innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color);">
+                    <i class="fas fa-exclamation-triangle fa-3x" style="color: var(--warning-color); margin-bottom: 16px;"></i>
+                    <h3 style="margin-bottom: 8px;">Unable to Load Commodity Data</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 16px;">${message}</p>
+                    <p style="color: var(--text-muted); font-size: 14px;">Please check your Data.gov.in API key configuration.</p>
+                </div>
+            `;
+        }
+
+        function populateStateFilter() {
+            const states = [...new Set(allMarketData.map(item => item.state))].sort();
+            const stateFilter = document.getElementById('stateFilter');
+            const currentValue = stateFilter.value;
+            stateFilter.innerHTML = '<option value="">All States</option>' + 
+                states.map(state => `<option value="${state}">${state}</option>`).join('');
+            stateFilter.value = currentValue; // Preserve selection
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('commoditySearchInput');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                applyFilters();
+            }, 300);
+        });
+
+        // Filter functionality
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('stateFilter').addEventListener('change', applyFilters);
+
+        function applyFilters() {
+            const searchQuery = searchInput.value.trim().toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const state = document.getElementById('stateFilter').value;
+            
+            filteredData = allMarketData;
+            
+            // Apply search filter
+            if (searchQuery && searchQuery.length >= 2) {
+                filteredData = filteredData.filter(item =>
+                    item.commodity.toLowerCase().includes(searchQuery) ||
+                    item.state.toLowerCase().includes(searchQuery) ||
+                    item.market.toLowerCase().includes(searchQuery) ||
+                    item.district.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            // Apply category filter
+            if (category) {
+                filteredData = filteredData.filter(item => item.category === category);
+            }
+            
+            // Apply state filter
+            if (state) {
+                filteredData = filteredData.filter(item => item.state === state);
+            }
+            
+            currentPage = 1;
+            updateDisplay();
+            updateSearchInfo();
+        }
+
+        // Helper function to safely format dates
+        function formatDate(dateValue) {
+            try {
+                const date = new Date(dateValue);
+                // Check if date is valid
+                if (isNaN(date.getTime())) {
+                    return 'Recently';
+                }
+                // Check if date is before year 2000 (likely invalid)
+                if (date.getFullYear() < 2000) {
+                    return 'Recently';
+                }
+                // Format the date
+                return date.toLocaleDateString('en-IN', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            } catch (error) {
+                return 'Recently';
+            }
+        }
+
+        function updateDisplay() {
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageData = filteredData.slice(start, end);
+            
+            renderMarketData(pageData);
+            updatePagination();
+        }
+
+        function updateSearchInfo() {
+            const info = document.getElementById('searchInfo');
+            const uniqueStates = new Set(allMarketData.map(c => c.state)).size;
+            const uniqueMarkets = new Set(allMarketData.map(c => c.market)).size;
+            
+            if (filteredData.length === allMarketData.length) {
+                if (isBackgroundLoading) {
+                    info.textContent = `Loading... ${allMarketData.length} commodities from ${uniqueStates} states`;
+                } else {
+                    info.textContent = `${allMarketData.length} commodities from ${uniqueStates} states • ${uniqueMarkets} markets`;
+                }
+            } else {
+                info.textContent = `Found ${filteredData.length} results`;
+            }
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const pageInfo = document.getElementById('pageInfo');
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
+            
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+            
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+        }
+
+        async function loadNextPage() {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateDisplay();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function loadPreviousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                updateDisplay();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function renderMarketData(data) {
+            const grid = document.getElementById('marketGrid');
+            
+            if (data.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 48px; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color);">
+                        <i class="fas fa-search fa-3x" style="color: var(--text-muted); margin-bottom: 16px;"></i>
+                        <h3 style="margin-bottom: 8px;">No commodities found</h3>
+                        <p style="color: var(--text-muted);">Try adjusting your search or filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = data.map(item => {
+                const icon = categoryIcons[item.category] || '📦';
+                
+                return `
+                    <div class="market-card">
+                        <div class="commodity-header">
+                            <div class="commodity-icon">${icon}</div>
+                            <div class="commodity-info">
+                                <h3>${item.commodity}</h3>
+                                <div class="commodity-location">${item.market}, ${item.district}, ${item.state}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="price-section">
+                            <div class="price-box">
+                                <div class="price-label">Wholesale</div>
+                                <div class="price-value">₹${item.prices.wholesale.average.toLocaleString()}</div>
+                                <div class="price-unit">${item.unit}</div>
+                            </div>
+                            <div class="price-box">
+                                <div class="price-label">Retail</div>
+                                <div class="price-value">₹${item.prices.retail.average.toLocaleString()}</div>
+                                <div class="price-unit">${item.unit}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="market-meta">
+                            <span>Source: ${item.source}</span>
+                            <span>Updated: ${formatDate(item.lastUpdated)}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize - load first 20 immediately, then continue in background
+        initialLoad();
+    </script>
+    
+    <!-- Enhanced context gathering for AI chat -->
+    <script>
+        window.gatherPageContextFixed = function() {
+            try {
+                const context = {
+                    page: window.location.pathname || '/market.html',
+                    pageTitle: document.title || 'Market Prices',
+                    pageName: 'Market',
+                    description: 'Commodity market prices including wholesale and retail rates from Data.gov.in',
+                    url: window.location.href || '',
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Gather commodity data
+                const marketCards = document.querySelectorAll('.market-card');
+                if (marketCards.length > 0) {
+                    const commodities = [];
+                    marketCards.forEach((card, idx) => {
+                        if (idx < 30) { // Get first 30 visible commodities
+                            const commodityInfo = {};
+                            
+                            // Commodity name and location
+                            const name = card.querySelector('.commodity-info h3');
+                            const location = card.querySelector('.commodity-location');
+                            const icon = card.querySelector('.commodity-icon');
+                            
+                            // Prices
+                            const priceBoxes = card.querySelectorAll('.price-box');
+                            const metaSpans = card.querySelectorAll('.market-meta span');
+                            
+                            if (name) {
+                                commodityInfo.commodity = name.textContent.trim();
+                                if (icon) commodityInfo.icon = icon.textContent.trim();
+                                if (location) {
+                                    const locationText = location.textContent.trim();
+                                    commodityInfo.location = locationText;
+                                    // Parse location (format: "Market, District, State")
+                                    const parts = locationText.split(',').map(p => p.trim());
+                                    if (parts.length >= 3) {
+                                        commodityInfo.market = parts[0];
+                                        commodityInfo.district = parts[1];
+                                        commodityInfo.state = parts[2];
+                                    }
+                                }
+                                
+                                // Extract prices
+                                priceBoxes.forEach(box => {
+                                    const label = box.querySelector('.price-label');
+                                    const value = box.querySelector('.price-value');
+                                    const unit = box.querySelector('.price-unit');
+                                    
+                                    if (label && value) {
+                                        const priceType = label.textContent.trim().toLowerCase();
+                                        const priceValue = value.textContent.trim();
+                                        const priceUnit = unit ? unit.textContent.trim() : '';
+                                        
+                                        if (priceType === 'wholesale') {
+                                            commodityInfo.wholesalePrice = priceValue;
+                                            commodityInfo.unit = priceUnit;
+                                        } else if (priceType === 'retail') {
+                                            commodityInfo.retailPrice = priceValue;
+                                        }
+                                    }
+                                });
+                                
+                                // Extract metadata
+                                metaSpans.forEach(span => {
+                                    const text = span.textContent.trim();
+                                    if (text.startsWith('Source:')) {
+                                        commodityInfo.source = text.replace('Source:', '').trim();
+                                    } else if (text.startsWith('Updated:')) {
+                                        commodityInfo.lastUpdated = text.replace('Updated:', '').trim();
+                                    }
+                                });
+                                
+                                commodities.push(commodityInfo);
+                            }
+                        }
+                    });
+                    
+                    if (commodities.length > 0) {
+                        context.visibleCommodities = commodities;
+                        context.totalCommoditiesOnPage = marketCards.length;
+                        context.commoditiesInContext = commodities.length;
+                        console.log(`📦 Found ${commodities.length} commodities with complete data (wholesale, retail, location)`);
+                    }
+                }
+                
+                // Add search/filter state if available
+                const searchInput = document.getElementById('marketSearch');
+                const categoryFilter = document.getElementById('categoryFilter');
+                if (searchInput && searchInput.value) {
+                    context.searchQuery = searchInput.value;
+                }
+                if (categoryFilter && categoryFilter.value) {
+                    context.selectedCategory = categoryFilter.value;
+                }
+                
+                console.log('📊 Market context gathered:', context);
+                return context;
+            } catch (error) {
+                console.error('Market context gathering failed:', error);
+                return { 
+                    page: '/market.html', 
+                    pageName: 'Market', 
+                    description: 'Commodity market prices',
+                    error: error.message 
+                };
+            }
+        };
+        
+        console.log('🔧 Market context hotfix loaded');
+    </script>
+    
+    <script src="/admin-check.js"></script>
+    
+    <!-- Language Manager -->
+    <script src="/language-manager.js?v=1.0"></script>
+    
+    <!-- AI Chat Floating Window -->
+    <script src="/ai-chat-floating.js?v=2.1"></script>
+    
+    <script>
+        // Language change handler
+        function changeLanguage(lang) {
+            if (window.LanguageManager) {
+                window.LanguageManager.changeLanguage(lang);
+            } else {
+                localStorage.setItem('language', lang);
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
